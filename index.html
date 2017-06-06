@@ -267,7 +267,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/06/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/06/虽然我是做Android的，但也会用python抓点数据用用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Alen Bear">
@@ -286,7 +286,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/06/hello-world/" itemprop="url">Hello World</a></h1>
+                <a class="post-title-link" href="/2017/06/06/虽然我是做Android的，但也会用python抓点数据用用/" itemprop="url">虽然我是做Android的，但也会用python抓点数据用用</a></h1>
         
 
         <div class="post-meta">
@@ -298,7 +298,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T14:36:00+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T15:01:12+08:00">
                 2017-06-06
               </time>
             
@@ -335,15 +335,955 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近也是在工作之余开发一个Android App，采用当前比较火的框架<code>retrofit+rxjava+rxbus+lamda+greenDao+glide</code>等。有兴趣的小伙伴可以关注一下我的<a href="https://github.com/MissMyDearBear/Diary" target="_blank" rel="external">github开源项目</a>。本文主要介绍的是如何利用<code>python</code>抓取糗百的热门段子。</p>
+<h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><ol>
+<li>Mac Os</li>
+<li>Python 2.7.10</li>
+<li>Node 7.8.0</li>
+</ol>
+<p>编译器：</p>
+<ol>
+<li>python–&gt;Pycharm Ec</li>
+<li>node–&gt;Visual Code Studio</li>
+</ol>
+<p>以上开发环境以及编译器大家可以自行百度 or google安装，本文就不一一介绍了。</p>
+<h2 id="爬虫开发过程"><a href="#爬虫开发过程" class="headerlink" title="爬虫开发过程"></a>爬虫开发过程</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>除了以上所说的编译器以及开发环境的配置外，我们还要明确设计爬虫的目标，找到抓取的url以及分析目标url的dom结构。</p>
+<ol>
+<li>目标：抓取糗百热门段子第一页中的，所有作者，作者的头像，以及对应的段子内容</li>
+<li>url：<a href="http://www.qiushibaike.com/" target="_blank" rel="external">http://www.qiushibaike.com/</a></li>
+<li>dom结构：<br>可以进入糗百首页，然后查看一下网页源码</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/4469838-bafbd468355752f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="{690D4AFF-447F-E481-B455-CDF6DAF63F7C}.png"></p>
+<p>如上图中所示，可以看到每个完整的段子都是在<code>class=article block untagged mb15</code>的<code>div</code>下面。西面接着找一下对应作者的头像以及姓名的节点<code>![](//pic.qiushibaike.com/system/avtnew/2883/28831688/medium/2017051108472215.JPEG)</code>可以看到作者的名字是和<code>img</code>的<code>alt</code>一样的因此只需要找到这个节点就可以得到姓名和头像地址了。最后看下段子的内容，在<code>class= content</code>的<code>div</code>下面的<code>span</code>中。至此所有要的信息的节点都找到了。</p>
+<h3 id="爬虫书写过程"><a href="#爬虫书写过程" class="headerlink" title="爬虫书写过程"></a>爬虫书写过程</h3><p>框架分为五个个部分：爬虫入口，url管理器，html下载器，html解析器，html输出器</p>
+<h4 id="爬虫入口"><a href="#爬虫入口" class="headerlink" title="爬虫入口"></a>爬虫入口</h4><p>新建spider_main.py</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">from baike import url_manager, html_download, html_parser, html_output</div><div class="line"></div><div class="line"></div><div class="line">class SpiderMain(object):</div><div class="line">    def __init__(self):</div><div class="line">        self.urls = url_manager.UrlManager()</div><div class="line">        self.download = html_download.HtmlDown()</div><div class="line">        self.parser = html_parser.HtmlParser()</div><div class="line">        self.out = html_output.HtmlOutput()</div><div class="line"></div><div class="line">    def crow(self, root_url):</div><div class="line">        count = 1</div><div class="line">        self.urls.add_new_url(root_url)</div><div class="line">        while self.urls.has_new_url():</div><div class="line">            try:</div><div class="line">                new_url = self.urls.get_new_url()</div><div class="line">                print &apos;craw %d:%s&apos; % (count, new_url)</div><div class="line">                html_count = self.download.download(new_url)</div><div class="line">                data = self.parser.parser(html_count)</div><div class="line">                self.out.collect_data(data)</div><div class="line">                if count == 1000:</div><div class="line">                    break</div><div class="line">                count = count+1</div><div class="line">            except:</div><div class="line">                print &apos;craw failed:&apos;</div><div class="line">        self.out.output_html()</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    root_url = &apos;http://www.qiushibaike.com/&apos;</div><div class="line">    obj_spider = SpiderMain()</div><div class="line">    obj_spider.crow(root_url)</div></pre></td></tr></table></figure>
+<h4 id="url管理器"><a href="#url管理器" class="headerlink" title="url管理器"></a>url管理器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">class UrlManager(object):</div><div class="line"></div><div class="line">    def __init__(self):</div><div class="line">        self.new_urls = set()</div><div class="line">        self.older_urls = set()</div><div class="line"></div><div class="line">    def add_new_url(self, url):</div><div class="line">        if url is None:</div><div class="line">            return</div><div class="line">        if url not in self.new_urls and url not in self.older_urls:</div><div class="line">            self.new_urls.add(url)</div><div class="line"></div><div class="line">    def add_new_urls(self, urls):</div><div class="line">        if urls is None or len(urls) == 0:</div><div class="line">            return</div><div class="line">        for url in urls:</div><div class="line">            self.add_new_url(url)</div><div class="line"></div><div class="line">    def has_new_url(self):</div><div class="line">        return len(self.new_urls) != 0</div><div class="line"></div><div class="line">    def get_new_url(self):</div><div class="line">        url = self.new_urls.pop()</div><div class="line">        self.older_urls.add(url)</div><div class="line">        return url</div></pre></td></tr></table></figure>
+<h4 id="html下载器"><a href="#html下载器" class="headerlink" title="html下载器"></a>html下载器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import requests</div><div class="line"></div><div class="line"></div><div class="line">class HtmlDown(object):</div><div class="line">    def download(self, url):</div><div class="line">        if url is None:</div><div class="line">            return None</div><div class="line">        response = requests.get(url)</div><div class="line">        if response.status_code != 200:</div><div class="line">            return None</div><div class="line">        return response.text</div></pre></td></tr></table></figure>
+<h4 id="html解析器"><a href="#html解析器" class="headerlink" title="html解析器"></a>html解析器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">from bs4 import BeautifulSoup</div><div class="line"></div><div class="line"></div><div class="line">class HtmlParser(object):</div><div class="line">    def __init__(self):</div><div class="line">        self.items = []</div><div class="line"></div><div class="line">    def parser(self, response):</div><div class="line">        if response is None:</div><div class="line">            return None</div><div class="line">        soup = BeautifulSoup(response, &apos;html.parser&apos;)</div><div class="line">        nodes = soup.findAll(&apos;div&apos;, class_=&apos;article block untagged mb15&apos;)</div><div class="line">        if nodes is None or len(nodes) == 0:</div><div class="line">            return None</div><div class="line">        for node in nodes:</div><div class="line">            image_node = node.img</div><div class="line">            image = &apos;http:&apos; + image_node[&apos;src&apos;]</div><div class="line">            user_name = image_node[&apos;alt&apos;]</div><div class="line">            content_node = node.span.get_text()</div><div class="line">            data = &#123;</div><div class="line">                &apos;image_url&apos;: image,</div><div class="line">                &apos;user_name&apos;: user_name,</div><div class="line">                &apos;content&apos;: content_node</div><div class="line">            &#125;</div><div class="line">            self.items.append(data)</div><div class="line">        return self.items</div></pre></td></tr></table></figure>
+<h4 id="html输出器"><a href="#html输出器" class="headerlink" title="html输出器"></a>html输出器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">import json</div><div class="line"></div><div class="line">class HtmlOutput(object):</div><div class="line">    def __init__(self):</div><div class="line">        self.data = []</div><div class="line"></div><div class="line">    def collect_data(self, data):</div><div class="line">        if data is None:</div><div class="line">            return</div><div class="line">        self.data = data</div><div class="line"></div><div class="line">    def output_html(self):</div><div class="line">        self.write_to_json(self.data)</div><div class="line">        fout = open(&apos;output.html&apos;, &apos;w&apos;)</div><div class="line">        fout.write(&quot;&lt;html&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;body&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;table&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;tr&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;td&gt;name&lt;/td&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;td&gt;image&lt;/td&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;td&gt;content&lt;/td&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;/tr&gt;&quot;)</div><div class="line">        if len(self.data) &gt; 0:</div><div class="line">            for item in self.data:</div><div class="line">                fout.write(&quot;&lt;tr&gt;&quot;)</div><div class="line">                fout.write(&quot;&lt;td&gt;%s&lt;/td&gt;&quot; % (item[&apos;user_name&apos;]).encode(&apos;utf-8&apos;))</div><div class="line">                fout.write(&quot;&lt;td&gt;%s&lt;/td&gt;&quot; % (item[&apos;image_url&apos;]))</div><div class="line">                fout.write(&quot;&lt;td&gt;%s&lt;/td&gt;&quot; % (item[&apos;content&apos;]).encode(&apos;utf-8&apos;))</div><div class="line">                fout.write(&quot;&lt;/tr&gt;&quot;)</div><div class="line"></div><div class="line">        fout.write(&quot;&lt;/table&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;/body&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;/html&gt;&quot;)</div><div class="line">        fout.close()</div><div class="line"></div><div class="line">    def write_to_json(self, data):</div><div class="line">        if data is None:</div><div class="line">            return</div><div class="line">        f = open(&apos;json.txt&apos;, &apos;w&apos;)</div><div class="line">        json_str = json.dumps(data).encode(&apos;utf-8&apos;)</div><div class="line">        print json_str</div><div class="line">        f.write(json_str)</div><div class="line">        f.close()</div></pre></td></tr></table></figure>
+<p>最终将爬去的数据以html的形式和Json形式分表保存在当前路径下面。</p>
+<h3 id="只用node书写简单的接口"><a href="#只用node书写简单的接口" class="headerlink" title="只用node书写简单的接口"></a>只用node书写简单的接口</h3><p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">ar http = require(&apos;http&apos;);</div><div class="line">var rf = require(&quot;fs&quot;);</div><div class="line">var data = rf.readFileSync(&quot;/Users/bear/Desktop/workplace/python/baike/json.txt&quot;, &quot;utf-8&quot;);</div><div class="line">console.log(data)</div><div class="line">var jsonStr = &#123;</div><div class="line">    &apos;code&apos;: &apos;1&apos;,</div><div class="line">    &apos;message&apos;: &apos;操作成功&apos;,</div><div class="line">    &quot;data&quot;: &#123;</div><div class="line">        &apos;items&apos;: JSON.parse(data)</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var json = JSON.stringify(jsonStr);</div><div class="line">console.log(json);</div><div class="line">http.createServer(function (req, res) &#123;</div><div class="line">    res.writeHead(200);</div><div class="line">    res.end(json);</div><div class="line">&#125;).listen(1377, &quot;0.0.0.0&quot;);</div><div class="line">console.log(&apos;Server running at http://127.0.0.1:/&apos;);</div></pre></td></tr></table></figure>
+<p>然后本地浏览器打开：localhost:1377就能看到最终的json了</p>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>app 端接口的调用可以看下<a href="https://github.com/MissMyDearBear/Diary" target="_blank" rel="external">Github上的开源项目</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/06/GreenDao数据库升级问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/06/GreenDao数据库升级问题/" itemprop="url">GreenDao数据库升级问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T15:00:33+08:00">
+                2017-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>前面博客中有介绍<a href="http://www.jianshu.com/p/b2d7bb53c454" target="_blank" rel="external">轻量级的数据库GreenDao的整合</a>。本文介绍如何对GreenDao数据库进行升级。</p>
+<h3 id="为什么要进行数据库升级呢？"><a href="#为什么要进行数据库升级呢？" class="headerlink" title="为什么要进行数据库升级呢？"></a>为什么要进行数据库升级呢？</h3><p>在项目建立之初，数据库的表结构基本上以满足现阶段的业务而建立，随着后面业务的增加需要更多的<code>column</code>，或者废弃掉表中的某些<code>column</code>,此时如果直接去修改表结构，就会与之前已有的表冲突，导致Crash，此时我们就需要升级数据库中的表。</p>
+<h3 id="数据库升级的思路"><a href="#数据库升级的思路" class="headerlink" title="数据库升级的思路"></a>数据库升级的思路</h3><h4 id="删除重建"><a href="#删除重建" class="headerlink" title="删除重建"></a>删除重建</h4><p>这种方法是最简单直接的。直接将之前的数据库删除后，再重新建立数据库。这样会使得之前保存的数据丢失。不需要持久化的保存数据，可以采用这种方式。</p>
+<h4 id="逐级版本迭代升级"><a href="#逐级版本迭代升级" class="headerlink" title="逐级版本迭代升级"></a>逐级版本迭代升级</h4><p>比如当前版本为1，最新版本为3，此方案就是先从1–&gt;2–&gt;3. 这种方法实际应用中用起来相当的繁琐，要维护每个版本，所以不做过多介绍。</p>
+<h4 id="备份数据库，建立新数据库，然后将备份导入"><a href="#备份数据库，建立新数据库，然后将备份导入" class="headerlink" title="备份数据库，建立新数据库，然后将备份导入"></a>备份数据库，建立新数据库，然后将备份导入</h4><p>如题，，奖原来的表删除，之后再将临时表插入到新建的表之中，然后再将临时表给删除了。以此完成数据迁移。</p>
+<h4 id="在原表基础上直接添加新的column"><a href="#在原表基础上直接添加新的column" class="headerlink" title="在原表基础上直接添加新的column"></a>在原表基础上直接添加新的<code>column</code></h4><p>对比原表，增加或者删除<code>column</code></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>首先创建一个数据库帮助类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * description: GreenDao帮助类</div><div class="line"> * author: bear .</div><div class="line"> * Created date:  2017/5/17.</div><div class="line"> */</div><div class="line">public class MyOpenHelper extends DaoMaster.DevOpenHelper &#123;</div><div class="line"></div><div class="line"></div><div class="line">    public MyOpenHelper(Context context, String name) &#123;</div><div class="line">        super(context, name);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public MyOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) &#123;</div><div class="line">        super(context, name, factory);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onUpgrade(Database db, int oldVersion, int newVersion) &#123;</div><div class="line">       /*此处不用super，因为父类中包含了</div><div class="line">       dropAllTables(db, true);</div><div class="line">        onCreate(db);</div><div class="line">        需要自己定制升级</div><div class="line">        */</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>修改<code>greenDao</code>的版本号，在内层的<code>gradle</code>中的<code>buildTypes</code>节点下添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">greendao&#123;</div><div class="line">            schemaVersion 1</div><div class="line">         // 这个地方是自动生成的配置文件存放在哪个位置的</div><div class="line">            targetGenDir &apos;src/main/java&apos;</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>以下是更新方式：</p>
+<ol>
+<li>删除再新建</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 删除原表重新再建立一个表</div><div class="line">    * @param db</div><div class="line">    */</div><div class="line">   public void dropAndCreate(Database db)&#123;</div><div class="line">       DaoMaster.dropAllTables(db, true);</div><div class="line">       DaoMaster.createAllTables(db, false);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>备份数据库，建立新数据库，然后将备份导入</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * 备份还原</div><div class="line">     * @param db</div><div class="line">     * @param daoClasses</div><div class="line">     */</div><div class="line">    public void migrate(Database db, Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;... daoClasses) &#123;</div><div class="line">        generateTempTables(db, daoClasses);</div><div class="line">        DaoMaster.dropAllTables(db, true);</div><div class="line">        DaoMaster.createAllTables(db, false);</div><div class="line">        restoreData(db, daoClasses);</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 数据库备份</div><div class="line">     * @param db</div><div class="line">     * @param daoClasses</div><div class="line">     */</div><div class="line">    private void generateTempTables(Database db, Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;... daoClasses) &#123;</div><div class="line">        for (int i = 0; i &lt; daoClasses.length; i++) &#123;</div><div class="line">            DaoConfig daoConfig = new DaoConfig(db, daoClasses[i]);</div><div class="line"></div><div class="line">            String divider = &quot;&quot;;</div><div class="line">            String tableName = daoConfig.tablename;</div><div class="line">            String tempTableName = daoConfig.tablename.concat(&quot;_TEMP&quot;);</div><div class="line">            ArrayList&lt;String&gt; properties = new ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">            StringBuilder createTableStringBuilder = new StringBuilder();</div><div class="line"></div><div class="line">            createTableStringBuilder.append(&quot;CREATE TABLE &quot;).append(tempTableName).append(&quot; (&quot;);</div><div class="line"></div><div class="line">            for (int j = 0; j &lt; daoConfig.properties.length; j++) &#123;</div><div class="line">                String columnName = daoConfig.properties[j].columnName;</div><div class="line"></div><div class="line">                if (getColumns(db, tableName).contains(columnName)) &#123;</div><div class="line">                    properties.add(columnName);</div><div class="line"></div><div class="line">                    String type = null;</div><div class="line"></div><div class="line">                    try &#123;</div><div class="line">                        type = getTypeByClass(daoConfig.properties[j].type);</div><div class="line">                    &#125; catch (Exception exception) &#123;</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    createTableStringBuilder.append(divider).append(columnName).append(&quot; &quot;).append(type);</div><div class="line"></div><div class="line">                    if (daoConfig.properties[j].primaryKey) &#123;</div><div class="line">                        createTableStringBuilder.append(&quot; PRIMARY KEY&quot;);</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    divider = &quot;,&quot;;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            createTableStringBuilder.append(&quot;);&quot;);</div><div class="line"></div><div class="line">            db.execSQL(createTableStringBuilder.toString());</div><div class="line"></div><div class="line">            StringBuilder insertTableStringBuilder = new StringBuilder();</div><div class="line"></div><div class="line">            insertTableStringBuilder.append(&quot;INSERT INTO &quot;).append(tempTableName).append(&quot; (&quot;);</div><div class="line">            insertTableStringBuilder.append(TextUtils.join(&quot;,&quot;, properties));</div><div class="line">            insertTableStringBuilder.append(&quot;) SELECT &quot;);</div><div class="line">            insertTableStringBuilder.append(TextUtils.join(&quot;,&quot;, properties));</div><div class="line">            insertTableStringBuilder.append(&quot; FROM &quot;).append(tableName).append(&quot;;&quot;);</div><div class="line"></div><div class="line">            db.execSQL(insertTableStringBuilder.toString());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 数据库恢复</div><div class="line">     * @param db</div><div class="line">     * @param daoClasses</div><div class="line">     */</div><div class="line">    private void restoreData(Database db, Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;... daoClasses) &#123;</div><div class="line">        for (int i = 0; i &lt; daoClasses.length; i++) &#123;</div><div class="line">            DaoConfig daoConfig = new DaoConfig(db, daoClasses[i]);</div><div class="line"></div><div class="line">            String tableName = daoConfig.tablename;</div><div class="line">            String tempTableName = daoConfig.tablename.concat(&quot;_TEMP&quot;);</div><div class="line">            ArrayList&lt;String&gt; properties = new ArrayList();</div><div class="line"></div><div class="line">            for (int j = 0; j &lt; daoConfig.properties.length; j++) &#123;</div><div class="line">                String columnName = daoConfig.properties[j].columnName;</div><div class="line"></div><div class="line">                if (getColumns(db, tempTableName).contains(columnName)) &#123;</div><div class="line">                    properties.add(columnName);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            StringBuilder insertTableStringBuilder = new StringBuilder();</div><div class="line"></div><div class="line">            insertTableStringBuilder.append(&quot;INSERT INTO &quot;).append(tableName).append(&quot; (&quot;);</div><div class="line">            insertTableStringBuilder.append(TextUtils.join(&quot;,&quot;, properties));</div><div class="line">            insertTableStringBuilder.append(&quot;) SELECT &quot;);</div><div class="line">            insertTableStringBuilder.append(TextUtils.join(&quot;,&quot;, properties));</div><div class="line">            insertTableStringBuilder.append(&quot; FROM &quot;).append(tempTableName).append(&quot;;&quot;);</div><div class="line"></div><div class="line">            StringBuilder dropTableStringBuilder = new StringBuilder();</div><div class="line"></div><div class="line">            dropTableStringBuilder.append(&quot;DROP TABLE &quot;).append(tempTableName);</div><div class="line"></div><div class="line">            db.execSQL(insertTableStringBuilder.toString());</div><div class="line">            db.execSQL(dropTableStringBuilder.toString());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    private String getTypeByClass(Class&lt;?&gt; type) throws Exception &#123;</div><div class="line">        if (type.equals(String.class)) &#123;</div><div class="line">            return &quot;TEXT&quot;;</div><div class="line">        &#125;</div><div class="line">        if (type.equals(Long.class) || type.equals(Integer.class) || type.equals(long.class)) &#123;</div><div class="line">            return &quot;INTEGER&quot;;</div><div class="line">        &#125;</div><div class="line">        if (type.equals(Boolean.class)) &#123;</div><div class="line">            return &quot;BOOLEAN&quot;;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Exception exception =</div><div class="line">                new Exception(CONVERSION_CLASS_NOT_FOUND_EXCEPTION.concat(&quot; - Class: &quot;).concat(type.toString()));</div><div class="line">        throw exception;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static List&lt;String&gt; getColumns(Database db, String tableName) &#123;</div><div class="line">        List&lt;String&gt; columns = new ArrayList&lt;&gt;();</div><div class="line">        Cursor cursor = null;</div><div class="line">        try &#123;</div><div class="line">            cursor = db.rawQuery(&quot;SELECT * FROM &quot; + tableName + &quot; limit 1&quot;, null);</div><div class="line">            if (cursor != null) &#123;</div><div class="line">                columns = new ArrayList&lt;&gt;(Arrays.asList(cursor.getColumnNames()));</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            Log.v(tableName, e.getMessage(), e);</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; finally &#123;</div><div class="line">            if (cursor != null) cursor.close();</div><div class="line">        &#125;</div><div class="line">        return columns;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>对比表差异，向原表中直接插入<code>column</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * 对比差异，在原表中直接添加column,赞不做删除操作</div><div class="line">     * @param db</div><div class="line">     * @param daoClasses</div><div class="line">     */</div><div class="line">    public void contrastDiff(Database db,ArrayList&lt;String&gt;properties, Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;... daoClasses)&#123;</div><div class="line">     for(int i=0;i&lt;daoClasses.length;i++)&#123;</div><div class="line">         DaoConfig daoConfig = new DaoConfig(db, daoClasses[i]);</div><div class="line">         String tableName=daoConfig.tablename;</div><div class="line">         if(properties!=null&amp;&amp;properties.size()&gt;0)&#123;</div><div class="line">             ArrayList&lt;String&gt;tem=new ArrayList&lt;&gt;();</div><div class="line">             StringBuilder sqlBuilder=new StringBuilder();</div><div class="line">             for(int j=0;j&lt;properties.size();j++)&#123;</div><div class="line">                 if(getColumns(db,tableName).contains(properties.get(j)))&#123;</div><div class="line">                     continue;</div><div class="line">                 &#125;</div><div class="line">                 tem.add(properties.get(j));</div><div class="line">             &#125;</div><div class="line">             sqlBuilder.append(&quot;INSERT INTO &quot;).append(tableName).append(&quot; (&quot;);</div><div class="line">             sqlBuilder.append(TextUtils.join(&quot;,&quot;, tem));</div><div class="line">             sqlBuilder.append(&quot;) SELECT &quot;);</div><div class="line">             sqlBuilder.append(TextUtils.join(&quot;,&quot;, tem));</div><div class="line">             sqlBuilder.append(&quot; FROM &quot;).append(tableName).append(&quot;;&quot;);</div><div class="line">             db.execSQL(sqlBuilder.toString());</div><div class="line">         &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h4 id="下面贴出，完整的数据库升级帮助类"><a href="#下面贴出，完整的数据库升级帮助类" class="headerlink" title="下面贴出，完整的数据库升级帮助类"></a>下面贴出，完整的数据库升级帮助类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * description: greenDao升级帮助</div><div class="line"> * author: bear .</div><div class="line"> * Created date:  2017/5/17.</div><div class="line"> */</div><div class="line">public class MigrationHelper &#123;</div><div class="line"></div><div class="line">    private static final String CONVERSION_CLASS_NOT_FOUND_EXCEPTION =</div><div class="line">            &quot;MIGRATION HELPER - CLASS DOESN&apos;T MATCH WITH THE CURRENT PARAMETERS&quot;;</div><div class="line">    private static MigrationHelper instance;</div><div class="line"></div><div class="line">    public static MigrationHelper getInstance() &#123;</div><div class="line">        if (instance == null) &#123;</div><div class="line">            instance = new MigrationHelper();</div><div class="line">        &#125;</div><div class="line">        return instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 备份还原</div><div class="line">     * @param db</div><div class="line">     * @param daoClasses</div><div class="line">     */</div><div class="line">    public void migrate(Database db, Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;... daoClasses) &#123;</div><div class="line">        generateTempTables(db, daoClasses);</div><div class="line">        DaoMaster.dropAllTables(db, true);</div><div class="line">        DaoMaster.createAllTables(db, false);</div><div class="line">        restoreData(db, daoClasses);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 对比差异，在原表中直接添加column,赞不做删除操作</div><div class="line">     * @param db</div><div class="line">     * @param daoClasses</div><div class="line">     */</div><div class="line">    public void contrastDiff(Database db,ArrayList&lt;String&gt;properties, Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;... daoClasses)&#123;</div><div class="line">     for(int i=0;i&lt;daoClasses.length;i++)&#123;</div><div class="line">         DaoConfig daoConfig = new DaoConfig(db, daoClasses[i]);</div><div class="line">         String tableName=daoConfig.tablename;</div><div class="line">         if(properties!=null&amp;&amp;properties.size()&gt;0)&#123;</div><div class="line">             ArrayList&lt;String&gt;tem=new ArrayList&lt;&gt;();</div><div class="line">             StringBuilder sqlBuilder=new StringBuilder();</div><div class="line">             for(int j=0;j&lt;properties.size();j++)&#123;</div><div class="line">                 if(getColumns(db,tableName).contains(properties.get(j)))&#123;</div><div class="line">                     continue;</div><div class="line">                 &#125;</div><div class="line">                 tem.add(properties.get(j));</div><div class="line">             &#125;</div><div class="line">             sqlBuilder.append(&quot;INSERT INTO &quot;).append(tableName).append(&quot; (&quot;);</div><div class="line">             sqlBuilder.append(TextUtils.join(&quot;,&quot;, tem));</div><div class="line">             sqlBuilder.append(&quot;) SELECT &quot;);</div><div class="line">             sqlBuilder.append(TextUtils.join(&quot;,&quot;, tem));</div><div class="line">             sqlBuilder.append(&quot; FROM &quot;).append(tableName).append(&quot;;&quot;);</div><div class="line">             db.execSQL(sqlBuilder.toString());</div><div class="line">         &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 删除原表重新再建立一个表</div><div class="line">     * @param db</div><div class="line">     */</div><div class="line">    public void dropAndCreate(Database db)&#123;</div><div class="line">        DaoMaster.dropAllTables(db, true);</div><div class="line">        DaoMaster.createAllTables(db, false);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 数据库备份</div><div class="line">     * @param db</div><div class="line">     * @param daoClasses</div><div class="line">     */</div><div class="line">    private void generateTempTables(Database db, Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;... daoClasses) &#123;</div><div class="line">        for (int i = 0; i &lt; daoClasses.length; i++) &#123;</div><div class="line">            DaoConfig daoConfig = new DaoConfig(db, daoClasses[i]);</div><div class="line"></div><div class="line">            String divider = &quot;&quot;;</div><div class="line">            String tableName = daoConfig.tablename;</div><div class="line">            String tempTableName = daoConfig.tablename.concat(&quot;_TEMP&quot;);</div><div class="line">            ArrayList&lt;String&gt; properties = new ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">            StringBuilder createTableStringBuilder = new StringBuilder();</div><div class="line"></div><div class="line">            createTableStringBuilder.append(&quot;CREATE TABLE &quot;).append(tempTableName).append(&quot; (&quot;);</div><div class="line"></div><div class="line">            for (int j = 0; j &lt; daoConfig.properties.length; j++) &#123;</div><div class="line">                String columnName = daoConfig.properties[j].columnName;</div><div class="line"></div><div class="line">                if (getColumns(db, tableName).contains(columnName)) &#123;</div><div class="line">                    properties.add(columnName);</div><div class="line"></div><div class="line">                    String type = null;</div><div class="line"></div><div class="line">                    try &#123;</div><div class="line">                        type = getTypeByClass(daoConfig.properties[j].type);</div><div class="line">                    &#125; catch (Exception exception) &#123;</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    createTableStringBuilder.append(divider).append(columnName).append(&quot; &quot;).append(type);</div><div class="line"></div><div class="line">                    if (daoConfig.properties[j].primaryKey) &#123;</div><div class="line">                        createTableStringBuilder.append(&quot; PRIMARY KEY&quot;);</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    divider = &quot;,&quot;;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            createTableStringBuilder.append(&quot;);&quot;);</div><div class="line"></div><div class="line">            db.execSQL(createTableStringBuilder.toString());</div><div class="line"></div><div class="line">            StringBuilder insertTableStringBuilder = new StringBuilder();</div><div class="line"></div><div class="line">            insertTableStringBuilder.append(&quot;INSERT INTO &quot;).append(tempTableName).append(&quot; (&quot;);</div><div class="line">            insertTableStringBuilder.append(TextUtils.join(&quot;,&quot;, properties));</div><div class="line">            insertTableStringBuilder.append(&quot;) SELECT &quot;);</div><div class="line">            insertTableStringBuilder.append(TextUtils.join(&quot;,&quot;, properties));</div><div class="line">            insertTableStringBuilder.append(&quot; FROM &quot;).append(tableName).append(&quot;;&quot;);</div><div class="line"></div><div class="line">            db.execSQL(insertTableStringBuilder.toString());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 数据库恢复</div><div class="line">     * @param db</div><div class="line">     * @param daoClasses</div><div class="line">     */</div><div class="line">    private void restoreData(Database db, Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;... daoClasses) &#123;</div><div class="line">        for (int i = 0; i &lt; daoClasses.length; i++) &#123;</div><div class="line">            DaoConfig daoConfig = new DaoConfig(db, daoClasses[i]);</div><div class="line"></div><div class="line">            String tableName = daoConfig.tablename;</div><div class="line">            String tempTableName = daoConfig.tablename.concat(&quot;_TEMP&quot;);</div><div class="line">            ArrayList&lt;String&gt; properties = new ArrayList();</div><div class="line"></div><div class="line">            for (int j = 0; j &lt; daoConfig.properties.length; j++) &#123;</div><div class="line">                String columnName = daoConfig.properties[j].columnName;</div><div class="line"></div><div class="line">                if (getColumns(db, tempTableName).contains(columnName)) &#123;</div><div class="line">                    properties.add(columnName);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            StringBuilder insertTableStringBuilder = new StringBuilder();</div><div class="line"></div><div class="line">            insertTableStringBuilder.append(&quot;INSERT INTO &quot;).append(tableName).append(&quot; (&quot;);</div><div class="line">            insertTableStringBuilder.append(TextUtils.join(&quot;,&quot;, properties));</div><div class="line">            insertTableStringBuilder.append(&quot;) SELECT &quot;);</div><div class="line">            insertTableStringBuilder.append(TextUtils.join(&quot;,&quot;, properties));</div><div class="line">            insertTableStringBuilder.append(&quot; FROM &quot;).append(tempTableName).append(&quot;;&quot;);</div><div class="line"></div><div class="line">            StringBuilder dropTableStringBuilder = new StringBuilder();</div><div class="line"></div><div class="line">            dropTableStringBuilder.append(&quot;DROP TABLE &quot;).append(tempTableName);</div><div class="line"></div><div class="line">            db.execSQL(insertTableStringBuilder.toString());</div><div class="line">            db.execSQL(dropTableStringBuilder.toString());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private String getTypeByClass(Class&lt;?&gt; type) throws Exception &#123;</div><div class="line">        if (type.equals(String.class)) &#123;</div><div class="line">            return &quot;TEXT&quot;;</div><div class="line">        &#125;</div><div class="line">        if (type.equals(Long.class) || type.equals(Integer.class) || type.equals(long.class)) &#123;</div><div class="line">            return &quot;INTEGER&quot;;</div><div class="line">        &#125;</div><div class="line">        if (type.equals(Boolean.class)) &#123;</div><div class="line">            return &quot;BOOLEAN&quot;;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Exception exception =</div><div class="line">                new Exception(CONVERSION_CLASS_NOT_FOUND_EXCEPTION.concat(&quot; - Class: &quot;).concat(type.toString()));</div><div class="line">        throw exception;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static List&lt;String&gt; getColumns(Database db, String tableName) &#123;</div><div class="line">        List&lt;String&gt; columns = new ArrayList&lt;&gt;();</div><div class="line">        Cursor cursor = null;</div><div class="line">        try &#123;</div><div class="line">            cursor = db.rawQuery(&quot;SELECT * FROM &quot; + tableName + &quot; limit 1&quot;, null);</div><div class="line">            if (cursor != null) &#123;</div><div class="line">                columns = new ArrayList&lt;&gt;(Arrays.asList(cursor.getColumnNames()));</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            Log.v(tableName, e.getMessage(), e);</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; finally &#123;</div><div class="line">            if (cursor != null) cursor.close();</div><div class="line">        &#125;</div><div class="line">        return columns;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上是本人自己整理的一些升级方法，请大家批评指正。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/06/Android市面常见加固方案评测/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/06/Android市面常见加固方案评测/" itemprop="url">Android市面常见加固方案评测</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T14:59:53+08:00">
+                2017-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>安卓应用主要基于Java开发，极易被破解，造成代码或关键接口暴露，甚至被别人加入广告，病毒等二次打包发布，给公司和用户均带来巨大的风险，应对破解的最便捷有效的方式就是加固。通过加固可以在一定程度上达到反编译和防止被二次打包的效果。</p>
+<p>通过大量网上调查并结合实际操作，对以下4个主流的加固平台从破解难易度，兼容性，加固后对应用的影响（体积，启动速度），操作难度，使用成本，客服响应速度几个方面给出评测。</p>
+<p>加固是非常专业的领域，该评测并未深入到实现原理及技术细节，仅供参考。</p>
+<blockquote>
+<p>1.360加固保   链接：<a href="http://jiagu.360.cn/" target="_blank" rel="external">http://jiagu.360.cn/</a> </p>
+<p>2.阿里聚安全   链接：<a href="http://jaq.alibaba.com/" target="_blank" rel="external">http://jaq.alibaba.com/</a></p>
+<p>3.爱加密   链接：<a href="http://ijiami.cn/AppProtect" target="_blank" rel="external">http://ijiami.cn/AppProtect</a></p>
+<p>4.腾讯乐固   链接：<a href="http://legu.qcloud.com/" target="_blank" rel="external">http://legu.qcloud.com/</a></p>
+</blockquote>
+<h2 id="一．破解难度"><a href="#一．破解难度" class="headerlink" title="一．破解难度"></a>一．破解难度</h2><blockquote>
+<p>目前加固技术基本都发展到第三代，前2代的加固技术破解难度不大，基本被淘汰，这里只针对第三代加固技术，由于各加固服务商加固原理大致相同，这里不做区分，统一评估。</p>
+<p>目前的破解基本是针对免费版，下面的破解难易度判断基于论坛和网络搜集的破解博客</p>
+</blockquote>
+<p>第三代加固技术的主要特点是：</p>
+<ol>
+<li>Dex Method代码动态解密</li>
+<li>So代码膨胀混淆</li>
+<li>对前2代漏洞修改或增强</li>
+</ol>
+<p>那么第三代是否无法破解呢？答案是否定的，在<a href="http://bbs.pediy.com/forum-161.htm" target="_blank" rel="external">看雪论坛</a>的Android版块，可以看到大量成功破解360，腾讯，百度等第三代加固方案的文章，甚至有的做成了专门的破解工具。下面列出几个例子：</p>
+<p>腾讯乐固破解：<a href="http://bbs.pediy.com/thread-210532.htm" target="_blank" rel="external">http://bbs.pediy.com/thread-210532.htm</a></p>
+<p>360和腾讯乐固的开源的双破方案：<a href="https://github.com/spriteviki/Dex2oatHunter" target="_blank" rel="external">https://github.com/spriteviki/Dex2oatHunter</a></p>
+<p>360加固破解：<a href="http://www.wjdiankong.cn/apk%E8%84%B1%E5%A3%B3%E5%9C%A3%E6%88%98%E4%B9%8B-%E8%84%B1%E6%8E%89360%E5%8A%A0%E5%9B%BA%E7%9A%84%E5%A3%B3/" target="_blank" rel="external">http://www.wjdiankong.cn/apk%E8%84%B1%E5%A3%B3%E5%9C%A3%E6%88%98%E4%B9%8B-%E8%84%B1%E6%8E%89360%E5%8A%A0%E5%9B%BA%E7%9A%84%E5%A3%B3/</a></p>
+<p>百度破解：<a href="http://bbs.pediy.com/thread-211162.htm" target="_blank" rel="external">http://bbs.pediy.com/thread-211162.htm</a></p>
+<p>阿里加固破解：<a href="http://bbs.pediy.com/thread-210880.htm" target="_blank" rel="external">http://bbs.pediy.com/thread-210880.htm</a></p>
+<p>爱加密破解：<a href="http://blog.csdn.net/jiangwei0910410003/article/details/51620236" target="_blank" rel="external">http://blog.csdn.net/jiangwei0910410003/article/details/51620236</a></p>
+<p>阿里聚安全反编译很容易看到源代码的。只是对部分方法由java层移到了native层， 需要配合阿里的安全组件才能真正起到保护的目的。</p>
+<p>这里有<a href="http://blog.csdn.net/qq1084283172/article/details/53572446" target="_blank" rel="external">一篇博客</a>总结了目前针对全部3代加固技术的破解方案，从文中可见对于专业人员来讲，第三代加固破解难度并不高。</p>
+<p>当然加固和破解是不断博弈的过程，公布出来的破解方案也基本会被加固商升级封堵，比如360和阿里的反应都是非常快速的。但由于在各大应用市场已经存在大量使用旧的加固方案的应用，因此只要破解较早版本的APK，基本就可以获取你应用的大部分关键信息了。所以使用第三代加固方案的应用，即便是用最新的加固策略，也是一定可以破解的，只是时间早晚的问题。</p>
+<h2 id="二．兼容性"><a href="#二．兼容性" class="headerlink" title="二．兼容性"></a>二．兼容性</h2><blockquote>
+<p>目前各个厂商网站上宣传的兼容性普遍较高，但都很少有敢承诺100%兼容，如阿里，爱加密，腾讯等均承认加固会影响原程序的兼容性及性能。</p>
+</blockquote>
+<p>对我们应用采用testin标准兼容测试，终端数100款，通过率大致如下：</p>
+<table>
+<thead>
+<tr>
+<th>未加固</th>
+<th>阿里加固</th>
+<th>腾讯加固</th>
+<th>360加固</th>
+<th>梆梆加固</th>
+<th>爱加密 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100%</td>
+<td>100%</td>
+<td>99%</td>
+<td>98%</td>
+<td>98%</td>
+<td>97%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="兼容性：-阿里-gt-腾讯-gt-360-梆梆-gt-爱加密"><a href="#兼容性：-阿里-gt-腾讯-gt-360-梆梆-gt-爱加密" class="headerlink" title="兼容性： 阿里 &gt; 腾讯 &gt; 360 = 梆梆 &gt; 爱加密"></a>兼容性： 阿里 &gt; 腾讯 &gt; 360 = 梆梆 &gt; 爱加密</h5><p>以下是搜集到的各平台关于兼容性的反馈：</p>
+<h6 id="360加固问题"><a href="#360加固问题" class="headerlink" title="360加固问题"></a>360加固问题</h6><ol>
+<li>360加固后会有<a href="http://bbs.360.cn/thread-14847313-1-1.html" target="_blank" rel="external">锁屏广告</a></li>
+<li>360加固后，导致ANR<a href="http://bbs.360.cn/thread-14756391-1-1.html" target="_blank" rel="external">概率增大</a></li>
+</ol>
+<ul>
+<li>大部分问题集中在2016年上半年之前</li>
+</ul>
+<h6 id="百度加固问题"><a href="#百度加固问题" class="headerlink" title="百度加固问题"></a>百度加固问题</h6><ol>
+<li>百度加固后 导致我的应用都无法用了 真是被坑大了：<a href="https://tieba.baidu.com/p/4375684485" target="_blank" rel="external">https://tieba.baidu.com/p/4375684485</a></li>
+</ol>
+<h6 id="腾讯乐固"><a href="#腾讯乐固" class="headerlink" title="腾讯乐固"></a>腾讯乐固</h6><ol>
+<li>乐固加固后App Crash：<a href="http://bbs.qcloud.com/thread-25537-1-1.html" target="_blank" rel="external">http://bbs.qcloud.com/thread-25537-1-1.html</a></li>
+</ol>
+<p>关于兼容性还可以参考知乎上的<a href="https://zhuanlan.zhihu.com/p/21482658" target="_blank" rel="external">这篇评测文章</a>。</p>
+<h2 id="三．加固后对应用的影响（体积，启动速度）"><a href="#三．加固后对应用的影响（体积，启动速度）" class="headerlink" title="三．加固后对应用的影响（体积，启动速度）"></a>三．加固后对应用的影响（体积，启动速度）</h2><blockquote>
+<p>以下数据基于启信宝3.6.2版</p>
+</blockquote>
+<ol>
+<li>对体积的影响</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>未加固</th>
+<th>阿里加固</th>
+<th>腾讯加固</th>
+<th>360加固</th>
+<th>梆梆加固</th>
+<th>爱加密 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11.9MB</td>
+<td>11.2MB</td>
+<td>11.6MB</td>
+<td>12.2MB</td>
+<td>13.9MB</td>
+<td>13.6MB</td>
+</tr>
+</tbody>
+</table>
+<p>2.对启动速度的影响(首次/第二次)</p>
+<table>
+<thead>
+<tr>
+<th>未加固</th>
+<th>阿里加固</th>
+<th>腾讯加固</th>
+<th>360加固</th>
+<th>梆梆加固</th>
+<th>爱加密 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1s833ms/788ms</td>
+<td>2s71ms/882ms</td>
+<td>1s877ms/1s681ms</td>
+<td>3s187ms/2s33ms</td>
+<td>3s803ms/2s212ms</td>
+<td>2s592ms/2s247ms</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>腾讯加固虽然体积和启动速度看起来不错，但在测试时无法在三星note4上进行网络请求，其他加固包正常。</li>
+</ul>
+<h2 id="四．操作复杂度"><a href="#四．操作复杂度" class="headerlink" title="四．操作复杂度"></a>四．操作复杂度</h2><p>各平台加固功能使用下来基本不会出现操作疑问，主要是步骤和流程都类似。体验上360和阿里稍好一些。爱加密体验较差。</p>
+<h2 id="五．使用成本"><a href="#五．使用成本" class="headerlink" title="五．使用成本"></a>五．使用成本</h2><ol>
+<li><p>360：</p>
+<p> 免费提供给开发者。</p>
+</li>
+<li><p>阿里聚安全：</p>
+<p> 有免费服务，也有付费的企业用户服务，明码标价，<a href="https://help.aliyun.com/document_detail/35078.html?spm=5176.doc35120.6.555.tsB0qO" target="_blank" rel="external">费用比较高</a>.</p>
+</li>
+<li><p>爱加密：</p>
+<p>有免费版和企业版，费用未知</p>
+</li>
+<li><p>腾讯乐固：</p>
+<p>有免费基础版和至尊版，至尊版需一个月内在腾讯云消耗金额大于<a href="https://www.qcloud.com/service/vip" target="_blank" rel="external">10万元</a>。</p>
+</li>
+</ol>
+<h2 id="六．客服响应速度（基于论坛及网友反馈）"><a href="#六．客服响应速度（基于论坛及网友反馈）" class="headerlink" title="六．客服响应速度（基于论坛及网友反馈）"></a>六．客服响应速度（基于论坛及网友反馈）</h2><ol>
+<li><p>360：</p>
+<p>有论坛和在线客服，回帖较快。</p>
+</li>
+<li><p>阿里聚安全：</p>
+<p>有在线客服，企业版提供1v1服务。</p>
+</li>
+<li><p>爱加密：</p>
+<p>有在线客服，企业版提供1v1服务，12小时内响应。</p>
+</li>
+<li><p>腾讯乐固：</p>
+<p>有论坛和在线客服，至尊版提供1v1服务</p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上分析基于免费版加固，企业级加固肯定加固强度高一个等级，再加上代码加花混淆等操作，相信一般人员很难破解，而且网上企业级破解样例很少，短期内可以有效保证代码安全。因而继续使用梆梆加固还是很有必要的，但出于兼容性考虑，有时候需要给用户提供别的加固包，这里结合使用成本，以上分析及实际使用体验（启动速度，兼容性，操作复杂度）给出2个备选方案：</p>
+<blockquote>
+<ol>
+<li><p>360加固（dex级）</p>
+</li>
+<li><p>阿里加固（核心方法级）+ 安全组件</p>
+</li>
+</ol>
+</blockquote>
+<ul>
+<li>360加固包已经提供部分用户使用，目前没有异常反馈。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/06/Android 代码规范/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/06/Android 代码规范/" itemprop="url">Android 代码规范</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T14:58:52+08:00">
+                2017-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-文件命名"><a href="#1-文件命名" class="headerlink" title="1  文件命名"></a>1  文件命名</h2><h4 id="1-1-类文件命名-参考"><a href="#1-1-类文件命名-参考" class="headerlink" title="1.1 类文件命名 参考."></a>1.1 类文件命名 <a href="http://en.wikipedia.org/wiki/CamelCase" target="_blank" rel="external">参考</a>.</h4><blockquote>
+<p>类命名方式采用 <code>大驼峰</code> 命名法</p>
+<p>对于继承自安卓组件的类来说，类名应该以该组件名结尾，例如 ： <code>SignInActivity</code>, <code>SignInFragment</code>, <code>ImageUploaderService</code>, <code>ChangePasswordDialog</code>.</p>
+<p>对于工具类来说，命名方式应该以其完成功能开始,以 <code>Utils</code> 结束 ，例如 ：<code>HttpUtils</code> , <code>ImageUtils</code>.</p>
+</blockquote>
+<h4 id="1-2-资源文件"><a href="#1-2-资源文件" class="headerlink" title="1.2 资源文件"></a>1.2 资源文件</h4><blockquote>
+<p>资源文件以<strong>小写加下划线</strong>的方式命名.例如 ：<code>R.layout.activity_main</code> ,</p>
+</blockquote>
+<h4 id="1-3-Drawable文件"><a href="#1-3-Drawable文件" class="headerlink" title="1.3 Drawable文件"></a>1.3 Drawable文件</h4><ul>
+<li>icon文件的命名规范</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Asset Type</th>
+<th>Prefix 前缀</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Icons</td>
+<td><code>ic_</code></td>
+<td><code>ic_star.png</code></td>
+</tr>
+<tr>
+<td>Launcher icons</td>
+<td><code>ic_launcher</code></td>
+<td><code>ic_launcher_calendar.png</code></td>
+</tr>
+<tr>
+<td>Menu icons and Action Bar icons</td>
+<td><code>ic_menu</code></td>
+<td><code>ic_menu_archive.png</code></td>
+</tr>
+<tr>
+<td>Status bar icons</td>
+<td><code>ic_stat_notify</code></td>
+<td><code>ic_stat_notify_msg.png</code></td>
+</tr>
+<tr>
+<td>Tab icons</td>
+<td><code>ic_tab</code></td>
+<td><code>ic_tab_recent.png</code></td>
+</tr>
+<tr>
+<td>Dialog icons</td>
+<td><code>ic_dialog</code></td>
+<td><code>ic_dialog_info.png</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>选择器状态文件的命名规范</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Suffix  尾缀</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Normal</td>
+<td><code>_normal</code></td>
+<td><code>btn_order_normal.9.png</code></td>
+</tr>
+<tr>
+<td>Pressed</td>
+<td><code>_pressed</code></td>
+<td><code>btn_order_pressed.9.png</code></td>
+</tr>
+<tr>
+<td>Focused</td>
+<td><code>_focused</code></td>
+<td><code>btn_order_focused.9.png</code></td>
+</tr>
+<tr>
+<td>Disabled</td>
+<td><code>_disabled</code></td>
+<td><code>btn_order_disabled.9.png</code></td>
+</tr>
+<tr>
+<td>Selected</td>
+<td><code>_selected</code></td>
+<td><code>btn_order_selected.9.png</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-4-布局文件"><a href="#1-4-布局文件" class="headerlink" title="1.4  布局文件"></a>1.4  布局文件</h4><blockquote>
+<p>布局文件的命名需要与他所嵌入的安卓组件匹配，但是将组件名称前移到开始处,例如,我们要创建一个名字为 <code>SignInActivity</code>, 其名字应该为  <code>activity_sign_in.xml</code>.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Component 组件</th>
+<th>Class Name</th>
+<th>Layout Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activity</td>
+<td><code>UserProfileActivity</code></td>
+<td><code>activity_user_profile.xml</code></td>
+</tr>
+<tr>
+<td>Fragment</td>
+<td><code>SignUpFragment</code></td>
+<td><code>fragment_sign_up.xml</code></td>
+</tr>
+<tr>
+<td>Dialog</td>
+<td><code>ChangePasswordDialog</code></td>
+<td><code>dialog_change_password.xml</code></td>
+</tr>
+<tr>
+<td>AdapterView Item</td>
+<td>—</td>
+<td><code>item_person.xml</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-5-类变量命名"><a href="#1-5-类变量命名" class="headerlink" title="1.5  类变量命名"></a>1.5  类变量命名</h4><ul>
+<li>公有变量按 <code>小驼峰</code> 法命名</li>
+<li>私有 &amp; 非静态成员变量以 <code>m</code> 开头</li>
+<li>私有 &amp; 静态成员变量以 <code>s</code> 开头</li>
+<li>常量以大写字母和下划线 <code>_</code> 组成</li>
+<li>尽量使用 <code>功能/描述 + 类型</code> 的模式 ,如 <code>mNameTextView</code></li>
+<li>类中变量的组件类型请不要使用缩写</li>
+<li>注意不要使用 <code>aa</code> <code>bb</code> <code>cc3</code> 这种变态的命名方式 ！！</li>
+<li>类变量过多时请 <code>分块摆放</code> 并且 <code>写好注释</code></li>
+<li><code>接口类</code> 请直接定义在类的最后</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</div><div class="line">    <span class="comment">//静态常量</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SOME_CONSTANT = <span class="number">42</span>;</div><div class="line">    <span class="comment">//公有变量</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> publicField;</div><div class="line">    <span class="comment">//私有静态变量</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> MyClass sSingleton;</div><div class="line">    <span class="comment">//默认变量</span></div><div class="line">    <span class="keyword">int</span> mPackagePrivate;</div><div class="line">    <span class="comment">//私有变量</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mPrivate;</div><div class="line">    <span class="comment">//继承型变量</span></div><div class="line">    <span class="keyword">protected</span> <span class="keyword">int</span> mProtected;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="1-6-类方法命名"><a href="#1-6-类方法命名" class="headerlink" title="1.6  类方法命名"></a>1.6  类方法命名</h4><ul>
+<li>类方法采用 <code>小驼峰</code> 命名法</li>
+<li>根据函数所完成功能命名 ， 如 <code>changView()</code></li>
+<li><p>在函数头写对于函数功能、参数和返回值的注释，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 获取两个数中最大的一个</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> value1 参与比较的第一个数</div><div class="line"> * <span class="doctag">@param</span> value2 参与比较的第二个数</div><div class="line"> * <span class="doctag">@return</span> 两个参数中最大的一个数</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> value1, <span class="keyword">int</span> value2)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> (value1 &gt; value2) ? value1 : value2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>一个函数请尽量保持在 <code>50行</code> 之内 ！！</p>
+</li>
+</ul>
+<h4 id="1-7-布局文件变量命名"><a href="#1-7-布局文件变量命名" class="headerlink" title="1.7 布局文件变量命名"></a>1.7 布局文件变量命名</h4><ul>
+<li><code>id</code> 以 <code>所在组件_类型_命名</code> 的模式，例如： <code>@+id/main_tv_name</code> 、 <code>@id/chat_btn_send</code></li>
+<li>布局多处重用的请使用 <code>&lt;include&gt;</code> 标签</li>
+<li>所有文本请定义在 <code>strings.xml</code> 中 , 如 <code>@string/app_name</code></li>
+<li>重用dp请定义在 <code>dimens.xml</code> 中 , 如  <code>@dimen/entry_item_height</code></li>
+<li>对应组件缩写表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Component 组件</th>
+<th>Abbreviation 缩写</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fragment</td>
+<td><code>fgm</code></td>
+</tr>
+<tr>
+<td>TextView</td>
+<td><code>tv</code></td>
+</tr>
+<tr>
+<td>ImageView</td>
+<td><code>iv</code></td>
+</tr>
+<tr>
+<td>Button</td>
+<td><code>btn</code></td>
+</tr>
+<tr>
+<td>EditText</td>
+<td><code>et</code></td>
+</tr>
+<tr>
+<td>LinearLayout</td>
+<td><code>ll</code></td>
+</tr>
+<tr>
+<td>ReleativeLayout</td>
+<td><code>rl</code></td>
+</tr>
+<tr>
+<td>normally : FirstSecond</td>
+<td><code>fs</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-8-strings-xml-dimens-xml-colors-xml-xml变量命名"><a href="#1-8-strings-xml-dimens-xml-colors-xml-xml变量命名" class="headerlink" title="1.8 strings.xml  dimens.xml  colors.xml  xml变量命名"></a>1.8 strings.xml  dimens.xml  colors.xml  xml变量命名</h4><blockquote>
+<ul>
+<li>遵循 <code>完整性</code> <code>规范性</code> <code>有序性</code>原则</li>
+<li><strong>分块并注释</strong>, 将 使用在不同的 <code>Activity</code> 或者 <code>Fragment</code> 中的 <code>xml</code> 变量 进行分块</li>
+<li>命名举例 ：<br><code>login_error_tips</code>  <strong>in</strong>  <code>strings.xml</code><br><code>login_error_tips_height</code> <strong>in</strong> <code>dimens.xml</code><br><code>login_error_tips_bg</code> <strong>in</strong> <code>colors.xml</code></li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Prefix 前缀</th>
+<th>Description 描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error_</code></td>
+<td>An error message</td>
+</tr>
+<tr>
+<td><code>msg_</code></td>
+<td>A regular information message</td>
+</tr>
+<tr>
+<td><code>title_</code></td>
+<td>A title, i.e. a dialog title</td>
+</tr>
+<tr>
+<td><code>action_</code></td>
+<td>An action such as “Save” or “Create”</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-9-额外注意"><a href="#1-9-额外注意" class="headerlink" title="1.9 额外注意"></a>1.9 额外注意</h4><table>
+<thead>
+<tr>
+<th>Good</th>
+<th>Bad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XmlHttpRequest</code></td>
+<td><code>XMLHTTPRequest</code></td>
+</tr>
+<tr>
+<td><code>getCustomerId</code></td>
+<td><code>getCustomerID</code></td>
+</tr>
+<tr>
+<td><code>String url</code></td>
+<td><code>String URL</code></td>
+</tr>
+<tr>
+<td><code>long id</code></td>
+<td><code>long ID</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-代码规范"><a href="#2-代码规范" class="headerlink" title="2 代码规范"></a>2 代码规范</h2><hr>
+<p>This is <strong>good</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (condition)&#123;</div><div class="line">    body();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This is <strong>bad</strong>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (condition) body();  <span class="comment">// bad!</span></div></pre></td></tr></table></figure>
+<hr>
+<p>This is <strong>good</strong>:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">	<span class="attr">android:id</span>=<span class="string">"@+id/text_view_profile"</span></div><div class="line">	<span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">	<span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span> /&gt;</div></pre></td></tr></table></figure>
+<p>This is <strong>bad</strong> :</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- Don't do this! --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/text_view_profile"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span> &gt;</div><div class="line"><span class="tag">&lt;/<span class="name">TextView</span>&gt;</span></div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/06/轻量级的数据库GreenDao的整合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/06/轻量级的数据库GreenDao的整合/" itemprop="url">轻量级的数据库GreenDao的整合</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T14:57:53+08:00">
+                2017-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="数据库的选择"><a href="#数据库的选择" class="headerlink" title="数据库的选择"></a>数据库的选择</h2><p>之前在项目中使用的是Xutils里面封装的数据库模块，操作起来也是简便好用，但是由于xutils的注解采用的是反射机制，在性能上不是很友好，于是拿来GreenDao试着玩玩。<br><a href="http://greenrobot.org/greendao/" target="_blank" rel="external">GreenDao</a> git首页可以看到一句介绍</p>
+<blockquote>
+<p>greenDAO is a light &amp; fast ORM solution for Android that maps objects to SQLite databases.</p>
+</blockquote>
+<p>妥，本篇不讲GreenDao的实现原理，说明一下配置过程以及遇到的坑。</p>
+<h3 id="gradle配置"><a href="#gradle配置" class="headerlink" title="gradle配置"></a>gradle配置</h3><p>外层需要全局引入GreenDao的插件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;org.greenrobot:greendao-gradle-plugin:3.2.2&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后在内部的gradle apply以及依赖相关的包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;com.android.application&apos;</div><div class="line">//applygreendao插件</div><div class="line">apply plugin: &apos;org.greenrobot.greendao&apos;</div><div class="line"></div><div class="line"> compile &apos;org.greenrobot:greendao:3.2.2&apos;</div><div class="line"> compile &apos;net.zetetic:android-database-sqlcipher:3.5.1@aar&apos;</div></pre></td></tr></table></figure>
+<p>上面<code>compile &#39;net.zetetic:android-database-sqlcipher:3.5.1@aar&#39;</code>的导入也是在配置过程中遇到的坑后面会解释一下为什么加这一句。</p>
+<h3 id="greenDao配置及使用"><a href="#greenDao配置及使用" class="headerlink" title="greenDao配置及使用"></a>greenDao配置及使用</h3><p>首先在Application中初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class MyApplication extends Application &#123;</div><div class="line"></div><div class="line">    public static MyApplication INSTANCE;</div><div class="line">    public static final boolean ENCRYPTED = true;</div><div class="line">    private DaoSession mDaoSession;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onCreate() &#123;</div><div class="line">        super.onCreate();</div><div class="line">        INSTANCE = this;</div><div class="line">        DaoMaster.DevOpenHelper help = new DaoMaster.DevOpenHelper(this, ENCRYPTED ? &quot;bear-db-encrypted&quot; : &quot;bear-db&quot;);</div><div class="line">        //此处有坑</div><div class="line">        Database db = ENCRYPTED ? help.getEncryptedWritableDb(&quot;admin&quot;) : help.getWritableDb();</div><div class="line">        mDaoSession = new DaoMaster(db).newSession();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public DaoSession getDaoSession() &#123;</div><div class="line">        return mDaoSession;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面建立一个数据表来试试，那先来个User表来试玩一下。新建UserBean class</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Entity(indexes = &#123;</div><div class="line">        //index 值是拿表中的account作为索引，且索引是唯一不可重复的</div><div class="line">        @Index(value = &quot;account&quot;,unique = true)</div><div class="line">&#125;)</div><div class="line">public class UserBean &#123;</div><div class="line">    //声明一个主键值</div><div class="line">    @Id</div><div class="line">    public long id;</div><div class="line">    public String account;</div><div class="line">    public String passWord;</div><div class="line">    public String mobile;</div><div class="line">    public String email;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>建立完之后点一下Android Studio运行左边的小锤子make project后就会预编译出一个比较长的类了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">@Entity(indexes = &#123;</div><div class="line">        @Index(value = &quot;account&quot;,unique = true)</div><div class="line">&#125;)</div><div class="line">public class UserBean &#123;</div><div class="line">    @Id</div><div class="line">    public long id;</div><div class="line">    public String account;</div><div class="line">    public String passWord;</div><div class="line">    public String mobile;</div><div class="line">    public String email;</div><div class="line">@Generated(hash = 1328729131)</div><div class="line">public UserBean(long id, String account, String passWord, String mobile,</div><div class="line">        String email) &#123;</div><div class="line">    this.id = id;</div><div class="line">    this.account = account;</div><div class="line">    this.passWord = passWord;</div><div class="line">    this.mobile = mobile;</div><div class="line">    this.email = email;</div><div class="line">&#125;</div><div class="line">@Generated(hash = 1203313951)</div><div class="line">public UserBean() &#123;</div><div class="line">&#125;</div><div class="line">public long getId() &#123;</div><div class="line">    return this.id;</div><div class="line">&#125;</div><div class="line">public void setId(long id) &#123;</div><div class="line">    this.id = id;</div><div class="line">&#125;</div><div class="line">public String getAccount() &#123;</div><div class="line">    return this.account;</div><div class="line">&#125;</div><div class="line">public void setAccount(String account) &#123;</div><div class="line">    this.account = account;</div><div class="line">&#125;</div><div class="line">public String getPassWord() &#123;</div><div class="line">    return this.passWord;</div><div class="line">&#125;</div><div class="line">public void setPassWord(String passWord) &#123;</div><div class="line">    this.passWord = passWord;</div><div class="line">&#125;</div><div class="line">public String getMobile() &#123;</div><div class="line">    return this.mobile;</div><div class="line">&#125;</div><div class="line">public void setMobile(String mobile) &#123;</div><div class="line">    this.mobile = mobile;</div><div class="line">&#125;</div><div class="line">public String getEmail() &#123;</div><div class="line">    return this.email;</div><div class="line">&#125;</div><div class="line">public void setEmail(String email) &#123;</div><div class="line">    this.email = email;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Ok，表已经建立完毕，现在试着插条数据进去玩玩</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">UserBean userBean = new UserBean();</div><div class="line">       userBean.setId((long)1);</div><div class="line">       userBean.setAccount(&quot;18262282215&quot;);</div><div class="line">       userBean.setPassWord(&quot;111111qq&quot;);</div><div class="line">       userBean.setEmail(&quot;bear@berdatata.com&quot;);</div><div class="line">       userBean.setMobile(&quot;18262282215&quot;);</div><div class="line">       UserBeanDao dao = MyApplication.INSTANCE.getDaoSession().getUserBeanDao();</div></pre></td></tr></table></figure>
+<p>开始运行后，Crash 没错就是crash，wocao，明明是按照官网的配置一个个来的嘛。折腾几次终于发现少依赖了一个包，就是前面讲的使用加密的数据库需要导入<code>compile &#39;net.zetetic:android-database-sqlcipher:3.5.1@aar&#39;</code>。总算是走通了。</p>
+<h3 id="greenDao的详细使用以及介绍"><a href="#greenDao的详细使用以及介绍" class="headerlink" title="greenDao的详细使用以及介绍"></a>greenDao的详细使用以及介绍</h3><p>可以看其他大神的博客：<a href="http://www.jianshu.com/p/e6c52fb7103d" target="_blank" rel="external">http://www.jianshu.com/p/e6c52fb7103d</a></p>
 
           
         
@@ -381,6 +1321,10 @@
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -423,7 +1367,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

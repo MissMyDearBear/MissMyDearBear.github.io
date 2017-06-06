@@ -1,0 +1,712 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言最近也是在工作之余开发一个Android App，采用当前比较火的框架retrofit+rxjava+rxbus+lamda+greenDao+glide等。有兴趣的小伙伴可以关注一下我的github开源项目。本文主要介绍的是如何利用python抓取糗百的热门段子。 开发环境 Mac Os Python 2.7.10 Node 7.8.0  编译器：  python–&amp;gt;Pycharm E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虽然我是做Android的，但也会用python抓点数据用用">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/06/06/虽然我是做Android的，但也会用python抓点数据用用/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="前言最近也是在工作之余开发一个Android App，采用当前比较火的框架retrofit+rxjava+rxbus+lamda+greenDao+glide等。有兴趣的小伙伴可以关注一下我的github开源项目。本文主要介绍的是如何利用python抓取糗百的热门段子。 开发环境 Mac Os Python 2.7.10 Node 7.8.0  编译器：  python–&amp;gt;Pycharm E">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4469838-bafbd468355752f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-06-06T07:01:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="虽然我是做Android的，但也会用python抓点数据用用">
+<meta name="twitter:description" content="前言最近也是在工作之余开发一个Android App，采用当前比较火的框架retrofit+rxjava+rxbus+lamda+greenDao+glide等。有兴趣的小伙伴可以关注一下我的github开源项目。本文主要介绍的是如何利用python抓取糗百的热门段子。 开发环境 Mac Os Python 2.7.10 Node 7.8.0  编译器：  python–&amp;gt;Pycharm E">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4469838-bafbd468355752f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/06/06/虽然我是做Android的，但也会用python抓点数据用用/"/>
+
+
+
+
+
+  <title>虽然我是做Android的，但也会用python抓点数据用用 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/06/虽然我是做Android的，但也会用python抓点数据用用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">虽然我是做Android的，但也会用python抓点数据用用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T15:01:12+08:00">
+                2017-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近也是在工作之余开发一个Android App，采用当前比较火的框架<code>retrofit+rxjava+rxbus+lamda+greenDao+glide</code>等。有兴趣的小伙伴可以关注一下我的<a href="https://github.com/MissMyDearBear/Diary" target="_blank" rel="external">github开源项目</a>。本文主要介绍的是如何利用<code>python</code>抓取糗百的热门段子。</p>
+<h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><ol>
+<li>Mac Os</li>
+<li>Python 2.7.10</li>
+<li>Node 7.8.0</li>
+</ol>
+<p>编译器：</p>
+<ol>
+<li>python–&gt;Pycharm Ec</li>
+<li>node–&gt;Visual Code Studio</li>
+</ol>
+<p>以上开发环境以及编译器大家可以自行百度 or google安装，本文就不一一介绍了。</p>
+<h2 id="爬虫开发过程"><a href="#爬虫开发过程" class="headerlink" title="爬虫开发过程"></a>爬虫开发过程</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>除了以上所说的编译器以及开发环境的配置外，我们还要明确设计爬虫的目标，找到抓取的url以及分析目标url的dom结构。</p>
+<ol>
+<li>目标：抓取糗百热门段子第一页中的，所有作者，作者的头像，以及对应的段子内容</li>
+<li>url：<a href="http://www.qiushibaike.com/" target="_blank" rel="external">http://www.qiushibaike.com/</a></li>
+<li>dom结构：<br>可以进入糗百首页，然后查看一下网页源码</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/4469838-bafbd468355752f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="{690D4AFF-447F-E481-B455-CDF6DAF63F7C}.png"></p>
+<p>如上图中所示，可以看到每个完整的段子都是在<code>class=article block untagged mb15</code>的<code>div</code>下面。西面接着找一下对应作者的头像以及姓名的节点<code>![](//pic.qiushibaike.com/system/avtnew/2883/28831688/medium/2017051108472215.JPEG)</code>可以看到作者的名字是和<code>img</code>的<code>alt</code>一样的因此只需要找到这个节点就可以得到姓名和头像地址了。最后看下段子的内容，在<code>class= content</code>的<code>div</code>下面的<code>span</code>中。至此所有要的信息的节点都找到了。</p>
+<h3 id="爬虫书写过程"><a href="#爬虫书写过程" class="headerlink" title="爬虫书写过程"></a>爬虫书写过程</h3><p>框架分为五个个部分：爬虫入口，url管理器，html下载器，html解析器，html输出器</p>
+<h4 id="爬虫入口"><a href="#爬虫入口" class="headerlink" title="爬虫入口"></a>爬虫入口</h4><p>新建spider_main.py</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">from baike import url_manager, html_download, html_parser, html_output</div><div class="line"></div><div class="line"></div><div class="line">class SpiderMain(object):</div><div class="line">    def __init__(self):</div><div class="line">        self.urls = url_manager.UrlManager()</div><div class="line">        self.download = html_download.HtmlDown()</div><div class="line">        self.parser = html_parser.HtmlParser()</div><div class="line">        self.out = html_output.HtmlOutput()</div><div class="line"></div><div class="line">    def crow(self, root_url):</div><div class="line">        count = 1</div><div class="line">        self.urls.add_new_url(root_url)</div><div class="line">        while self.urls.has_new_url():</div><div class="line">            try:</div><div class="line">                new_url = self.urls.get_new_url()</div><div class="line">                print &apos;craw %d:%s&apos; % (count, new_url)</div><div class="line">                html_count = self.download.download(new_url)</div><div class="line">                data = self.parser.parser(html_count)</div><div class="line">                self.out.collect_data(data)</div><div class="line">                if count == 1000:</div><div class="line">                    break</div><div class="line">                count = count+1</div><div class="line">            except:</div><div class="line">                print &apos;craw failed:&apos;</div><div class="line">        self.out.output_html()</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    root_url = &apos;http://www.qiushibaike.com/&apos;</div><div class="line">    obj_spider = SpiderMain()</div><div class="line">    obj_spider.crow(root_url)</div></pre></td></tr></table></figure>
+<h4 id="url管理器"><a href="#url管理器" class="headerlink" title="url管理器"></a>url管理器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">class UrlManager(object):</div><div class="line"></div><div class="line">    def __init__(self):</div><div class="line">        self.new_urls = set()</div><div class="line">        self.older_urls = set()</div><div class="line"></div><div class="line">    def add_new_url(self, url):</div><div class="line">        if url is None:</div><div class="line">            return</div><div class="line">        if url not in self.new_urls and url not in self.older_urls:</div><div class="line">            self.new_urls.add(url)</div><div class="line"></div><div class="line">    def add_new_urls(self, urls):</div><div class="line">        if urls is None or len(urls) == 0:</div><div class="line">            return</div><div class="line">        for url in urls:</div><div class="line">            self.add_new_url(url)</div><div class="line"></div><div class="line">    def has_new_url(self):</div><div class="line">        return len(self.new_urls) != 0</div><div class="line"></div><div class="line">    def get_new_url(self):</div><div class="line">        url = self.new_urls.pop()</div><div class="line">        self.older_urls.add(url)</div><div class="line">        return url</div></pre></td></tr></table></figure>
+<h4 id="html下载器"><a href="#html下载器" class="headerlink" title="html下载器"></a>html下载器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import requests</div><div class="line"></div><div class="line"></div><div class="line">class HtmlDown(object):</div><div class="line">    def download(self, url):</div><div class="line">        if url is None:</div><div class="line">            return None</div><div class="line">        response = requests.get(url)</div><div class="line">        if response.status_code != 200:</div><div class="line">            return None</div><div class="line">        return response.text</div></pre></td></tr></table></figure>
+<h4 id="html解析器"><a href="#html解析器" class="headerlink" title="html解析器"></a>html解析器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">from bs4 import BeautifulSoup</div><div class="line"></div><div class="line"></div><div class="line">class HtmlParser(object):</div><div class="line">    def __init__(self):</div><div class="line">        self.items = []</div><div class="line"></div><div class="line">    def parser(self, response):</div><div class="line">        if response is None:</div><div class="line">            return None</div><div class="line">        soup = BeautifulSoup(response, &apos;html.parser&apos;)</div><div class="line">        nodes = soup.findAll(&apos;div&apos;, class_=&apos;article block untagged mb15&apos;)</div><div class="line">        if nodes is None or len(nodes) == 0:</div><div class="line">            return None</div><div class="line">        for node in nodes:</div><div class="line">            image_node = node.img</div><div class="line">            image = &apos;http:&apos; + image_node[&apos;src&apos;]</div><div class="line">            user_name = image_node[&apos;alt&apos;]</div><div class="line">            content_node = node.span.get_text()</div><div class="line">            data = &#123;</div><div class="line">                &apos;image_url&apos;: image,</div><div class="line">                &apos;user_name&apos;: user_name,</div><div class="line">                &apos;content&apos;: content_node</div><div class="line">            &#125;</div><div class="line">            self.items.append(data)</div><div class="line">        return self.items</div></pre></td></tr></table></figure>
+<h4 id="html输出器"><a href="#html输出器" class="headerlink" title="html输出器"></a>html输出器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">import json</div><div class="line"></div><div class="line">class HtmlOutput(object):</div><div class="line">    def __init__(self):</div><div class="line">        self.data = []</div><div class="line"></div><div class="line">    def collect_data(self, data):</div><div class="line">        if data is None:</div><div class="line">            return</div><div class="line">        self.data = data</div><div class="line"></div><div class="line">    def output_html(self):</div><div class="line">        self.write_to_json(self.data)</div><div class="line">        fout = open(&apos;output.html&apos;, &apos;w&apos;)</div><div class="line">        fout.write(&quot;&lt;html&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;body&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;table&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;tr&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;td&gt;name&lt;/td&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;td&gt;image&lt;/td&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;td&gt;content&lt;/td&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;/tr&gt;&quot;)</div><div class="line">        if len(self.data) &gt; 0:</div><div class="line">            for item in self.data:</div><div class="line">                fout.write(&quot;&lt;tr&gt;&quot;)</div><div class="line">                fout.write(&quot;&lt;td&gt;%s&lt;/td&gt;&quot; % (item[&apos;user_name&apos;]).encode(&apos;utf-8&apos;))</div><div class="line">                fout.write(&quot;&lt;td&gt;%s&lt;/td&gt;&quot; % (item[&apos;image_url&apos;]))</div><div class="line">                fout.write(&quot;&lt;td&gt;%s&lt;/td&gt;&quot; % (item[&apos;content&apos;]).encode(&apos;utf-8&apos;))</div><div class="line">                fout.write(&quot;&lt;/tr&gt;&quot;)</div><div class="line"></div><div class="line">        fout.write(&quot;&lt;/table&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;/body&gt;&quot;)</div><div class="line">        fout.write(&quot;&lt;/html&gt;&quot;)</div><div class="line">        fout.close()</div><div class="line"></div><div class="line">    def write_to_json(self, data):</div><div class="line">        if data is None:</div><div class="line">            return</div><div class="line">        f = open(&apos;json.txt&apos;, &apos;w&apos;)</div><div class="line">        json_str = json.dumps(data).encode(&apos;utf-8&apos;)</div><div class="line">        print json_str</div><div class="line">        f.write(json_str)</div><div class="line">        f.close()</div></pre></td></tr></table></figure>
+<p>最终将爬去的数据以html的形式和Json形式分表保存在当前路径下面。</p>
+<h3 id="只用node书写简单的接口"><a href="#只用node书写简单的接口" class="headerlink" title="只用node书写简单的接口"></a>只用node书写简单的接口</h3><p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">ar http = require(&apos;http&apos;);</div><div class="line">var rf = require(&quot;fs&quot;);</div><div class="line">var data = rf.readFileSync(&quot;/Users/bear/Desktop/workplace/python/baike/json.txt&quot;, &quot;utf-8&quot;);</div><div class="line">console.log(data)</div><div class="line">var jsonStr = &#123;</div><div class="line">    &apos;code&apos;: &apos;1&apos;,</div><div class="line">    &apos;message&apos;: &apos;操作成功&apos;,</div><div class="line">    &quot;data&quot;: &#123;</div><div class="line">        &apos;items&apos;: JSON.parse(data)</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var json = JSON.stringify(jsonStr);</div><div class="line">console.log(json);</div><div class="line">http.createServer(function (req, res) &#123;</div><div class="line">    res.writeHead(200);</div><div class="line">    res.end(json);</div><div class="line">&#125;).listen(1377, &quot;0.0.0.0&quot;);</div><div class="line">console.log(&apos;Server running at http://127.0.0.1:/&apos;);</div></pre></td></tr></table></figure>
+<p>然后本地浏览器打开：localhost:1377就能看到最终的json了</p>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>app 端接口的调用可以看下<a href="https://github.com/MissMyDearBear/Diary" target="_blank" rel="external">Github上的开源项目</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/06/GreenDao数据库升级问题/" rel="next" title="GreenDao数据库升级问题">
+                <i class="fa fa-chevron-left"></i> GreenDao数据库升级问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发环境"><span class="nav-number">2.</span> <span class="nav-text">开发环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#爬虫开发过程"><span class="nav-number">3.</span> <span class="nav-text">爬虫开发过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-number">3.1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#爬虫书写过程"><span class="nav-number">3.2.</span> <span class="nav-text">爬虫书写过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#爬虫入口"><span class="nav-number">3.2.1.</span> <span class="nav-text">爬虫入口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#url管理器"><span class="nav-number">3.2.2.</span> <span class="nav-text">url管理器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#html下载器"><span class="nav-number">3.2.3.</span> <span class="nav-text">html下载器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#html解析器"><span class="nav-number">3.2.4.</span> <span class="nav-text">html解析器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#html输出器"><span class="nav-number">3.2.5.</span> <span class="nav-text">html输出器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#只用node书写简单的接口"><span class="nav-number">3.3.</span> <span class="nav-text">只用node书写简单的接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它"><span class="nav-number">3.4.</span> <span class="nav-text">其它</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

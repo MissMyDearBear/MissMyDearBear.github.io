@@ -1,0 +1,701 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="数据库的选择之前在项目中使用的是Xutils里面封装的数据库模块，操作起来也是简便好用，但是由于xutils的注解采用的是反射机制，在性能上不是很友好，于是拿来GreenDao试着玩玩。GreenDao git首页可以看到一句介绍  greenDAO is a light &amp;amp; fast ORM solution for Android that maps objects to SQLite">
+<meta property="og:type" content="article">
+<meta property="og:title" content="轻量级的数据库GreenDao的整合">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/06/06/轻量级的数据库GreenDao的整合/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="数据库的选择之前在项目中使用的是Xutils里面封装的数据库模块，操作起来也是简便好用，但是由于xutils的注解采用的是反射机制，在性能上不是很友好，于是拿来GreenDao试着玩玩。GreenDao git首页可以看到一句介绍  greenDAO is a light &amp;amp; fast ORM solution for Android that maps objects to SQLite">
+<meta property="og:updated_time" content="2017-06-06T06:57:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="轻量级的数据库GreenDao的整合">
+<meta name="twitter:description" content="数据库的选择之前在项目中使用的是Xutils里面封装的数据库模块，操作起来也是简便好用，但是由于xutils的注解采用的是反射机制，在性能上不是很友好，于是拿来GreenDao试着玩玩。GreenDao git首页可以看到一句介绍  greenDAO is a light &amp;amp; fast ORM solution for Android that maps objects to SQLite">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/06/06/轻量级的数据库GreenDao的整合/"/>
+
+
+
+
+
+  <title>轻量级的数据库GreenDao的整合 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/06/轻量级的数据库GreenDao的整合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">轻量级的数据库GreenDao的整合</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T14:57:53+08:00">
+                2017-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="数据库的选择"><a href="#数据库的选择" class="headerlink" title="数据库的选择"></a>数据库的选择</h2><p>之前在项目中使用的是Xutils里面封装的数据库模块，操作起来也是简便好用，但是由于xutils的注解采用的是反射机制，在性能上不是很友好，于是拿来GreenDao试着玩玩。<br><a href="http://greenrobot.org/greendao/" target="_blank" rel="external">GreenDao</a> git首页可以看到一句介绍</p>
+<blockquote>
+<p>greenDAO is a light &amp; fast ORM solution for Android that maps objects to SQLite databases.</p>
+</blockquote>
+<p>妥，本篇不讲GreenDao的实现原理，说明一下配置过程以及遇到的坑。</p>
+<h3 id="gradle配置"><a href="#gradle配置" class="headerlink" title="gradle配置"></a>gradle配置</h3><p>外层需要全局引入GreenDao的插件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;org.greenrobot:greendao-gradle-plugin:3.2.2&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后在内部的gradle apply以及依赖相关的包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;com.android.application&apos;</div><div class="line">//applygreendao插件</div><div class="line">apply plugin: &apos;org.greenrobot.greendao&apos;</div><div class="line"></div><div class="line"> compile &apos;org.greenrobot:greendao:3.2.2&apos;</div><div class="line"> compile &apos;net.zetetic:android-database-sqlcipher:3.5.1@aar&apos;</div></pre></td></tr></table></figure>
+<p>上面<code>compile &#39;net.zetetic:android-database-sqlcipher:3.5.1@aar&#39;</code>的导入也是在配置过程中遇到的坑后面会解释一下为什么加这一句。</p>
+<h3 id="greenDao配置及使用"><a href="#greenDao配置及使用" class="headerlink" title="greenDao配置及使用"></a>greenDao配置及使用</h3><p>首先在Application中初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class MyApplication extends Application &#123;</div><div class="line"></div><div class="line">    public static MyApplication INSTANCE;</div><div class="line">    public static final boolean ENCRYPTED = true;</div><div class="line">    private DaoSession mDaoSession;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onCreate() &#123;</div><div class="line">        super.onCreate();</div><div class="line">        INSTANCE = this;</div><div class="line">        DaoMaster.DevOpenHelper help = new DaoMaster.DevOpenHelper(this, ENCRYPTED ? &quot;bear-db-encrypted&quot; : &quot;bear-db&quot;);</div><div class="line">        //此处有坑</div><div class="line">        Database db = ENCRYPTED ? help.getEncryptedWritableDb(&quot;admin&quot;) : help.getWritableDb();</div><div class="line">        mDaoSession = new DaoMaster(db).newSession();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public DaoSession getDaoSession() &#123;</div><div class="line">        return mDaoSession;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面建立一个数据表来试试，那先来个User表来试玩一下。新建UserBean class</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Entity(indexes = &#123;</div><div class="line">        //index 值是拿表中的account作为索引，且索引是唯一不可重复的</div><div class="line">        @Index(value = &quot;account&quot;,unique = true)</div><div class="line">&#125;)</div><div class="line">public class UserBean &#123;</div><div class="line">    //声明一个主键值</div><div class="line">    @Id</div><div class="line">    public long id;</div><div class="line">    public String account;</div><div class="line">    public String passWord;</div><div class="line">    public String mobile;</div><div class="line">    public String email;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>建立完之后点一下Android Studio运行左边的小锤子make project后就会预编译出一个比较长的类了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">@Entity(indexes = &#123;</div><div class="line">        @Index(value = &quot;account&quot;,unique = true)</div><div class="line">&#125;)</div><div class="line">public class UserBean &#123;</div><div class="line">    @Id</div><div class="line">    public long id;</div><div class="line">    public String account;</div><div class="line">    public String passWord;</div><div class="line">    public String mobile;</div><div class="line">    public String email;</div><div class="line">@Generated(hash = 1328729131)</div><div class="line">public UserBean(long id, String account, String passWord, String mobile,</div><div class="line">        String email) &#123;</div><div class="line">    this.id = id;</div><div class="line">    this.account = account;</div><div class="line">    this.passWord = passWord;</div><div class="line">    this.mobile = mobile;</div><div class="line">    this.email = email;</div><div class="line">&#125;</div><div class="line">@Generated(hash = 1203313951)</div><div class="line">public UserBean() &#123;</div><div class="line">&#125;</div><div class="line">public long getId() &#123;</div><div class="line">    return this.id;</div><div class="line">&#125;</div><div class="line">public void setId(long id) &#123;</div><div class="line">    this.id = id;</div><div class="line">&#125;</div><div class="line">public String getAccount() &#123;</div><div class="line">    return this.account;</div><div class="line">&#125;</div><div class="line">public void setAccount(String account) &#123;</div><div class="line">    this.account = account;</div><div class="line">&#125;</div><div class="line">public String getPassWord() &#123;</div><div class="line">    return this.passWord;</div><div class="line">&#125;</div><div class="line">public void setPassWord(String passWord) &#123;</div><div class="line">    this.passWord = passWord;</div><div class="line">&#125;</div><div class="line">public String getMobile() &#123;</div><div class="line">    return this.mobile;</div><div class="line">&#125;</div><div class="line">public void setMobile(String mobile) &#123;</div><div class="line">    this.mobile = mobile;</div><div class="line">&#125;</div><div class="line">public String getEmail() &#123;</div><div class="line">    return this.email;</div><div class="line">&#125;</div><div class="line">public void setEmail(String email) &#123;</div><div class="line">    this.email = email;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Ok，表已经建立完毕，现在试着插条数据进去玩玩</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">UserBean userBean = new UserBean();</div><div class="line">       userBean.setId((long)1);</div><div class="line">       userBean.setAccount(&quot;18262282215&quot;);</div><div class="line">       userBean.setPassWord(&quot;111111qq&quot;);</div><div class="line">       userBean.setEmail(&quot;bear@berdatata.com&quot;);</div><div class="line">       userBean.setMobile(&quot;18262282215&quot;);</div><div class="line">       UserBeanDao dao = MyApplication.INSTANCE.getDaoSession().getUserBeanDao();</div></pre></td></tr></table></figure>
+<p>开始运行后，Crash 没错就是crash，wocao，明明是按照官网的配置一个个来的嘛。折腾几次终于发现少依赖了一个包，就是前面讲的使用加密的数据库需要导入<code>compile &#39;net.zetetic:android-database-sqlcipher:3.5.1@aar&#39;</code>。总算是走通了。</p>
+<h3 id="greenDao的详细使用以及介绍"><a href="#greenDao的详细使用以及介绍" class="headerlink" title="greenDao的详细使用以及介绍"></a>greenDao的详细使用以及介绍</h3><p>可以看其他大神的博客：<a href="http://www.jianshu.com/p/e6c52fb7103d" target="_blank" rel="external">http://www.jianshu.com/p/e6c52fb7103d</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/06/Retrofit&rxjava初体验/" rel="next" title="Retrofit&rxjava初体验">
+                <i class="fa fa-chevron-left"></i> Retrofit&rxjava初体验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/06/Android 代码规范/" rel="prev" title="Android 代码规范">
+                Android 代码规范 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库的选择"><span class="nav-number">1.</span> <span class="nav-text">数据库的选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gradle配置"><span class="nav-number">1.1.</span> <span class="nav-text">gradle配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#greenDao配置及使用"><span class="nav-number">1.2.</span> <span class="nav-text">greenDao配置及使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#greenDao的详细使用以及介绍"><span class="nav-number">1.3.</span> <span class="nav-text">greenDao的详细使用以及介绍</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
