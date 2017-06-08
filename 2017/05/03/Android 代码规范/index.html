@@ -1,0 +1,948 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="1  文件命名1.1 类文件命名 参考. 类命名方式采用 大驼峰 命名法 对于继承自安卓组件的类来说，类名应该以该组件名结尾，例如 ： SignInActivity, SignInFragment, ImageUploaderService, ChangePasswordDialog. 对于工具类来说，命名方式应该以其完成功能开始,以 Utils 结束 ，例如 ：HttpUtils , Image">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 代码规范">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/05/03/Android 代码规范/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="1  文件命名1.1 类文件命名 参考. 类命名方式采用 大驼峰 命名法 对于继承自安卓组件的类来说，类名应该以该组件名结尾，例如 ： SignInActivity, SignInFragment, ImageUploaderService, ChangePasswordDialog. 对于工具类来说，命名方式应该以其完成功能开始,以 Utils 结束 ，例如 ：HttpUtils , Image">
+<meta property="og:updated_time" content="2017-06-08T01:37:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 代码规范">
+<meta name="twitter:description" content="1  文件命名1.1 类文件命名 参考. 类命名方式采用 大驼峰 命名法 对于继承自安卓组件的类来说，类名应该以该组件名结尾，例如 ： SignInActivity, SignInFragment, ImageUploaderService, ChangePasswordDialog. 对于工具类来说，命名方式应该以其完成功能开始,以 Utils 结束 ，例如 ：HttpUtils , Image">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/05/03/Android 代码规范/"/>
+
+
+
+
+
+  <title>Android 代码规范 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/05/03/Android 代码规范/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 代码规范</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-03T00:00:00+08:00">
+                2017-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-文件命名"><a href="#1-文件命名" class="headerlink" title="1  文件命名"></a>1  文件命名</h2><h4 id="1-1-类文件命名-参考"><a href="#1-1-类文件命名-参考" class="headerlink" title="1.1 类文件命名 参考."></a>1.1 类文件命名 <a href="http://en.wikipedia.org/wiki/CamelCase" target="_blank" rel="external">参考</a>.</h4><blockquote>
+<p>类命名方式采用 <code>大驼峰</code> 命名法</p>
+<p>对于继承自安卓组件的类来说，类名应该以该组件名结尾，例如 ： <code>SignInActivity</code>, <code>SignInFragment</code>, <code>ImageUploaderService</code>, <code>ChangePasswordDialog</code>.</p>
+<p>对于工具类来说，命名方式应该以其完成功能开始,以 <code>Utils</code> 结束 ，例如 ：<code>HttpUtils</code> , <code>ImageUtils</code>.</p>
+</blockquote>
+<h4 id="1-2-资源文件"><a href="#1-2-资源文件" class="headerlink" title="1.2 资源文件"></a>1.2 资源文件</h4><blockquote>
+<p>资源文件以<strong>小写加下划线</strong>的方式命名.例如 ：<code>R.layout.activity_main</code> ,</p>
+</blockquote>
+<h4 id="1-3-Drawable文件"><a href="#1-3-Drawable文件" class="headerlink" title="1.3 Drawable文件"></a>1.3 Drawable文件</h4><ul>
+<li>icon文件的命名规范</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Asset Type</th>
+<th>Prefix 前缀</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Icons</td>
+<td><code>ic_</code></td>
+<td><code>ic_star.png</code></td>
+</tr>
+<tr>
+<td>Launcher icons</td>
+<td><code>ic_launcher</code></td>
+<td><code>ic_launcher_calendar.png</code></td>
+</tr>
+<tr>
+<td>Menu icons and Action Bar icons</td>
+<td><code>ic_menu</code></td>
+<td><code>ic_menu_archive.png</code></td>
+</tr>
+<tr>
+<td>Status bar icons</td>
+<td><code>ic_stat_notify</code></td>
+<td><code>ic_stat_notify_msg.png</code></td>
+</tr>
+<tr>
+<td>Tab icons</td>
+<td><code>ic_tab</code></td>
+<td><code>ic_tab_recent.png</code></td>
+</tr>
+<tr>
+<td>Dialog icons</td>
+<td><code>ic_dialog</code></td>
+<td><code>ic_dialog_info.png</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>选择器状态文件的命名规范</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Suffix  尾缀</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Normal</td>
+<td><code>_normal</code></td>
+<td><code>btn_order_normal.9.png</code></td>
+</tr>
+<tr>
+<td>Pressed</td>
+<td><code>_pressed</code></td>
+<td><code>btn_order_pressed.9.png</code></td>
+</tr>
+<tr>
+<td>Focused</td>
+<td><code>_focused</code></td>
+<td><code>btn_order_focused.9.png</code></td>
+</tr>
+<tr>
+<td>Disabled</td>
+<td><code>_disabled</code></td>
+<td><code>btn_order_disabled.9.png</code></td>
+</tr>
+<tr>
+<td>Selected</td>
+<td><code>_selected</code></td>
+<td><code>btn_order_selected.9.png</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-4-布局文件"><a href="#1-4-布局文件" class="headerlink" title="1.4  布局文件"></a>1.4  布局文件</h4><blockquote>
+<p>布局文件的命名需要与他所嵌入的安卓组件匹配，但是将组件名称前移到开始处,例如,我们要创建一个名字为 <code>SignInActivity</code>, 其名字应该为  <code>activity_sign_in.xml</code>.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Component 组件</th>
+<th>Class Name</th>
+<th>Layout Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activity</td>
+<td><code>UserProfileActivity</code></td>
+<td><code>activity_user_profile.xml</code></td>
+</tr>
+<tr>
+<td>Fragment</td>
+<td><code>SignUpFragment</code></td>
+<td><code>fragment_sign_up.xml</code></td>
+</tr>
+<tr>
+<td>Dialog</td>
+<td><code>ChangePasswordDialog</code></td>
+<td><code>dialog_change_password.xml</code></td>
+</tr>
+<tr>
+<td>AdapterView Item</td>
+<td>—</td>
+<td><code>item_person.xml</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-5-类变量命名"><a href="#1-5-类变量命名" class="headerlink" title="1.5  类变量命名"></a>1.5  类变量命名</h4><ul>
+<li>公有变量按 <code>小驼峰</code> 法命名</li>
+<li>私有 &amp; 非静态成员变量以 <code>m</code> 开头</li>
+<li>私有 &amp; 静态成员变量以 <code>s</code> 开头</li>
+<li>常量以大写字母和下划线 <code>_</code> 组成</li>
+<li>尽量使用 <code>功能/描述 + 类型</code> 的模式 ,如 <code>mNameTextView</code></li>
+<li>类中变量的组件类型请不要使用缩写</li>
+<li>注意不要使用 <code>aa</code> <code>bb</code> <code>cc3</code> 这种变态的命名方式 ！！</li>
+<li>类变量过多时请 <code>分块摆放</code> 并且 <code>写好注释</code></li>
+<li><code>接口类</code> 请直接定义在类的最后</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</div><div class="line">    <span class="comment">//静态常量</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SOME_CONSTANT = <span class="number">42</span>;</div><div class="line">    <span class="comment">//公有变量</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> publicField;</div><div class="line">    <span class="comment">//私有静态变量</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> MyClass sSingleton;</div><div class="line">    <span class="comment">//默认变量</span></div><div class="line">    <span class="keyword">int</span> mPackagePrivate;</div><div class="line">    <span class="comment">//私有变量</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mPrivate;</div><div class="line">    <span class="comment">//继承型变量</span></div><div class="line">    <span class="keyword">protected</span> <span class="keyword">int</span> mProtected;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="1-6-类方法命名"><a href="#1-6-类方法命名" class="headerlink" title="1.6  类方法命名"></a>1.6  类方法命名</h4><ul>
+<li>类方法采用 <code>小驼峰</code> 命名法</li>
+<li>根据函数所完成功能命名 ， 如 <code>changView()</code></li>
+<li><p>在函数头写对于函数功能、参数和返回值的注释，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 获取两个数中最大的一个</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> value1 参与比较的第一个数</div><div class="line"> * <span class="doctag">@param</span> value2 参与比较的第二个数</div><div class="line"> * <span class="doctag">@return</span> 两个参数中最大的一个数</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> value1, <span class="keyword">int</span> value2)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> (value1 &gt; value2) ? value1 : value2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>一个函数请尽量保持在 <code>50行</code> 之内 ！！</p>
+</li>
+</ul>
+<h4 id="1-7-布局文件变量命名"><a href="#1-7-布局文件变量命名" class="headerlink" title="1.7 布局文件变量命名"></a>1.7 布局文件变量命名</h4><ul>
+<li><code>id</code> 以 <code>所在组件_类型_命名</code> 的模式，例如： <code>@+id/main_tv_name</code> 、 <code>@id/chat_btn_send</code></li>
+<li>布局多处重用的请使用 <code>&lt;include&gt;</code> 标签</li>
+<li>所有文本请定义在 <code>strings.xml</code> 中 , 如 <code>@string/app_name</code></li>
+<li>重用dp请定义在 <code>dimens.xml</code> 中 , 如  <code>@dimen/entry_item_height</code></li>
+<li>对应组件缩写表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Component 组件</th>
+<th>Abbreviation 缩写</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fragment</td>
+<td><code>fgm</code></td>
+</tr>
+<tr>
+<td>TextView</td>
+<td><code>tv</code></td>
+</tr>
+<tr>
+<td>ImageView</td>
+<td><code>iv</code></td>
+</tr>
+<tr>
+<td>Button</td>
+<td><code>btn</code></td>
+</tr>
+<tr>
+<td>EditText</td>
+<td><code>et</code></td>
+</tr>
+<tr>
+<td>LinearLayout</td>
+<td><code>ll</code></td>
+</tr>
+<tr>
+<td>ReleativeLayout</td>
+<td><code>rl</code></td>
+</tr>
+<tr>
+<td>normally : FirstSecond</td>
+<td><code>fs</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-8-strings-xml-dimens-xml-colors-xml-xml变量命名"><a href="#1-8-strings-xml-dimens-xml-colors-xml-xml变量命名" class="headerlink" title="1.8 strings.xml  dimens.xml  colors.xml  xml变量命名"></a>1.8 strings.xml  dimens.xml  colors.xml  xml变量命名</h4><blockquote>
+<ul>
+<li>遵循 <code>完整性</code> <code>规范性</code> <code>有序性</code>原则</li>
+<li><strong>分块并注释</strong>, 将 使用在不同的 <code>Activity</code> 或者 <code>Fragment</code> 中的 <code>xml</code> 变量 进行分块</li>
+<li>命名举例 ：<br><code>login_error_tips</code>  <strong>in</strong>  <code>strings.xml</code><br><code>login_error_tips_height</code> <strong>in</strong> <code>dimens.xml</code><br><code>login_error_tips_bg</code> <strong>in</strong> <code>colors.xml</code></li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Prefix 前缀</th>
+<th>Description 描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error_</code></td>
+<td>An error message</td>
+</tr>
+<tr>
+<td><code>msg_</code></td>
+<td>A regular information message</td>
+</tr>
+<tr>
+<td><code>title_</code></td>
+<td>A title, i.e. a dialog title</td>
+</tr>
+<tr>
+<td><code>action_</code></td>
+<td>An action such as “Save” or “Create”</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-9-额外注意"><a href="#1-9-额外注意" class="headerlink" title="1.9 额外注意"></a>1.9 额外注意</h4><table>
+<thead>
+<tr>
+<th>Good</th>
+<th>Bad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XmlHttpRequest</code></td>
+<td><code>XMLHTTPRequest</code></td>
+</tr>
+<tr>
+<td><code>getCustomerId</code></td>
+<td><code>getCustomerID</code></td>
+</tr>
+<tr>
+<td><code>String url</code></td>
+<td><code>String URL</code></td>
+</tr>
+<tr>
+<td><code>long id</code></td>
+<td><code>long ID</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-代码规范"><a href="#2-代码规范" class="headerlink" title="2 代码规范"></a>2 代码规范</h2><hr>
+<p>This is <strong>good</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (condition)&#123;</div><div class="line">    body();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This is <strong>bad</strong>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (condition) body();  <span class="comment">// bad!</span></div></pre></td></tr></table></figure>
+<hr>
+<p>This is <strong>good</strong>:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">	<span class="attr">android:id</span>=<span class="string">"@+id/text_view_profile"</span></div><div class="line">	<span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">	<span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span> /&gt;</div></pre></td></tr></table></figure>
+<p>This is <strong>bad</strong> :</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- Don't do this! --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/text_view_profile"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span> &gt;</div><div class="line"><span class="tag">&lt;/<span class="name">TextView</span>&gt;</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/28/轻量级的数据库GreenDao的整合/" rel="next" title="轻量级的数据库GreenDao的整合">
+                <i class="fa fa-chevron-left"></i> 轻量级的数据库GreenDao的整合
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/03/Android市面常见加固方案评测/" rel="prev" title="Android市面常见加固方案评测">
+                Android市面常见加固方案评测 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-文件命名"><span class="nav-number">1.</span> <span class="nav-text">1  文件命名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-类文件命名-参考"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 类文件命名 参考.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-资源文件"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 资源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-Drawable文件"><span class="nav-number">1.0.3.</span> <span class="nav-text">1.3 Drawable文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-布局文件"><span class="nav-number">1.0.4.</span> <span class="nav-text">1.4  布局文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-类变量命名"><span class="nav-number">1.0.5.</span> <span class="nav-text">1.5  类变量命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-类方法命名"><span class="nav-number">1.0.6.</span> <span class="nav-text">1.6  类方法命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-7-布局文件变量命名"><span class="nav-number">1.0.7.</span> <span class="nav-text">1.7 布局文件变量命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-8-strings-xml-dimens-xml-colors-xml-xml变量命名"><span class="nav-number">1.0.8.</span> <span class="nav-text">1.8 strings.xml  dimens.xml  colors.xml  xml变量命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-9-额外注意"><span class="nav-number">1.0.9.</span> <span class="nav-text">1.9 额外注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-代码规范"><span class="nav-number">2.</span> <span class="nav-text">2 代码规范</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

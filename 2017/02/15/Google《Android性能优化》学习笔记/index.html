@@ -1,0 +1,754 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="渲染篇 大多数手机的屏幕刷新频率是60HZ，如果在1000/60=16.67ms内没有办法把这一帧的任务执行完毕，就会发生丢帧的现象。丢帧越多，用户感受的卡顿情况就越严重。 渲染操作通常依赖于两个核心组件：CPU与GPU。CPU负责包括Measure，Layout，Record，Execute的计算操作，GPU负责Rasterization(栅格化)操作。CPU通常存在的问题的原因是存在非必需的视">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Google《Android性能优化》学习笔记">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/02/15/Google《Android性能优化》学习笔记/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="渲染篇 大多数手机的屏幕刷新频率是60HZ，如果在1000/60=16.67ms内没有办法把这一帧的任务执行完毕，就会发生丢帧的现象。丢帧越多，用户感受的卡顿情况就越严重。 渲染操作通常依赖于两个核心组件：CPU与GPU。CPU负责包括Measure，Layout，Record，Execute的计算操作，GPU负责Rasterization(栅格化)操作。CPU通常存在的问题的原因是存在非必需的视">
+<meta property="og:updated_time" content="2017-06-08T01:37:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Google《Android性能优化》学习笔记">
+<meta name="twitter:description" content="渲染篇 大多数手机的屏幕刷新频率是60HZ，如果在1000/60=16.67ms内没有办法把这一帧的任务执行完毕，就会发生丢帧的现象。丢帧越多，用户感受的卡顿情况就越严重。 渲染操作通常依赖于两个核心组件：CPU与GPU。CPU负责包括Measure，Layout，Record，Execute的计算操作，GPU负责Rasterization(栅格化)操作。CPU通常存在的问题的原因是存在非必需的视">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/02/15/Google《Android性能优化》学习笔记/"/>
+
+
+
+
+
+  <title>Google《Android性能优化》学习笔记 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/02/15/Google《Android性能优化》学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Google《Android性能优化》学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-15T00:00:00+08:00">
+                2017-02-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="渲染篇"><a href="#渲染篇" class="headerlink" title="渲染篇"></a>渲染篇</h2><ol>
+<li>大多数手机的屏幕刷新频率是60HZ，如果在1000/60=16.67ms内没有办法把这一帧的任务执行完毕，就会发生丢帧的现象。丢帧越多，用户感受的卡顿情况就越严重。</li>
+<li>渲染操作通常依赖于两个核心组件：CPU与GPU。CPU负责包括Measure，Layout，Record，Execute的计算操作，GPU负责Rasterization(栅格化)操作。CPU通常存在的问题的原因是存在非必需的视图组件，它不仅仅会带来重复的计算操作，而且还会占用额外的GPU资源。<blockquote>
+<p>Resterization栅格化是绘制那些Button，Shape，Path，String，Bitmap等组件最基础的操作。它把那些组件拆分到不同的像素上进行显示。这是一个很费时的操作，GPU的引入就是为了加快栅格化的操作。</p>
+</blockquote>
+</li>
+<li>CPU负责把UI组件计算成Polygons，Texture纹理，然后交给GPU进行栅格化渲染。</li>
+<li>Overdraw(过度绘制)描述的是屏幕上的某个像素在同一帧的时间内被绘制了多次。</li>
+<li>减少过度绘制的步骤：</li>
+</ol>
+<ul>
+<li>移除Window默认的background</li>
+<li>XML布局中去除多余的background（一般父布局中的background可以不设置，具体视情况而定）</li>
+</ul>
+<ol>
+<li>自定义view时，需注意有重叠部分时采用ClipRect方法，避免重叠部分被过度绘制</li>
+<li>提升布局性能的关键点时尽量保持布局层级的扁平化，避免出现重复的嵌套布局。<h2 id="运算篇"><a href="#运算篇" class="headerlink" title="运算篇"></a>运算篇</h2></li>
+<li>TraceView使用了解</li>
+<li>Batching and Caching<blockquote>
+<p>Batching是在真正执行运算操作之前对数据进行批量预处理，例如你需要有这样一个方法，它的作用是查找某个值是否存在于一堆数据中。</p>
+</blockquote>
+</li>
+<li>把可能有性能问题的代码放到非主线程中。</li>
+<li>Vector，ArrayList,LinkedList,HashMap,SparseArray<h2 id="内存篇"><a href="#内存篇" class="headerlink" title="内存篇"></a>内存篇</h2></li>
+<li>Android系统里面有一个Generatioal Heap Memory的模型，系统会根据不同的内存数据类型分别执行不同的GC操作。例如，最近刚分配的对象会放在Young Generation区域，这个区域的对象通常都是会快速被创建并且很快被销毁回收的，同时这个区域的GC操作速度也是比Old Generation区域的GC操作速度更快的。除了速度差异之外，执行GC操作的时候，所有线程的任何操作都会需要暂停，等待GC操作完成之后，其他操作才能够继续运行。通常来说，单个的GC并不会占用太多时间，但是大量不停的GC操作则会显著占用帧间隔时间(16ms)。如果在帧间隔时间里面做了过多的GC操作，那么自然其他类似计算，渲染等操作的可用时间就变得少了。</li>
+<li>memory monitor工具</li>
+<li>发生内存泄漏会导致Memory Generation中的剩余可用Heap Size越来越小，这样会导致频繁触发GC，更进一步引起性能问题。<blockquote>
+<p>内存泄漏表示的是不再用到的对象因为被错误引用而无法进行回收。</p>
+</blockquote>
+</li>
+<li>Memory Churn内存抖动，内存抖动是因为在短时间内大量的对象被创建又马上被释放。瞬间产生大量的对象会严重占用Young Generation的内存区域，当达到阀值，剩余空间不够的时候，会触发GC从而导致刚产生的对象又很快被回收。即使每次分配的对象占用了很少的内存，但是他们叠加在一起会增加Heap的压力，从而触发更多其他类型的GC。这个操作有可能会影响到帧率，并使得用户感知到性能问题。</li>
+</ol>
+<p>解决上面的问题有简洁直观方法，如果你在Memory Monitor里面查看到短时间发生了多次内存的涨跌，这意味着很有可能发生了内存抖动。同时我们还可以通过Allocation Tracker来查看在短时间内，同一个栈中不断进出的相同对象。这是内存抖动的典型信号之一。</p>
+<p>当你大致定位问题之后，接下去的问题修复也就显得相对直接简单了。例如，你需要避免在for循环里面分配对象占用内存，需要尝试把对象的创建移到循环体之外，自定义View中的onDraw方法也需要引起注意，每次屏幕发生绘制以及动画执行过程中，onDraw方法都会被调用到，避免在onDraw方法里面执行复杂的操作，避免创建对象。对于那些无法避免需要创建对象的情况，我们可以考虑对象池模型，通过对象池来解决频繁创建与销毁的问题，但是这里需要注意结束使用之后，需要手动释放对象池中的对象。</p>
+<ol>
+<li>关于Allocation Tracker工具的使用，不展开了，参考下面的链接：</li>
+</ol>
+<ul>
+<li><a href="http://developer.android.com/tools/debugging/ddms.html#alloc" target="_blank" rel="external">http://developer.android.com/tools/debugging/ddms.html#alloc</a></li>
+<li><a href="http://android-developers.blogspot.com/2009/02/track-memory-allocations.html" target="_blank" rel="external">http://android-developers.blogspot.com/2009/02/track-memory-allocations.html</a></li>
+</ul>
+<ol>
+<li>三种测量内存工具，各自的特点：</li>
+</ol>
+<ul>
+<li>Memory Monitor:跟踪整个APP内存变化情况。</li>
+<li>Heap Viewer：查看当前内存快照，便于对比分析哪些对象有可能发生内存泄露</li>
+<li>Alloction Tracker：追踪内存对象的来源<h2 id="电量篇"><a href="#电量篇" class="headerlink" title="电量篇"></a>电量篇</h2></li>
+</ul>
+<ol>
+<li>使用WakeLock或者JobScheduler唤醒设备处理定时的任务之后，一定要及时让设备回到初始状态。每次唤醒蜂窝信号进行数据传递，都会消耗很多电量，它比WiFi等操作更加的耗电。</li>
+<li>我们可以通过下面的代码来获取手机的当前充电状态：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// It is very easy to subscribe to changes to the battery state, but you can get the current</div><div class="line">// state by simply passing null in as your receiver.  Nifty, isn&apos;t that?</div><div class="line">IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);</div><div class="line">Intent batteryStatus = this.registerReceiver(null, filter);</div><div class="line">int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);</div><div class="line">boolean acCharge = (chargePlug == BatteryManager.BATTERY_PLUGGED_AC);</div><div class="line">if (acCharge) &#123;</div><div class="line">    Log.v(LOG_TAG,“The phone is charging!”);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在上面的例子演示了如何立即获取到手机的充电状态，得到充电状态信息之后，我们可以有针对性的对部分代码做优化。比如我们可以判断只有当前手机为AC充电状态时 才去执行一些非常耗电的操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * This method checks for power by comparing the current battery state against all possible</div><div class="line"> * plugged in states. In this case, a device may be considered plugged in either by USB, AC, or</div><div class="line"> * wireless charge. (Wireless charge was introduced in API Level 17.)</div><div class="line"> */</div><div class="line">private boolean checkForPower() &#123;</div><div class="line">    // It is very easy to subscribe to changes to the battery state, but you can get the current</div><div class="line">    // state by simply passing null in as your receiver.  Nifty, isn&apos;t that?</div><div class="line">    IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);</div><div class="line">    Intent batteryStatus = this.registerReceiver(null, filter);</div><div class="line"></div><div class="line">    // There are currently three ways a device can be plugged in. We should check them all.</div><div class="line">    int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);</div><div class="line">    boolean usbCharge = (chargePlug == BatteryManager.BATTERY_PLUGGED_USB);</div><div class="line">    boolean acCharge = (chargePlug == BatteryManager.BATTERY_PLUGGED_AC);</div><div class="line">    boolean wirelessCharge = false;</div><div class="line">    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.JELLY_BEAN_MR1) &#123;</div><div class="line">        wirelessCharge = (chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS);</div><div class="line">    &#125;</div><div class="line">    return (usbCharge || acCharge || wirelessCharge);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>一个最简单的唤醒手机的方法是使用PowerManager.WakeLock的API来保持CPU工作并防止屏幕变暗关闭。这使得手机可以被唤醒，执行工作，然后回到睡眠状态。知道如何获取WakeLock是简单的，可是及时释放WakeLock也是非常重要的，不恰当的使用WakeLock会导致严重错误。例如网络请求的数据返回时间不确定，导致本来只需要10s的事情一直等待了1个小时，这样会使得电量白白浪费了。这也是为何使用带超时参数的wakelock.acquice()方法是很关键的。</li>
+</ol>
+<p>但是仅仅设置超时并不足够解决问题，例如设置多长的超时比较合适？什么时候进行重试等等？解决上面的问题，正确的方式可能是使用非精准定时器。通常情况下，我们会设定一个时间进行某个操作，但是动态修改这个时间也许会更好。例如，如果有另外一个程序需要比你设定的时间晚5分钟唤醒，最好能够等到那个时候，两个任务捆绑一起同时进行，这就是非精确定时器的核心工作原理。我们可以定制计划的任务，可是系统如果检测到一个更好的时间，它可以推迟你的任务，以节省电量消耗。这正是JobScheduler API所做的事情</p>
+<blockquote>
+<p>JobScheduler会根据当前的情况与任务，组合出理想的唤醒时间，例如等到正在充电或者连接到WiFi的时候，或者集中任务一起执行。我们可以通过这个API实现很多免费的调度算法。</p>
+<ol>
+<li>为了减少电量的消耗，在蜂窝移动网络下，最好做到批量执行网络请求，尽量避免频繁的间隔网络请求。WiFi连接下，网络传输的电量消耗要比移动网络少很多，应该尽量减少移动网络下的数据传输，多在WiFi环境下传输数据。</li>
+<li>使用Job Scheduler，应用需要做的事情就是判断哪些任务是不紧急的，可以交给Job Scheduler来处理，Job Scheduler集中处理收到的任务，选择合适的时间，合适的网络，再一起进行执行。</li>
+</ol>
+</blockquote>
+<p>下面是使用Job Scheduler的一段简要示例，需要先有一个JobService</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div></pre></td><td class="code"><pre><div class="line">public class MyJobService extends JobService &#123;</div><div class="line">    private static final String LOG_TAG = &quot;MyJobService&quot;;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onCreate() &#123;</div><div class="line">        super.onCreate();</div><div class="line">        Log.i(LOG_TAG, &quot;MyJobService created&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onDestroy() &#123;</div><div class="line">        super.onDestroy();</div><div class="line">        Log.i(LOG_TAG, &quot;MyJobService destroyed&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public boolean onStartJob(JobParameters params) &#123;</div><div class="line">        // This is where you would implement all of the logic for your job. Note that this runs</div><div class="line">        // on the main thread, so you will want to use a separate thread for asynchronous work</div><div class="line">        // (as we demonstrate below to establish a network connection).</div><div class="line">        // If you use a separate thread, return true to indicate that you need a &quot;reschedule&quot; to</div><div class="line">        // return to the job at some point in the future to finish processing the work. Otherwise,</div><div class="line">        // return false when finished.</div><div class="line">        Log.i(LOG_TAG, &quot;Totally and completely working on job &quot; + params.getJobId());</div><div class="line">        // First, check the network, and then attempt to connect.</div><div class="line">        if (isNetworkConnected()) &#123;</div><div class="line">            new SimpleDownloadTask() .execute(params);</div><div class="line">            return true;</div><div class="line">        &#125; else &#123;</div><div class="line">            Log.i(LOG_TAG, &quot;No connection on job &quot; + params.getJobId() + &quot;; sad face&quot;);</div><div class="line">        &#125;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public boolean onStopJob(JobParameters params) &#123;</div><div class="line">        // Called if the job must be stopped before jobFinished() has been called. This may</div><div class="line">        // happen if the requirements are no longer being met, such as the user no longer</div><div class="line">        // connecting to WiFi, or the device no longer being idle. Use this callback to resolve</div><div class="line">        // anything that may cause your application to misbehave from the job being halted.</div><div class="line">        // Return true if the job should be rescheduled based on the retry criteria specified</div><div class="line">        // when the job was created or return false to drop the job. Regardless of the value</div><div class="line">        // returned, your job must stop executing.</div><div class="line">        Log.i(LOG_TAG, &quot;Whelp, something changed, so I&apos;m calling it on job &quot; + params.getJobId());</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Determines if the device is currently online.</div><div class="line">     */</div><div class="line">    private boolean isNetworkConnected() &#123;</div><div class="line">        ConnectivityManager connectivityManager =</div><div class="line">                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);</div><div class="line">        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();</div><div class="line">        return (networkInfo != null &amp;&amp; networkInfo.isConnected());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     *  Uses AsyncTask to create a task away from the main UI thread. This task creates a</div><div class="line">     *  HTTPUrlConnection, and then downloads the contents of the webpage as an InputStream.</div><div class="line">     *  The InputStream is then converted to a String, which is logged by the</div><div class="line">     *  onPostExecute() method.</div><div class="line">     */</div><div class="line">    private class SimpleDownloadTask extends AsyncTask&lt;JobParameters, Void, String&gt; &#123;</div><div class="line"></div><div class="line">        protected JobParameters mJobParam;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        protected String doInBackground(JobParameters... params) &#123;</div><div class="line">            // cache system provided job requirements</div><div class="line">            mJobParam = params[0];</div><div class="line">            try &#123;</div><div class="line">                InputStream is = null;</div><div class="line">                // Only display the first 50 characters of the retrieved web page content.</div><div class="line">                int len = 50;</div><div class="line"></div><div class="line">                URL url = new URL(&quot;https://www.google.com&quot;);</div><div class="line">                HttpURLConnection conn = (HttpURLConnection) url.openConnection();</div><div class="line">                conn.setReadTimeout(10000); //10sec</div><div class="line">                conn.setConnectTimeout(15000); //15sec</div><div class="line">                conn.setRequestMethod(&quot;GET&quot;);</div><div class="line">                //Starts the query</div><div class="line">                conn.connect();</div><div class="line">                int response = conn.getResponseCode();</div><div class="line">                Log.d(LOG_TAG, &quot;The response is: &quot; + response);</div><div class="line">                is = conn.getInputStream();</div><div class="line"></div><div class="line">                // Convert the input stream to a string</div><div class="line">                Reader reader = null;</div><div class="line">                reader = new InputStreamReader(is, &quot;UTF-8&quot;);</div><div class="line">                char[] buffer = new char[len];</div><div class="line">                reader.read(buffer);</div><div class="line">                return new String(buffer);</div><div class="line"></div><div class="line">            &#125; catch (IOException e) &#123;</div><div class="line">                return &quot;Unable to retrieve web page.&quot;;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        protected void onPostExecute(String result) &#123;</div><div class="line">            jobFinished(mJobParam, false);</div><div class="line">            Log.i(LOG_TAG, result);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后模拟通过点击Button触发N个任务，交给JobService来处理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">public class FreeTheWakelockActivity extends ActionBarActivity &#123;</div><div class="line">    public static final String LOG_TAG = &quot;FreeTheWakelockActivity&quot;;</div><div class="line"></div><div class="line">    TextView mWakeLockMsg;</div><div class="line">    ComponentName mServiceComponent;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_wakelock);</div><div class="line"></div><div class="line">        mWakeLockMsg = (TextView) findViewById(R.id.wakelock_txt);</div><div class="line">        mServiceComponent = new ComponentName(this, MyJobService.class);</div><div class="line">        Intent startServiceIntent = new Intent(this, MyJobService.class);</div><div class="line">        startService(startServiceIntent);</div><div class="line"></div><div class="line">        Button theButtonThatWakelocks = (Button) findViewById(R.id.wakelock_poll);</div><div class="line">        theButtonThatWakelocks.setText(R.string.poll_server_button);</div><div class="line"></div><div class="line">        theButtonThatWakelocks.setOnClickListener(new View.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(View v) &#123;</div><div class="line">                    pollServer();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * This method polls the server via the JobScheduler API. By scheduling the job with this API,</div><div class="line">     * your app can be confident it will execute, but without the need for a wake lock. Rather, the</div><div class="line">     * API will take your network jobs and execute them in batch to best take advantage of the</div><div class="line">     * initial network connection cost.</div><div class="line">     *</div><div class="line">     * The JobScheduler API works through a background service. In this sample, we have</div><div class="line">     * a simple service in MyJobService to get you started. The job is scheduled here in</div><div class="line">     * the activity, but the job itself is executed in MyJobService in the startJob() method. For</div><div class="line">     * example, to poll your server, you would create the network connection, send your GET</div><div class="line">     * request, and then process the response all in MyJobService. This allows the JobScheduler API</div><div class="line">     * to invoke your logic without needed to restart your activity.</div><div class="line">     *</div><div class="line">     * For brevity in the sample, we are scheduling the same job several times in quick succession,</div><div class="line">     * but again, try to consider similar tasks occurring over time in your application that can</div><div class="line">     * afford to wait and may benefit from batching.</div><div class="line">     */</div><div class="line">    public void pollServer() &#123;</div><div class="line">        JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);</div><div class="line">        for (int i=0; i&lt;10; i++) &#123;</div><div class="line">            JobInfo jobInfo = new JobInfo.Builder(i, mServiceComponent)</div><div class="line">                    .setMinimumLatency(5000) // 5 seconds</div><div class="line">                    .setOverrideDeadline(60000) // 60 seconds (for brevity in the sample)</div><div class="line">                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY) // WiFi or data connections</div><div class="line">                    .build();</div><div class="line"></div><div class="line">            mWakeLockMsg.append(&quot;Scheduling job &quot; + i + &quot;!\n&quot;);</div><div class="line">            scheduler.schedule(jobInfo);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/10/路边跌倒的老太太我都不服，图片加载我只服Glide/" rel="next" title="路边跌倒的老太太我都不服，图片加载我只服Glide">
+                <i class="fa fa-chevron-left"></i> 路边跌倒的老太太我都不服，图片加载我只服Glide
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/06/Android Studio 快捷键整理/" rel="prev" title="Android Studio 快捷键整理">
+                Android Studio 快捷键整理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染篇"><span class="nav-number">1.</span> <span class="nav-text">渲染篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运算篇"><span class="nav-number">2.</span> <span class="nav-text">运算篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存篇"><span class="nav-number">3.</span> <span class="nav-text">内存篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#电量篇"><span class="nav-number">4.</span> <span class="nav-text">电量篇</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

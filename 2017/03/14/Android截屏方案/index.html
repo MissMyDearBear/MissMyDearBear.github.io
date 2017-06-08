@@ -1,0 +1,710 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Android截屏Android截屏的原理：获取具体需要截屏的区域的Bitmap，然后绘制在画布上，保存为图片后进行分享或者其它用途 在截屏功能中，有时需要截取全屏的内容，有时需要截取超过一屏的内容（比如：Listview，Scrollview，RecyclerView）。下面介绍各种场景获取Bitmap的方法 普通截屏的实现获取当前Window的DrawingCache的方式，即decorVie">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android截屏方案">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/03/14/Android截屏方案/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="Android截屏Android截屏的原理：获取具体需要截屏的区域的Bitmap，然后绘制在画布上，保存为图片后进行分享或者其它用途 在截屏功能中，有时需要截取全屏的内容，有时需要截取超过一屏的内容（比如：Listview，Scrollview，RecyclerView）。下面介绍各种场景获取Bitmap的方法 普通截屏的实现获取当前Window的DrawingCache的方式，即decorVie">
+<meta property="og:updated_time" content="2017-06-08T01:37:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android截屏方案">
+<meta name="twitter:description" content="Android截屏Android截屏的原理：获取具体需要截屏的区域的Bitmap，然后绘制在画布上，保存为图片后进行分享或者其它用途 在截屏功能中，有时需要截取全屏的内容，有时需要截取超过一屏的内容（比如：Listview，Scrollview，RecyclerView）。下面介绍各种场景获取Bitmap的方法 普通截屏的实现获取当前Window的DrawingCache的方式，即decorVie">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/03/14/Android截屏方案/"/>
+
+
+
+
+
+  <title>Android截屏方案 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/03/14/Android截屏方案/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android截屏方案</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-14T00:00:00+08:00">
+                2017-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Android截屏"><a href="#Android截屏" class="headerlink" title="Android截屏"></a>Android截屏</h2><p>Android截屏的原理：获取具体需要截屏的区域的Bitmap，然后绘制在画布上，保存为图片后进行分享或者其它用途</p>
+<p>在截屏功能中，有时需要截取全屏的内容，有时需要截取超过一屏的内容（比如：Listview，Scrollview，RecyclerView）。下面介绍各种场景获取Bitmap的方法</p>
+<h3 id="普通截屏的实现"><a href="#普通截屏的实现" class="headerlink" title="普通截屏的实现"></a>普通截屏的实现</h3><p>获取当前Window的DrawingCache的方式，即decorView的DrawingCache</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">   * shot the current screen ,with the status but the status is trans *</div><div class="line">   *</div><div class="line">   * @param ctx current activity</div><div class="line">   */</div><div class="line">  public static Bitmap shotActivity(Activity ctx) &#123;</div><div class="line"></div><div class="line">    View view = ctx.getWindow().getDecorView();</div><div class="line">    view.setDrawingCacheEnabled(true);</div><div class="line">    view.buildDrawingCache();</div><div class="line"></div><div class="line">    Bitmap bp = Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getMeasuredWidth(),</div><div class="line">        view.getMeasuredHeight());</div><div class="line"></div><div class="line">    view.setDrawingCacheEnabled(false);</div><div class="line">    view.destroyDrawingCache();</div><div class="line"></div><div class="line">    return bp;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>获取当前View的DrawingCache</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public static Bitmap getViewBp(View v) &#123;</div><div class="line">        if (null == v) &#123;</div><div class="line">            return null;</div><div class="line">        &#125;</div><div class="line">        v.setDrawingCacheEnabled(true);</div><div class="line">        v.buildDrawingCache();</div><div class="line">        if (Build.VERSION.SDK_INT &gt;= 11) &#123;</div><div class="line">            v.measure(MeasureSpec.makeMeasureSpec(v.getWidth(),</div><div class="line">                    MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(</div><div class="line">                    v.getHeight(), MeasureSpec.EXACTLY));</div><div class="line">            v.layout((int) v.getX(), (int) v.getY(),</div><div class="line">                    (int) v.getX() + v.getMeasuredWidth(),</div><div class="line">                    (int) v.getY() + v.getMeasuredHeight());</div><div class="line">        &#125; else &#123;</div><div class="line">            v.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),</div><div class="line">                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));</div><div class="line">            v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());</div><div class="line">        &#125;</div><div class="line">        Bitmap b = Bitmap.createBitmap(v.getDrawingCache(), 0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());</div><div class="line"></div><div class="line">        v.setDrawingCacheEnabled(false);</div><div class="line">        v.destroyDrawingCache();</div><div class="line">        return b;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="开源方案"><a href="#开源方案" class="headerlink" title="开源方案"></a>开源方案</h3><p>在滚动视图中，如果当前View并没有在视图中全部绘制出来，我们可以利用View的ScrollTo()和ScrollBy()方法来移动画布，同时获取当前View的可视部分的DrawingCache，最后进行拼接得到其Bitmap，参考:<a href="https://github.com/PGSSoft/scrollscreenshot" target="_blank" rel="external">PGSSoft/scrollscreenshot@[Github]</a>。</p>
+<h3 id="Scrollview截屏"><a href="#Scrollview截屏" class="headerlink" title="Scrollview截屏"></a>Scrollview截屏</h3><p>三个截屏中，ScrollView最简单，因为ScrollView只有一个childView，虽然没有全部显示在界面上，但是已经全部渲染绘制，因此可以直接 调用<code>scrollView.draw(canvas)</code>来完成截图</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public static Bitmap shotScrollView(ScrollView scrollView) &#123;</div><div class="line">  int h = 0;</div><div class="line">  Bitmap bitmap = null;</div><div class="line">  for (int i = 0; i &lt; scrollView.getChildCount(); i++) &#123;</div><div class="line">    h += scrollView.getChildAt(i).getHeight();</div><div class="line">    scrollView.getChildAt(i).setBackgroundColor(Color.parseColor(&quot;#ffffff&quot;));</div><div class="line">  &#125;</div><div class="line">  bitmap = Bitmap.createBitmap(scrollView.getWidth(), h, Bitmap.Config.RGB_565);</div><div class="line">  final Canvas canvas = new Canvas(bitmap);</div><div class="line">  scrollView.draw(canvas);</div><div class="line">  return bitmap;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="listview截屏"><a href="#listview截屏" class="headerlink" title="listview截屏"></a>listview截屏</h3><p>而ListView就是会回收与重用Item，并且只会绘制在屏幕上显示的ItemView，根据stackoverflow上大神的建议，采用一个List来存储Item的视图，这种方案依然不够好，当Item足够多的时候，可能会发生oom。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">public static Bitmap shotListView(ListView listview) &#123;</div><div class="line"></div><div class="line">  ListAdapter adapter = listview.getAdapter();</div><div class="line">  int itemscount = adapter.getCount();</div><div class="line">  int allitemsheight = 0;</div><div class="line">  List&lt;Bitmap&gt; bmps = new ArrayList&lt;Bitmap&gt;();</div><div class="line"></div><div class="line">  for (int i = 0; i &lt; itemscount; i++) &#123;</div><div class="line"></div><div class="line">    View childView = adapter.getView(i, null, listview);</div><div class="line">    childView.measure(</div><div class="line">        View.MeasureSpec.makeMeasureSpec(listview.getWidth(), View.MeasureSpec.EXACTLY),</div><div class="line">        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));</div><div class="line"></div><div class="line">    childView.layout(0, 0, childView.getMeasuredWidth(), childView.getMeasuredHeight());</div><div class="line">    childView.setDrawingCacheEnabled(true);</div><div class="line">    childView.buildDrawingCache();</div><div class="line">    bmps.add(childView.getDrawingCache());</div><div class="line">    allitemsheight += childView.getMeasuredHeight();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  Bitmap bigbitmap =</div><div class="line">      Bitmap.createBitmap(listview.getMeasuredWidth(), allitemsheight, Bitmap.Config.ARGB_8888);</div><div class="line">  Canvas bigcanvas = new Canvas(bigbitmap);</div><div class="line"></div><div class="line">  Paint paint = new Paint();</div><div class="line">  int iHeight = 0;</div><div class="line"></div><div class="line">  for (int i = 0; i &lt; bmps.size(); i++) &#123;</div><div class="line">    Bitmap bmp = bmps.get(i);</div><div class="line">    bigcanvas.drawBitmap(bmp, 0, iHeight, paint);</div><div class="line">    iHeight += bmp.getHeight();</div><div class="line"></div><div class="line">    bmp.recycle();</div><div class="line">    bmp = null;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return bigbitmap;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="RecyclerView截屏"><a href="#RecyclerView截屏" class="headerlink" title="RecyclerView截屏"></a>RecyclerView截屏</h3><p>我们都知道，在新的Android版本中，已经可以用RecyclerView来代替使用ListView的场景，相比较ListView，RecyclerView对Item View的缓存支持的更好。可以采用和ListView相同的方案，这里也是在stackoverflow上看到的方案。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public static Bitmap shotRecyclerView(RecyclerView view) &#123;</div><div class="line">  RecyclerView.Adapter adapter = view.getAdapter();</div><div class="line">  Bitmap bigBitmap = null;</div><div class="line">  if (adapter != null) &#123;</div><div class="line">    int size = adapter.getItemCount();</div><div class="line">    int height = 0;</div><div class="line">    Paint paint = new Paint();</div><div class="line">    int iHeight = 0;</div><div class="line">    final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);</div><div class="line"></div><div class="line">    // Use 1/8th of the available memory for this memory cache.</div><div class="line">    final int cacheSize = maxMemory / 8;</div><div class="line">    LruCache&lt;String, Bitmap&gt; bitmaCache = new LruCache&lt;&gt;(cacheSize);</div><div class="line">    for (int i = 0; i &lt; size; i++) &#123;</div><div class="line">      RecyclerView.ViewHolder holder = adapter.createViewHolder(view, adapter.getItemViewType(i));</div><div class="line">      adapter.onBindViewHolder(holder, i);</div><div class="line">      holder.itemView.measure(</div><div class="line">          View.MeasureSpec.makeMeasureSpec(view.getWidth(), View.MeasureSpec.EXACTLY),</div><div class="line">          View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));</div><div class="line">      holder.itemView.layout(0, 0, holder.itemView.getMeasuredWidth(),</div><div class="line">          holder.itemView.getMeasuredHeight());</div><div class="line">      holder.itemView.setDrawingCacheEnabled(true);</div><div class="line">      holder.itemView.buildDrawingCache();</div><div class="line">      Bitmap drawingCache = holder.itemView.getDrawingCache();</div><div class="line">      if (drawingCache != null) &#123;</div><div class="line"></div><div class="line">        bitmaCache.put(String.valueOf(i), drawingCache);</div><div class="line">      &#125;</div><div class="line">      height += holder.itemView.getMeasuredHeight();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    bigBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), height, Bitmap.Config.ARGB_8888);</div><div class="line">    Canvas bigCanvas = new Canvas(bigBitmap);</div><div class="line">    Drawable lBackground = view.getBackground();</div><div class="line">    if (lBackground instanceof ColorDrawable) &#123;</div><div class="line">      ColorDrawable lColorDrawable = (ColorDrawable) lBackground;</div><div class="line">      int lColor = lColorDrawable.getColor();</div><div class="line">      bigCanvas.drawColor(lColor);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    for (int i = 0; i &lt; size; i++) &#123;</div><div class="line">      Bitmap bitmap = bitmaCache.get(String.valueOf(i));</div><div class="line">      bigCanvas.drawBitmap(bitmap, 0f, iHeight, paint);</div><div class="line">      iHeight += bitmap.getHeight();</div><div class="line">      bitmap.recycle();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return bigBitmap;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>相信有不少小伙伴用BRVH第三方库来做recycleview的适配器的。使用这个库的话再用上面的方法会报角标越界的错误，看了BRVH的源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public void onBindViewHolder(ViewHolder holder, int positions) &#123;</div><div class="line">       int viewType = holder.getItemViewType();</div><div class="line">       switch(viewType) &#123;</div><div class="line">       case 0:</div><div class="line">           this.convert((BaseViewHolder)holder, this.mData.get(holder.getLayoutPosition() - this.getHeaderLayoutCount()));</div><div class="line">       case 273:</div><div class="line">       case 819:</div><div class="line">       case 1365:</div><div class="line">           break;</div><div class="line">       case 546:</div><div class="line">           this.addLoadMore(holder);</div><div class="line">           break;</div><div class="line">       default:</div><div class="line">           this.convert((BaseViewHolder)holder, this.mData.get(holder.getLayoutPosition() - this.getHeaderLayoutCount()));</div><div class="line">           this.onBindDefViewHolder((BaseViewHolder)holder, this.mData.get(holder.getLayoutPosition() - this.getHeaderLayoutCount()));</div><div class="line">       &#125;</div><div class="line"></div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>在调用<code>adapter.onBindViewHolder</code>时，因为里面的<code>position</code>参数未使用，里面用的计算<code>holder.getLayoutPosition() - this.getHeaderLayoutCount()</code>的值一直是-1导致角标越界报错。</p>
+<p>本人理解，RecyclerView的截屏原理是，首先构造每个item的ViewHolder，然后调用具体设置数据到每个item的方法，此时cache中就存有item的内容，此时绘制就能获取到完整的内容。采用v7包中的<code>onBindViewHolder</code>方法即可，或者是BRVH的<code>convert</code>方法，可以看到BRVH中没有暴露出这个方法，而且唯一暴露出的<code>onBindViewHolder</code>还会报角标越界错误，此时我们就需要在BRVH的基础上暴露出<code>convert</code>即可，代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class MyAdapter extends BaseQuickAdapter&lt;T&gt; &#123;</div><div class="line"></div><div class="line">       public MyAdapter() &#123;</div><div class="line">           super(getItemLayoutResId(), datas);</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       /**</div><div class="line">        * 用于对外暴露convert方法,构造缓存视图(截屏用)</div><div class="line">        * @param viewHolder</div><div class="line">        * @param t</div><div class="line">        */</div><div class="line">       public void startConvert(BaseViewHolder viewHolder, T t)&#123;</div><div class="line">           convert(viewHolder,t);</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       protected void convert(BaseViewHolder viewHolder, T t) &#123;</div><div class="line">           bindView(viewHolder, t);</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>然后将上面所述的获取Bitmap方法修改一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 截取recycler view</div><div class="line">    */</div><div class="line">   public static Bitmap getRecyclerViewScreenshot(RecyclerView view) &#123;</div><div class="line">       BaseListFragment.MyAdapter adapter = (BaseListFragment.MyAdapter) view.getAdapter();</div><div class="line">       Bitmap bigBitmap = null;</div><div class="line">       if (adapter != null) &#123;</div><div class="line">           int size = adapter.getData().size();</div><div class="line">           int height = 0;</div><div class="line">           Paint paint = new Paint();</div><div class="line">           int iHeight = 0;</div><div class="line">           final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);</div><div class="line"></div><div class="line">           // Use 1/8th of the available memory for this memory cache.</div><div class="line">           final int cacheSize = maxMemory / 8;</div><div class="line">           LruCache&lt;String, Bitmap&gt; bitmaCache = new LruCache&lt;&gt;(cacheSize);</div><div class="line">           for (int i = 0; i &lt; size; i++) &#123;</div><div class="line">               BaseViewHolder holder = (BaseViewHolder) adapter.createViewHolder(view, adapter.getItemViewType(i));</div><div class="line">               //此处需要调用convert方法，否则绘制出来的都是空的item</div><div class="line">               adapter.startConvert(holder, adapter.getData().get(i));</div><div class="line">               holder.itemView.measure(</div><div class="line">                       View.MeasureSpec.makeMeasureSpec(view.getWidth(), View.MeasureSpec.EXACTLY),</div><div class="line">                       View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));</div><div class="line">               holder.itemView.layout(0, 0, holder.itemView.getMeasuredWidth(),</div><div class="line">                       holder.itemView.getMeasuredHeight());</div><div class="line">               holder.itemView.setDrawingCacheEnabled(true);</div><div class="line">               holder.itemView.buildDrawingCache();</div><div class="line">               Bitmap drawingCache = holder.itemView.getDrawingCache();</div><div class="line">               if (drawingCache != null) &#123;</div><div class="line"></div><div class="line">                   bitmaCache.put(String.valueOf(i), drawingCache);</div><div class="line">               &#125;</div><div class="line">               height += holder.itemView.getMeasuredHeight();</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           bigBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), height, Bitmap.Config.ARGB_8888);</div><div class="line">           Canvas bigCanvas = new Canvas(bigBitmap);</div><div class="line">           Drawable lBackground = view.getBackground();</div><div class="line">           if (lBackground instanceof ColorDrawable) &#123;</div><div class="line">               ColorDrawable lColorDrawable = (ColorDrawable) lBackground;</div><div class="line">               int lColor = lColorDrawable.getColor();</div><div class="line">               bigCanvas.drawColor(lColor);</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           for (int i = 0; i &lt; size; i++) &#123;</div><div class="line">               Bitmap bitmap = bitmaCache.get(String.valueOf(i));</div><div class="line">               bigCanvas.drawBitmap(bitmap, 0f, iHeight, paint);</div><div class="line">               iHeight += bitmap.getHeight();</div><div class="line">               bitmap.recycle();</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       return bigBitmap;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h3 id="合成Bitmap"><a href="#合成Bitmap" class="headerlink" title="合成Bitmap"></a>合成Bitmap</h3><p>比如四张合成一张</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">/**</div><div class="line">   * 将四张图拼成一张</div><div class="line">   *</div><div class="line">   * @param pic1 图一</div><div class="line">   * @param pic2 图二</div><div class="line">   * @param pic3 图三</div><div class="line">   * @param pic4 图四</div><div class="line">   * @return only_bitmap</div><div class="line">   * 详情见说明：&#123;@link com.bertadata.qxb.util.ScreenShotUtils&#125;</div><div class="line">   */</div><div class="line">  public static Bitmap combineBitmapsIntoOnlyOne(Bitmap pic1, Bitmap pic2, Bitmap pic3, Bitmap pic4, Activity context) &#123;</div><div class="line">      int w_total = pic2.getWidth();</div><div class="line">      int h_total = pic1.getHeight() + pic2.getHeight() + pic3.getHeight() + pic4.getHeight();</div><div class="line">      int h_pic1 = pic1.getHeight();</div><div class="line">      int h_pic4 = pic4.getHeight();</div><div class="line">      int h_pic12 = pic1.getHeight() + pic2.getHeight();</div><div class="line">      //此处为防止OOM需要对高度做限制</div><div class="line">      if (h_total &gt; HEIGHTLIMIT) &#123;</div><div class="line">          return null;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      Bitmap only_bitmap = Bitmap.createBitmap(w_total, h_total, Bitmap.Config.ARGB_4444);</div><div class="line">      Canvas canvas = new Canvas(only_bitmap);</div><div class="line">      canvas.drawColor(ContextCompat.getColor(context, R.color.color_content_bg));</div><div class="line">      canvas.drawBitmap(pic1, 0, 0, null);</div><div class="line">      canvas.drawBitmap(pic2, 0, h_pic1, null);</div><div class="line">      canvas.drawBitmap(pic3, 0, h_pic12, null);</div><div class="line">      canvas.drawBitmap(pic4, 0, h_total - h_pic4, null);</div><div class="line">      return only_bitmap;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<h3 id="图片后期处理"><a href="#图片后期处理" class="headerlink" title="图片后期处理"></a>图片后期处理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 将传入的Bitmap合理压缩后输出到系统截屏目录下</div><div class="line">    * 命名格式为：Screenshot+时间戳+启信宝报名.jpg</div><div class="line">    * 同时通知系统重新扫描系统文件</div><div class="line">    *</div><div class="line">    * @param pic1    图一 标题栏截图</div><div class="line">    * @param pic2    图二 scrollview截图</div><div class="line">    * @param context 用于通知重新扫描文件系统，为提升性能可去掉</div><div class="line">    *                详情见说明：&#123;@link com.bertadata.qxb.util.ScreenShotUtils&#125;</div><div class="line">    */</div><div class="line">   public static void savingBitmapIntoFile(final Bitmap pic1, final Bitmap pic2, final Activity context, final BitmapAndFileCallBack callBack) &#123;</div><div class="line">       if (context == null || context.isFinishing()) &#123;</div><div class="line">           return;</div><div class="line">       &#125;</div><div class="line">       Thread thread = new Thread(new Runnable() &#123;</div><div class="line">           @Override</div><div class="line">           public void run() &#123;</div><div class="line">               String fileReturnPath = &quot;&quot;;</div><div class="line">               int w = pic1.getWidth();</div><div class="line">               Bitmap bottom = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_picture_combine_bottom);</div><div class="line">               Bitmap top_banner = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_picture_combine_top);</div><div class="line"></div><div class="line">               Bitmap bitmap_bottom = anyRatioCompressing(bottom, (float) w / bottom.getWidth(), (float) w / bottom.getWidth());</div><div class="line">               Bitmap bitmap_top = anyRatioCompressing(top_banner, (float) w / bottom.getWidth(), (float) w / bottom.getWidth());</div><div class="line">               final Bitmap only_bitmap = combineBitmapsIntoOnlyOne(bitmap_top, pic1, pic2, bitmap_bottom, context);</div><div class="line"></div><div class="line">               // 获取当前时间</div><div class="line">               SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd-HH-mm-ss-ms&quot;, Locale.getDefault());</div><div class="line">               String data = sdf.format(new Date());</div><div class="line"></div><div class="line">               // 获取内存路径</div><div class="line">               // 设置图片路径+命名规范</div><div class="line">               // 声明输出文件</div><div class="line">               String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath();</div><div class="line">               String fileTitle = &quot;Screenshot_&quot; + data + &quot;_com.bertadata.qxb.biz_info.jpg&quot;;</div><div class="line">               String filePath = storagePath + &quot;/DCIM/&quot;;</div><div class="line">               final String fileAbsolutePath = filePath + fileTitle;</div><div class="line">               File file = new File(fileAbsolutePath);</div><div class="line"></div><div class="line">               /**</div><div class="line">                * 质压与比压结合</div><div class="line">                * 分级压缩</div><div class="line">                * 输出文件</div><div class="line">                */</div><div class="line">               if (only_bitmap != null) &#123;</div><div class="line">                   try &#123;</div><div class="line">                       // 首先，对原图进行一步质量压缩,形成初步文件</div><div class="line">                       FileOutputStream fos = new FileOutputStream(file);</div><div class="line">                       only_bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);</div><div class="line"></div><div class="line">                       // 另建一个文件other_file预备输出</div><div class="line">                       String other_fileTitle = &quot;Screenshot_&quot; + data + &quot;_com.bertadata.qxb.jpg&quot;;</div><div class="line">                       String other_fileAbsolutePath = filePath + other_fileTitle;</div><div class="line">                       File other_file = new File(other_fileAbsolutePath);</div><div class="line">                       FileOutputStream other_fos = new FileOutputStream(other_file);</div><div class="line"></div><div class="line">                       // 其次，要判断质压之后的文件大小，按文件大小分级进行处理</div><div class="line">                       long file_size = file.length() / 1024; // size of file(KB)</div><div class="line">                       if (file_size &lt; 0 || !(file.exists())) &#123;</div><div class="line">                           // 零级： 文件判空</div><div class="line">                           throw new NullPointerException();</div><div class="line">                       &#125; else if (file_size &gt; 0 &amp;&amp; file_size &lt;= 256) &#123;</div><div class="line">                           // 一级： 直接输出</div><div class="line">                           deleteFile(other_file);</div><div class="line">                           // 通知刷新文件系统，显示最新截取的图文件</div><div class="line">                           fileReturnPath = fileAbsolutePath;</div><div class="line">                           context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(&quot;file://&quot; + fileAbsolutePath)));</div><div class="line">                       &#125; else if (file_size &gt; 256 &amp;&amp; file_size &lt;= 768) &#123;</div><div class="line">                           // 二级： 简单压缩:压缩为原比例的3/4，质压为50%</div><div class="line">                           anyRatioCompressing(only_bitmap, (float) 3 / 4, (float) 3 / 4).compress(Bitmap.CompressFormat.JPEG, 40, other_fos);</div><div class="line">                           deleteFile(file);</div><div class="line">                           // 通知刷新文件系统，显示最新截取的图文件</div><div class="line">                           fileReturnPath = other_fileAbsolutePath;</div><div class="line">                           context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(&quot;file://&quot; + other_fileAbsolutePath)));</div><div class="line">                       &#125; else if (file_size &gt; 768 &amp;&amp; file_size &lt;= 1280) &#123;</div><div class="line">                           // 三级： 中度压缩：压缩为原比例的1/2，质压为40%</div><div class="line">                           anyRatioCompressing(only_bitmap, (float) 1 / 2, (float) 1 / 2).compress(Bitmap.CompressFormat.JPEG, 40, other_fos);</div><div class="line">                           deleteFile(file);</div><div class="line">                           // 通知刷新文件系统，显示最新截取的图文件</div><div class="line">                           fileReturnPath = other_fileAbsolutePath;</div><div class="line">                           context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(&quot;file://&quot; + other_fileAbsolutePath)));</div><div class="line">                       &#125; else if (file_size &gt; 1280 &amp;&amp; file_size &lt;= 2048) &#123;</div><div class="line">                           // 四级： 大幅压缩：压缩为原比例的1/3，质压为40%</div><div class="line">                           anyRatioCompressing(only_bitmap, (float) 1 / 3, (float) 1 / 3).compress(Bitmap.CompressFormat.JPEG, 40, other_fos);</div><div class="line">                           deleteFile(file);</div><div class="line">                           // 通知刷新文件系统，显示最新截取的图文件</div><div class="line">                           fileReturnPath = other_fileAbsolutePath;</div><div class="line">                           context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(&quot;file://&quot; + other_fileAbsolutePath)));</div><div class="line">                       &#125; else if (file_size &gt; 2048) &#123;</div><div class="line">                           // 五级： 中度压缩：压缩为原比例的1/2，质压为40%</div><div class="line">                           anyRatioCompressing(only_bitmap, (float) 1 / 2, (float) 1 / 2).compress(Bitmap.CompressFormat.JPEG, 40, other_fos);</div><div class="line">                           deleteFile(file);</div><div class="line">                           // 通知刷新文件系统，显示最新截取的图文件</div><div class="line">                           fileReturnPath = other_fileAbsolutePath;</div><div class="line">                           context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(&quot;file://&quot; + other_fileAbsolutePath)));</div><div class="line">                       &#125;</div><div class="line"></div><div class="line">                       // 注销fos;</div><div class="line">                       fos.flush();</div><div class="line">                       other_fos.flush();</div><div class="line">                       other_fos.close();</div><div class="line">                       fos.close();</div><div class="line">                       //callback用于回传保存成功的路径以及Bitmap</div><div class="line">                       callBack.onSuccess(only_bitmap, fileReturnPath);</div><div class="line">                   &#125; catch (Exception e) &#123;</div><div class="line">                       e.printStackTrace();</div><div class="line">                   &#125;</div><div class="line">               &#125; else callBack.onSuccess(null, &quot;&quot;);</div><div class="line">           &#125;</div><div class="line">       &#125;);</div><div class="line">       thread.start();</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">/**</div><div class="line"> * 可实现任意宽高比例压缩（宽高压比可不同）的压缩方法（主要用于微压）</div><div class="line"> *</div><div class="line"> * @param bitmap       源图</div><div class="line"> * @param width_ratio  宽压比（float）（0&lt;&amp;&amp;&lt;1)</div><div class="line"> * @param height_ratio 高压比（float）（0&lt;&amp;&amp;&lt;1)</div><div class="line"> * @return 目标图片</div><div class="line"> * &lt;p&gt;</div><div class="line"> */</div><div class="line">public static Bitmap anyRatioCompressing(Bitmap bitmap, float width_ratio, float height_ratio) &#123;</div><div class="line">    Matrix matrix = new Matrix();</div><div class="line">    matrix.postScale(width_ratio, height_ratio);</div><div class="line">    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>本文参考<a href="http://www.cnblogs.com/BoBoMEe/p/4556917.html，并结合自己实际项目操作完成" target="_blank" rel="external">http://www.cnblogs.com/BoBoMEe/p/4556917.html，并结合自己实际项目操作完成</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/06/Android Studio 快捷键整理/" rel="next" title="Android Studio 快捷键整理">
+                <i class="fa fa-chevron-left"></i> Android Studio 快捷键整理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/24/Retrofit&rxjava初体验/" rel="prev" title="Retrofit&rxjava初体验">
+                Retrofit&rxjava初体验 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android截屏"><span class="nav-number">1.</span> <span class="nav-text">Android截屏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通截屏的实现"><span class="nav-number">1.1.</span> <span class="nav-text">普通截屏的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开源方案"><span class="nav-number">1.2.</span> <span class="nav-text">开源方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scrollview截屏"><span class="nav-number">1.3.</span> <span class="nav-text">Scrollview截屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listview截屏"><span class="nav-number">1.4.</span> <span class="nav-text">listview截屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RecyclerView截屏"><span class="nav-number">1.5.</span> <span class="nav-text">RecyclerView截屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合成Bitmap"><span class="nav-number">1.6.</span> <span class="nav-text">合成Bitmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图片后期处理"><span class="nav-number">1.7.</span> <span class="nav-text">图片后期处理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

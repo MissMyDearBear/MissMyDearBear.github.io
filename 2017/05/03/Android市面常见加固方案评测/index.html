@@ -1,0 +1,848 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言：安卓应用主要基于Java开发，极易被破解，造成代码或关键接口暴露，甚至被别人加入广告，病毒等二次打包发布，给公司和用户均带来巨大的风险，应对破解的最便捷有效的方式就是加固。通过加固可以在一定程度上达到反编译和防止被二次打包的效果。 通过大量网上调查并结合实际操作，对以下4个主流的加固平台从破解难易度，兼容性，加固后对应用的影响（体积，启动速度），操作难度，使用成本，客服响应速度几个方面给出评">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android市面常见加固方案评测">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/05/03/Android市面常见加固方案评测/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="前言：安卓应用主要基于Java开发，极易被破解，造成代码或关键接口暴露，甚至被别人加入广告，病毒等二次打包发布，给公司和用户均带来巨大的风险，应对破解的最便捷有效的方式就是加固。通过加固可以在一定程度上达到反编译和防止被二次打包的效果。 通过大量网上调查并结合实际操作，对以下4个主流的加固平台从破解难易度，兼容性，加固后对应用的影响（体积，启动速度），操作难度，使用成本，客服响应速度几个方面给出评">
+<meta property="og:updated_time" content="2017-06-08T01:37:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android市面常见加固方案评测">
+<meta name="twitter:description" content="前言：安卓应用主要基于Java开发，极易被破解，造成代码或关键接口暴露，甚至被别人加入广告，病毒等二次打包发布，给公司和用户均带来巨大的风险，应对破解的最便捷有效的方式就是加固。通过加固可以在一定程度上达到反编译和防止被二次打包的效果。 通过大量网上调查并结合实际操作，对以下4个主流的加固平台从破解难易度，兼容性，加固后对应用的影响（体积，启动速度），操作难度，使用成本，客服响应速度几个方面给出评">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/05/03/Android市面常见加固方案评测/"/>
+
+
+
+
+
+  <title>Android市面常见加固方案评测 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/05/03/Android市面常见加固方案评测/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android市面常见加固方案评测</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-03T00:00:00+08:00">
+                2017-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>安卓应用主要基于Java开发，极易被破解，造成代码或关键接口暴露，甚至被别人加入广告，病毒等二次打包发布，给公司和用户均带来巨大的风险，应对破解的最便捷有效的方式就是加固。通过加固可以在一定程度上达到反编译和防止被二次打包的效果。</p>
+<p>通过大量网上调查并结合实际操作，对以下4个主流的加固平台从破解难易度，兼容性，加固后对应用的影响（体积，启动速度），操作难度，使用成本，客服响应速度几个方面给出评测。</p>
+<p>加固是非常专业的领域，该评测并未深入到实现原理及技术细节，仅供参考。</p>
+<blockquote>
+<p>1.360加固保   链接：<a href="http://jiagu.360.cn/" target="_blank" rel="external">http://jiagu.360.cn/</a> </p>
+<p>2.阿里聚安全   链接：<a href="http://jaq.alibaba.com/" target="_blank" rel="external">http://jaq.alibaba.com/</a></p>
+<p>3.爱加密   链接：<a href="http://ijiami.cn/AppProtect" target="_blank" rel="external">http://ijiami.cn/AppProtect</a></p>
+<p>4.腾讯乐固   链接：<a href="http://legu.qcloud.com/" target="_blank" rel="external">http://legu.qcloud.com/</a></p>
+</blockquote>
+<h2 id="一．破解难度"><a href="#一．破解难度" class="headerlink" title="一．破解难度"></a>一．破解难度</h2><blockquote>
+<p>目前加固技术基本都发展到第三代，前2代的加固技术破解难度不大，基本被淘汰，这里只针对第三代加固技术，由于各加固服务商加固原理大致相同，这里不做区分，统一评估。</p>
+<p>目前的破解基本是针对免费版，下面的破解难易度判断基于论坛和网络搜集的破解博客</p>
+</blockquote>
+<p>第三代加固技术的主要特点是：</p>
+<ol>
+<li>Dex Method代码动态解密</li>
+<li>So代码膨胀混淆</li>
+<li>对前2代漏洞修改或增强</li>
+</ol>
+<p>那么第三代是否无法破解呢？答案是否定的，在<a href="http://bbs.pediy.com/forum-161.htm" target="_blank" rel="external">看雪论坛</a>的Android版块，可以看到大量成功破解360，腾讯，百度等第三代加固方案的文章，甚至有的做成了专门的破解工具。下面列出几个例子：</p>
+<p>腾讯乐固破解：<a href="http://bbs.pediy.com/thread-210532.htm" target="_blank" rel="external">http://bbs.pediy.com/thread-210532.htm</a></p>
+<p>360和腾讯乐固的开源的双破方案：<a href="https://github.com/spriteviki/Dex2oatHunter" target="_blank" rel="external">https://github.com/spriteviki/Dex2oatHunter</a></p>
+<p>360加固破解：<a href="http://www.wjdiankong.cn/apk%E8%84%B1%E5%A3%B3%E5%9C%A3%E6%88%98%E4%B9%8B-%E8%84%B1%E6%8E%89360%E5%8A%A0%E5%9B%BA%E7%9A%84%E5%A3%B3/" target="_blank" rel="external">http://www.wjdiankong.cn/apk%E8%84%B1%E5%A3%B3%E5%9C%A3%E6%88%98%E4%B9%8B-%E8%84%B1%E6%8E%89360%E5%8A%A0%E5%9B%BA%E7%9A%84%E5%A3%B3/</a></p>
+<p>百度破解：<a href="http://bbs.pediy.com/thread-211162.htm" target="_blank" rel="external">http://bbs.pediy.com/thread-211162.htm</a></p>
+<p>阿里加固破解：<a href="http://bbs.pediy.com/thread-210880.htm" target="_blank" rel="external">http://bbs.pediy.com/thread-210880.htm</a></p>
+<p>爱加密破解：<a href="http://blog.csdn.net/jiangwei0910410003/article/details/51620236" target="_blank" rel="external">http://blog.csdn.net/jiangwei0910410003/article/details/51620236</a></p>
+<p>阿里聚安全反编译很容易看到源代码的。只是对部分方法由java层移到了native层， 需要配合阿里的安全组件才能真正起到保护的目的。</p>
+<p>这里有<a href="http://blog.csdn.net/qq1084283172/article/details/53572446" target="_blank" rel="external">一篇博客</a>总结了目前针对全部3代加固技术的破解方案，从文中可见对于专业人员来讲，第三代加固破解难度并不高。</p>
+<p>当然加固和破解是不断博弈的过程，公布出来的破解方案也基本会被加固商升级封堵，比如360和阿里的反应都是非常快速的。但由于在各大应用市场已经存在大量使用旧的加固方案的应用，因此只要破解较早版本的APK，基本就可以获取你应用的大部分关键信息了。所以使用第三代加固方案的应用，即便是用最新的加固策略，也是一定可以破解的，只是时间早晚的问题。</p>
+<h2 id="二．兼容性"><a href="#二．兼容性" class="headerlink" title="二．兼容性"></a>二．兼容性</h2><blockquote>
+<p>目前各个厂商网站上宣传的兼容性普遍较高，但都很少有敢承诺100%兼容，如阿里，爱加密，腾讯等均承认加固会影响原程序的兼容性及性能。</p>
+</blockquote>
+<p>对我们应用采用testin标准兼容测试，终端数100款，通过率大致如下：</p>
+<table>
+<thead>
+<tr>
+<th>未加固</th>
+<th>阿里加固</th>
+<th>腾讯加固</th>
+<th>360加固</th>
+<th>梆梆加固</th>
+<th>爱加密 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100%</td>
+<td>100%</td>
+<td>99%</td>
+<td>98%</td>
+<td>98%</td>
+<td>97%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="兼容性：-阿里-gt-腾讯-gt-360-梆梆-gt-爱加密"><a href="#兼容性：-阿里-gt-腾讯-gt-360-梆梆-gt-爱加密" class="headerlink" title="兼容性： 阿里 &gt; 腾讯 &gt; 360 = 梆梆 &gt; 爱加密"></a>兼容性： 阿里 &gt; 腾讯 &gt; 360 = 梆梆 &gt; 爱加密</h5><p>以下是搜集到的各平台关于兼容性的反馈：</p>
+<h6 id="360加固问题"><a href="#360加固问题" class="headerlink" title="360加固问题"></a>360加固问题</h6><ol>
+<li>360加固后会有<a href="http://bbs.360.cn/thread-14847313-1-1.html" target="_blank" rel="external">锁屏广告</a></li>
+<li>360加固后，导致ANR<a href="http://bbs.360.cn/thread-14756391-1-1.html" target="_blank" rel="external">概率增大</a></li>
+</ol>
+<ul>
+<li>大部分问题集中在2016年上半年之前</li>
+</ul>
+<h6 id="百度加固问题"><a href="#百度加固问题" class="headerlink" title="百度加固问题"></a>百度加固问题</h6><ol>
+<li>百度加固后 导致我的应用都无法用了 真是被坑大了：<a href="https://tieba.baidu.com/p/4375684485" target="_blank" rel="external">https://tieba.baidu.com/p/4375684485</a></li>
+</ol>
+<h6 id="腾讯乐固"><a href="#腾讯乐固" class="headerlink" title="腾讯乐固"></a>腾讯乐固</h6><ol>
+<li>乐固加固后App Crash：<a href="http://bbs.qcloud.com/thread-25537-1-1.html" target="_blank" rel="external">http://bbs.qcloud.com/thread-25537-1-1.html</a></li>
+</ol>
+<p>关于兼容性还可以参考知乎上的<a href="https://zhuanlan.zhihu.com/p/21482658" target="_blank" rel="external">这篇评测文章</a>。</p>
+<h2 id="三．加固后对应用的影响（体积，启动速度）"><a href="#三．加固后对应用的影响（体积，启动速度）" class="headerlink" title="三．加固后对应用的影响（体积，启动速度）"></a>三．加固后对应用的影响（体积，启动速度）</h2><blockquote>
+<p>以下数据基于启信宝3.6.2版</p>
+</blockquote>
+<ol>
+<li>对体积的影响</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>未加固</th>
+<th>阿里加固</th>
+<th>腾讯加固</th>
+<th>360加固</th>
+<th>梆梆加固</th>
+<th>爱加密 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11.9MB</td>
+<td>11.2MB</td>
+<td>11.6MB</td>
+<td>12.2MB</td>
+<td>13.9MB</td>
+<td>13.6MB</td>
+</tr>
+</tbody>
+</table>
+<p>2.对启动速度的影响(首次/第二次)</p>
+<table>
+<thead>
+<tr>
+<th>未加固</th>
+<th>阿里加固</th>
+<th>腾讯加固</th>
+<th>360加固</th>
+<th>梆梆加固</th>
+<th>爱加密 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1s833ms/788ms</td>
+<td>2s71ms/882ms</td>
+<td>1s877ms/1s681ms</td>
+<td>3s187ms/2s33ms</td>
+<td>3s803ms/2s212ms</td>
+<td>2s592ms/2s247ms</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>腾讯加固虽然体积和启动速度看起来不错，但在测试时无法在三星note4上进行网络请求，其他加固包正常。</li>
+</ul>
+<h2 id="四．操作复杂度"><a href="#四．操作复杂度" class="headerlink" title="四．操作复杂度"></a>四．操作复杂度</h2><p>各平台加固功能使用下来基本不会出现操作疑问，主要是步骤和流程都类似。体验上360和阿里稍好一些。爱加密体验较差。</p>
+<h2 id="五．使用成本"><a href="#五．使用成本" class="headerlink" title="五．使用成本"></a>五．使用成本</h2><ol>
+<li><p>360：</p>
+<p> 免费提供给开发者。</p>
+</li>
+<li><p>阿里聚安全：</p>
+<p> 有免费服务，也有付费的企业用户服务，明码标价，<a href="https://help.aliyun.com/document_detail/35078.html?spm=5176.doc35120.6.555.tsB0qO" target="_blank" rel="external">费用比较高</a>.</p>
+</li>
+<li><p>爱加密：</p>
+<p>有免费版和企业版，费用未知</p>
+</li>
+<li><p>腾讯乐固：</p>
+<p>有免费基础版和至尊版，至尊版需一个月内在腾讯云消耗金额大于<a href="https://www.qcloud.com/service/vip" target="_blank" rel="external">10万元</a>。</p>
+</li>
+</ol>
+<h2 id="六．客服响应速度（基于论坛及网友反馈）"><a href="#六．客服响应速度（基于论坛及网友反馈）" class="headerlink" title="六．客服响应速度（基于论坛及网友反馈）"></a>六．客服响应速度（基于论坛及网友反馈）</h2><ol>
+<li><p>360：</p>
+<p>有论坛和在线客服，回帖较快。</p>
+</li>
+<li><p>阿里聚安全：</p>
+<p>有在线客服，企业版提供1v1服务。</p>
+</li>
+<li><p>爱加密：</p>
+<p>有在线客服，企业版提供1v1服务，12小时内响应。</p>
+</li>
+<li><p>腾讯乐固：</p>
+<p>有论坛和在线客服，至尊版提供1v1服务</p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上分析基于免费版加固，企业级加固肯定加固强度高一个等级，再加上代码加花混淆等操作，相信一般人员很难破解，而且网上企业级破解样例很少，短期内可以有效保证代码安全。因而继续使用梆梆加固还是很有必要的，但出于兼容性考虑，有时候需要给用户提供别的加固包，这里结合使用成本，以上分析及实际使用体验（启动速度，兼容性，操作复杂度）给出2个备选方案：</p>
+<blockquote>
+<ol>
+<li><p>360加固（dex级）</p>
+</li>
+<li><p>阿里加固（核心方法级）+ 安全组件</p>
+</li>
+</ol>
+</blockquote>
+<ul>
+<li>360加固包已经提供部分用户使用，目前没有异常反馈。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/03/Android 代码规范/" rel="next" title="Android 代码规范">
+                <i class="fa fa-chevron-left"></i> Android 代码规范
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/17/GreenDao数据库升级问题/" rel="prev" title="GreenDao数据库升级问题">
+                GreenDao数据库升级问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言："><span class="nav-number">1.</span> <span class="nav-text">前言：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一．破解难度"><span class="nav-number">2.</span> <span class="nav-text">一．破解难度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二．兼容性"><span class="nav-number">3.</span> <span class="nav-text">二．兼容性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#兼容性：-阿里-gt-腾讯-gt-360-梆梆-gt-爱加密"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">兼容性： 阿里 > 腾讯 > 360 = 梆梆 > 爱加密</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#360加固问题"><span class="nav-number">3.0.0.1.1.</span> <span class="nav-text">360加固问题</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#百度加固问题"><span class="nav-number">3.0.0.1.2.</span> <span class="nav-text">百度加固问题</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#腾讯乐固"><span class="nav-number">3.0.0.1.3.</span> <span class="nav-text">腾讯乐固</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三．加固后对应用的影响（体积，启动速度）"><span class="nav-number">4.</span> <span class="nav-text">三．加固后对应用的影响（体积，启动速度）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四．操作复杂度"><span class="nav-number">5.</span> <span class="nav-text">四．操作复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五．使用成本"><span class="nav-number">6.</span> <span class="nav-text">五．使用成本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六．客服响应速度（基于论坛及网友反馈）"><span class="nav-number">7.</span> <span class="nav-text">六．客服响应速度（基于论坛及网友反馈）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
