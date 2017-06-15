@@ -1,0 +1,769 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="基本类型数字类型   Type Bit width     Double 64   Float 32   Long 64   Int 32   Short 16   Byte 8    与java不同的是characters不再是基本数字类型。 数值的表示 十进制：123 （Long：123L） 16进制：0x0F 二进制：0b00001011  不支持八进制 kotlin也支持浮点数值  Dou">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin_lesson_01_基本类型">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/06/15/Kotlin_lesson_01_基本类型/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="基本类型数字类型   Type Bit width     Double 64   Float 32   Long 64   Int 32   Short 16   Byte 8    与java不同的是characters不再是基本数字类型。 数值的表示 十进制：123 （Long：123L） 16进制：0x0F 二进制：0b00001011  不支持八进制 kotlin也支持浮点数值  Dou">
+<meta property="og:updated_time" content="2017-06-15T08:38:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kotlin_lesson_01_基本类型">
+<meta name="twitter:description" content="基本类型数字类型   Type Bit width     Double 64   Float 32   Long 64   Int 32   Short 16   Byte 8    与java不同的是characters不再是基本数字类型。 数值的表示 十进制：123 （Long：123L） 16进制：0x0F 二进制：0b00001011  不支持八进制 kotlin也支持浮点数值  Dou">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/06/15/Kotlin_lesson_01_基本类型/"/>
+
+
+
+
+
+  <title>Kotlin_lesson_01_基本类型 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/06/15/Kotlin_lesson_01_基本类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kotlin_lesson_01_基本类型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-15T00:00:00+08:00">
+                2017-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h2><h3 id="数字类型"><a href="#数字类型" class="headerlink" title="数字类型"></a>数字类型</h3><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Bit width</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Double</td>
+<td>64</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Long</td>
+<td>64</td>
+</tr>
+<tr>
+<td>Int</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Short</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Byte</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<p>与<code>java</code>不同的是<code>characters</code>不再是基本数字类型。</p>
+<h4 id="数值的表示"><a href="#数值的表示" class="headerlink" title="数值的表示"></a>数值的表示</h4><ul>
+<li>十进制：123 （Long：123L）</li>
+<li>16进制：0x0F</li>
+<li>二进制：0b00001011</li>
+</ul>
+<p>不支持八进制</p>
+<p>kotlin也支持浮点数值</p>
+<ul>
+<li>Double：123.5，123.5e10</li>
+<li>Float(f or F为数值后缀):123.5f<h3 id="下划线在数值中的使用"><a href="#下划线在数值中的使用" class="headerlink" title="下划线在数值中的使用"></a>下划线在数值中的使用</h3>可以用下划线去分割数值，增加数值可读性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val oneMillion = 1_000_000</div><div class="line">val creditCardNumber = 1234_5678_9012_3456L</div><div class="line">val socialSecurityNumber = 999_99_9999L</div><div class="line">val hexBytes = 0xFF_EC_DE_5E</div><div class="line">val bytes = 0b11010010_01101001_10010100_10010010</div></pre></td></tr></table></figure>
+<h4 id="表现形式"><a href="#表现形式" class="headerlink" title="表现形式"></a>表现形式</h4><p>在java平台，数字类型是以JVNM基本字节的形式存在物理内存中，除非需要空的数字引用（e.g. <code>Int?</code>）或者是泛型引用。后者数字类型会进行封箱。</p>
+<p>需要注意的是封箱不会保证引用同一物理地址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val a: Int = 10000</div><div class="line">print(a === a) // Prints &apos;true&apos;</div><div class="line">val boxedA: Int? = a</div><div class="line">val anotherBoxedA: Int? = a</div><div class="line">print(boxedA === anotherBoxedA) // !!!Prints &apos;false&apos;!!!</div></pre></td></tr></table></figure>
+<p>另一方面只会保证其对应的数值相等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val a: Int = 10000</div><div class="line">print(a == a) // Prints &apos;true&apos;</div><div class="line">val boxedA: Int? = a</div><div class="line">val anotherBoxedA: Int? = a</div><div class="line">print(boxedA == anotherBoxedA) // Prints &apos;true&apos;</div></pre></td></tr></table></figure>
+<h4 id="精确的类型转换"><a href="#精确的类型转换" class="headerlink" title="精确的类型转换"></a>精确的类型转换</h4><p>由于不同的表现形式，较小的数据类型时不能代表较大的数据类型，会发生意想不到的事情：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// Hypothetical code, does not actually compile:</div><div class="line">val a: Int? = 1 // A boxed Int (java.lang.Integer)</div><div class="line">val b: Long? = a // implicit conversion yields a boxed Long (java.lang.Long)</div><div class="line">print(a == b) // Surprise! This prints &quot;false&quot; as Long&apos;s equals() check for other part to be Long as well</div></pre></td></tr></table></figure>
+<p>不仅仅是类型不同，就连数值也是不同的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">val b: Byte = 1 // OK, literals are checked statically </div><div class="line">val i: Int = b // ERROR</div></pre></td></tr></table></figure>
+<p>我们可以精确的做类型转换：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">val i:Int=b.toInt()</div></pre></td></tr></table></figure>
+<p>所有的数值类型都支持以下的类型转换：</p>
+<ul>
+<li><code>toByte(): Byte</code></li>
+<li><code>toShort(): Short</code></li>
+<li><code>toInt(): Int</code></li>
+<li><code>toLong(): Long</code></li>
+<li><code>toFloat(): Float</code></li>
+<li><code>toDouble(): Double</code></li>
+<li><code>toChar(): Char</code></li>
+</ul>
+<p>就“长”原则，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">val l = 1L + 3 // Long + Int =&gt; Long</div></pre></td></tr></table></figure>
+<h3 id="Booleans（布尔）"><a href="#Booleans（布尔）" class="headerlink" title="Booleans（布尔）"></a>Booleans（布尔）</h3><p>Boolean有两个值：true，false</p>
+<p>Boolean也是引用类型，可以为null</p>
+<p>Boolean运算符有：</p>
+<ul>
+<li><code>||</code>-或（左边若为true，就不会去管右边）</li>
+<li><code>&amp;&amp;</code>-且（左边false，就不会去管右边）</li>
+<li><code>!</code>-非<h3 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h3>数组在kotlin中用<code>Array</code>来表示，它有<code>get</code>和<code>set</code>方法，<code>size</code>属性，还有其它一些比较实用的成员方法：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class Array&lt;T&gt; private constructor() &#123; val size: Int</div><div class="line">operator fun get(index: Int): T</div><div class="line">operator fun set(index: Int, value: T): Unit</div><div class="line">operator fun iterator(): Iterator&lt;T&gt;</div><div class="line">// ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>创建<code>Array</code>的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val array= arrayOf(1,2,3)//--&gt;array[1,2,3]</div><div class="line">//建立指定类型和长度的空数组</div><div class="line">val array= arrayOfNulls&lt;Int&gt;(3)</div><div class="line"> // Creates an Array&lt;String&gt; with values [&quot;0&quot;, &quot;1&quot;, &quot;4&quot;, &quot;9&quot;, &quot;16&quot;]</div><div class="line">val asc = Array(5, &#123; i -&gt; (i * i).toString() &#125;)</div></pre></td></tr></table></figure>
+<h3 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h3><p>字符串有<code>String</code>来表示。<code>String</code>是不可变的，String中的元素可以用<code>s[i]</code>表示，也可一使用for循环：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">for (c in str) &#123; println(c)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>kotlin中，有两种字符值类型的字符串，一种是包含转义字符的字符串，另一种是原始字符串就想java中的String</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">val s = &quot;Hello, world!\n&quot;</div></pre></td></tr></table></figure>
+<p>多行字符串可以用<code>&quot;&quot;&quot;</code>来包裹，里面不能包含转义字符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">val text = &quot;&quot;&quot;</div><div class="line">for (c in &quot;foo&quot;)</div><div class="line">print(c) &quot;&quot;&quot;</div></pre></td></tr></table></figure>
+<p>当然你可以删除缩紧，用<code>trimMargin()</code>方法来设置前缀：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val text = &quot;&quot;&quot;</div><div class="line">|Tell me and I forget. </div><div class="line">|Teach me and I remember.</div><div class="line">|Involve me and I learn.</div><div class="line">|(Benjamin Franklin) &quot;&quot;&quot;.trimMargin()</div></pre></td></tr></table></figure>
+<p><code>|</code>是默认的前缀，你可以自定义前缀如<code>trimMargin(&quot;&gt;&quot;)</code></p>
+<h4 id="字符串模版"><a href="#字符串模版" class="headerlink" title="字符串模版"></a>字符串模版</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">//$为标识符，后面直接跟要填充的变量名</div><div class="line">val i = 10</div><div class="line">val s = &quot;i = $i&quot; // evaluates to &quot;i = 10&quot;</div><div class="line">//可以用任意的表达式做模版</div><div class="line">val s = &quot;abc&quot;</div><div class="line">val str = &quot;$s.length is $&#123;s.length&#125;&quot; // evaluates to &quot;abc.length is 3&quot;</div><div class="line"></div><div class="line">//$是关键字，需要转义为$&#123;&apos;$&apos;&#125;</div><div class="line">val price = &quot;&quot;&quot;</div><div class="line">$&#123;&apos;$&apos;&#125;9.99</div><div class="line">&quot;&quot;&quot;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/08/开源项目-小熊日记/" rel="next" title="Android开源项目-小熊日记">
+                <i class="fa fa-chevron-left"></i> Android开源项目-小熊日记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本类型"><span class="nav-number">1.</span> <span class="nav-text">基本类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数字类型"><span class="nav-number">1.1.</span> <span class="nav-text">数字类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数值的表示"><span class="nav-number">1.1.1.</span> <span class="nav-text">数值的表示</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下划线在数值中的使用"><span class="nav-number">1.2.</span> <span class="nav-text">下划线在数值中的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#表现形式"><span class="nav-number">1.2.1.</span> <span class="nav-text">表现形式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#精确的类型转换"><span class="nav-number">1.2.2.</span> <span class="nav-text">精确的类型转换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Booleans（布尔）"><span class="nav-number">1.3.</span> <span class="nav-text">Booleans（布尔）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Arrays"><span class="nav-number">1.4.</span> <span class="nav-text">Arrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Strings"><span class="nav-number">1.5.</span> <span class="nav-text">Strings</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串模版"><span class="nav-number">1.5.1.</span> <span class="nav-text">字符串模版</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
