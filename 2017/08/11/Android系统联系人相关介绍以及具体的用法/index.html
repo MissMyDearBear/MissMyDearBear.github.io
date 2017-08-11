@@ -1,0 +1,729 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概述本文主要解读Android系统联系人相关的知识，以及展示联系人相关的操作实例。参考Android官方API。由于Contact在API 5的时候废弃，因为其只支持单账号联系人。所以本文就直接介绍ContactContract类 ContactsContractContactsContract是什么呢？官方文档是这样描述的：  The contract between the contacts">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android系统联系人相关介绍以及具体的用法">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/08/11/Android系统联系人相关介绍以及具体的用法/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="概述本文主要解读Android系统联系人相关的知识，以及展示联系人相关的操作实例。参考Android官方API。由于Contact在API 5的时候废弃，因为其只支持单账号联系人。所以本文就直接介绍ContactContract类 ContactsContractContactsContract是什么呢？官方文档是这样描述的：  The contract between the contacts">
+<meta property="og:updated_time" content="2017-08-11T08:03:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android系统联系人相关介绍以及具体的用法">
+<meta name="twitter:description" content="概述本文主要解读Android系统联系人相关的知识，以及展示联系人相关的操作实例。参考Android官方API。由于Contact在API 5的时候废弃，因为其只支持单账号联系人。所以本文就直接介绍ContactContract类 ContactsContractContactsContract是什么呢？官方文档是这样描述的：  The contract between the contacts">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/08/11/Android系统联系人相关介绍以及具体的用法/"/>
+
+
+
+
+
+  <title>Android系统联系人相关介绍以及具体的用法 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/08/11/Android系统联系人相关介绍以及具体的用法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android系统联系人相关介绍以及具体的用法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-11T00:00:00+08:00">
+                2017-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文主要解读Android系统联系人相关的知识，以及展示联系人相关的操作实例。参考Android官方API。由于Contact在API 5的时候废弃，因为其只支持单账号联系人。所以本文就直接介绍<code>ContactContract</code>类</p>
+<h3 id="ContactsContract"><a href="#ContactsContract" class="headerlink" title="ContactsContract"></a>ContactsContract</h3><p><code>ContactsContract</code>是什么呢？官方文档是这样描述的：</p>
+<blockquote>
+<p>The contract between the contacts provider and applications. Contains definitions for the supported URIs and columns. These APIs supersede ContactsContract.Contacts.</p>
+</blockquote>
+<p>联系人应用和提供者包括自定义URL可字段都被新的<code>ContactsContract</code>API取代。也就是说新的API支持多个URL也就是多账号，是Contact类的升级版。</p>
+<h4 id="ContactsContract定义了可扩展的联系人关联数据库，联系人信息存储为三层表模型"><a href="#ContactsContract定义了可扩展的联系人关联数据库，联系人信息存储为三层表模型" class="headerlink" title="ContactsContract定义了可扩展的联系人关联数据库，联系人信息存储为三层表模型"></a><code>ContactsContract</code>定义了可扩展的联系人关联数据库，联系人信息存储为三层表模型</h4><ul>
+<li><code>ContactsContract.Data</code>：表中一行可以存储任何个人数据，例如手机号或者邮箱地址。并且表中的所有数据皆为开放的。表中有一些常规的预定字段，当然任何应用可以根据自身需求去定义自己数据字段。</li>
+<li><code>ContactsContract.RawContacts</code>：这个表表示用户单个账号下面的联系人，比如用户的Gmail邮箱内的联系人。</li>
+<li><code>ContactsContract.Contact</code>：此表存放着描述同一个人的一个或者多个RowContact（账号）的聚合数据。当单个账号数据修改后，此表会根据需要更新对应的聚合联系人。<h4 id="其它表"><a href="#其它表" class="headerlink" title="其它表"></a>其它表</h4></li>
+<li><code>ContactsContract.Groups</code>：其中包含有关Gmail联系人组等原始联系人群组的信息。当前的API不支持跨多个账户的组的概念。</li>
+<li><code>ContactsContract.StatusUpdates</code>：其中包含社交状态更新，包括IM可用性。</li>
+<li><code>ContactsContract.AggregationExceptions</code>：用于手动聚合和分解原生数据。</li>
+<li><code>ContactsContract.Settings</code>：其中包含账号和组的可见性和同步设置。</li>
+<li><code>ContactsContract.SyncState</code>： 其中包含代表同步适配器维护的自由格式数据。</li>
+<li><code>ContactsContract.PhoneLookup</code>：用于紧急呼叫者的ID查找。<h3 id="ContactsContact-Contacts"><a href="#ContactsContact-Contacts" class="headerlink" title="ContactsContact.Contacts"></a>ContactsContact.Contacts</h3>联系人表的常熟，其中包含代表同一人的原始联系人的每个汇总的记录<h4 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h4><h5 id="Insert"><a href="#Insert" class="headerlink" title="Insert"></a>Insert</h5>无法明确的创建联系人。当一条联系人数据插入的时候，provider首先去查找是否存在同一个联系人。如果找到，会从聚合表中获取联系人的<code>CONTACT_ID</code>。如果没有找到匹配的联系人，provider会自动的插入一个新的联系人，并将新的联系人插入原始的联系人数据表中。<h5 id="update"><a href="#update" class="headerlink" title="update"></a>update</h5>当某个确定的列被修改如： <code>TIMES_CONTACTED</code>, <code>LAST_TIME_CONTACTED</code>, <code>STARRED</code>, <code>CUSTOM_RINGTONE</code>, <code>SEND_TO_VOICEMAIL</code>. 更改联系人表的以上字段都会更改所有构成联系人的原始数据。<h5 id="Query"><a href="#Query" class="headerlink" title="Query"></a>Query</h5></li>
+<li>如果只是阅读个别联系人，可以使用<code>CONTENT_LOOKUP_URI</code>去代替<code>CONTENT_URI</code>。</li>
+<li>如果你要根据电话号码来查找联系人，使用<code>PhoneLookup.CONTENT_FILTER_URI</code>，对此进行了优化</li>
+<li>如果你要根据部分名称查询联系人，例如某些过滤条件，可以使用<code>CONTENT_FILTER_URI</code></li>
+<li>如果你想根据某些数据元素如邮箱地址，昵称等查询联系人，可以对<code>ContactsContract.Data</code>表进行查询，该表中包含联系人ID，姓名等。</li>
+</ul>
+<h3 id="ContactsContract-Data"><a href="#ContactsContract-Data" class="headerlink" title="ContactsContract.Data"></a>ContactsContract.Data</h3><p>表中的常量包含与联系人绑定的数据点。且每一行的数据表中存放着单个一些列的联系人信息（比如手机号）和他相关的数据如（家庭电话或者是工作电话）。</p>
+<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><p>数据表可以容纳任何种类的联系数据。存储在一个特定行的数据由<code>MIMETYPE</code>值指定，该值决定了数据存放在通用的数据表DATA1到DATA15行中。比如，如果数据类型是 <code>Phone.CONTENT_ITEM_TYPE</code>则DATA1列存放手机号，如果数据类型是 <code>Email.CONTENT_ITEM_TYPE</code>则DATA1存放为邮箱地址。同步的适配器和应用可以定义他们自己的数据类型。</p>
+<p><code>ContactsContract</code>预设了很少一部分数据类型，例如：<code>ContactsContract.CommonDataKinds.Phone</code>， <code>ContactsContract.CommonDataKinds.Email</code>等等。为了方便起见，为DATA1起了别名。<code>Phone.NUMBER</code>与DATA1是相同的意思。</p>
+<p>DATA1位索引列，用于预期在查询选择中最常用的数据元素。例如在代表电子邮件地址的DATA1行的情况下，应用于邮件地址本身，而DATA2等可以用于诸如电子邮件类型的辅助信息。</p>
+<p>按照惯例，DATA15用于存储BLOB（二进制数据）</p>
+<p>给定账户类型的同步适配器必须正确的处理相应原始联系人中使用的每种数据类型。否则可能导致数据丢失或者损坏。</p>
+<p>同样的你不能为已有的账号类型引入新的数据类型。例如，你给谷歌账号的联系人数据表行中中新增一个数据类型“favorite song”，它将不会同步到服务器上面，因为谷歌同步适配器并不能解析这种数据类型。所以新的数据类型应该去建立新的账户类型或者新的同步适配器。</p>
+<h4 id="批量操作"><a href="#批量操作" class="headerlink" title="批量操作"></a>批量操作</h4><p>可以使用传统的插入（Uri，ContentValues），update（Uri，ContentValues，String，String []）和delete（Uri，String，String []）方法来插入/更新/删除数据行，但是基于在几乎所有情况下，批处理<code>ContentProviderOperation</code>将被证明是一个更好的选择。批处理中的所有操作都在单个事务中执行，这确保原始联系人的电话端和服务器端状态始终保持一致。此外，基于批处理的方法效率更高：不仅数据库操作在单个事务中执行时更快，而且还向内容提供者发送一批命令可以节省大量时间在进程和内容提供商运行的过程。</p>
+<p>使用批处理操作的另一面是大批量可能长时间锁定数据库，从而阻止其他应用程序访问数据并潜在地导致ANR（“应用程序无响应”对话框）。）</p>
+<p>为了避免数据库的这种锁定，请确保在批处理中插入“产生点”。产生点向内容提供者指出，在执行下一个操作之前，它可以提交已经进行的更改，产生其他请求，打开另一个事务并继续处理操作。屈服点不会自动提交事务，但只有在数据库上有其他请求等待时。通常，同步适配器应在批次中的每个原始接触操作序列的开始处插入屈服点。</p>
+<h4 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h4><h5 id="Insert-1"><a href="#Insert-1" class="headerlink" title="Insert"></a>Insert</h5><p>可以使用传统插入（Uri，ContentValues）方法插入单个数据行。应该始终以批次的形式插入多个行。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ContentValues values = new ContentValues();</div><div class="line">values.put(Data.RAW_CONTACT_ID, rawContactId);</div><div class="line">values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);</div><div class="line">values.put(Phone.NUMBER, &quot;1-800-GOOG-411&quot;);</div><div class="line">values.put(Phone.TYPE, Phone.TYPE_CUSTOM);</div><div class="line">values.put(Phone.LABEL, &quot;free directory assistance&quot;);</div><div class="line">Uri dataUri = getContentResolver().insert(Data.CONTENT_URI, values);</div></pre></td></tr></table></figure>
+<p>同样的可以<code>使用ContentProviderOperations</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">ArrayList&lt;ContentProviderOperation&gt; ops =</div><div class="line">          new ArrayList&lt;ContentProviderOperation&gt;();</div><div class="line"></div><div class="line"> ops.add(ContentProviderOperation.newInsert(Data.CONTENT_URI)</div><div class="line">          .withValue(Data.RAW_CONTACT_ID, rawContactId)</div><div class="line">          .withValue(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE)</div><div class="line">          .withValue(Phone.NUMBER, &quot;1-800-GOOG-411&quot;)</div><div class="line">          .withValue(Phone.TYPE, Phone.TYPE_CUSTOM)</div><div class="line">          .withValue(Phone.LABEL, &quot;free directory assistance&quot;)</div><div class="line">          .build());</div><div class="line"> getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);</div></pre></td></tr></table></figure>
+<h5 id="Update"><a href="#Update" class="headerlink" title="Update"></a>Update</h5><p>就像插入一样，更新可以逐个或者批处理，批处理模式是首选方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">ArrayList&lt;ContentProviderOperation&gt; ops =</div><div class="line">          new ArrayList&lt;ContentProviderOperation&gt;();</div><div class="line"></div><div class="line"> ops.add(ContentProviderOperation.newUpdate(Data.CONTENT_URI)</div><div class="line">          .withSelection(Data._ID + &quot;=?&quot;, new String[]&#123;String.valueOf(dataId)&#125;)</div><div class="line">          .withValue(Email.DATA, &quot;somebody@android.com&quot;)</div><div class="line">          .build());</div><div class="line"> getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);</div></pre></td></tr></table></figure>
+<h5 id="Delete"><a href="#Delete" class="headerlink" title="Delete"></a>Delete</h5><p>就像插入和更新一样，删除可以使用delete（Uri，String，String []）方法或使用ContentProviderOperation完成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ArrayList&lt;ContentProviderOperation&gt; ops =</div><div class="line">          new ArrayList&lt;ContentProviderOperation&gt;();</div><div class="line"></div><div class="line"> ops.add(ContentProviderOperation.newDelete(Data.CONTENT_URI)</div><div class="line">          .withSelection(Data._ID + &quot;=?&quot;, new String[]&#123;String.valueOf(dataId)&#125;)</div><div class="line">          .build());</div><div class="line"> getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);</div></pre></td></tr></table></figure>
+<h5 id="Query-1"><a href="#Query-1" class="headerlink" title="Query"></a>Query</h5><p>查找给定联系人的给定类型的所有数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Cursor c = getContentResolver().query(Data.CONTENT_URI,</div><div class="line">          new String[] &#123;Data._ID, Phone.NUMBER, Phone.TYPE, Phone.LABEL&#125;,</div><div class="line">          Data.CONTACT_ID + &quot;=?&quot; + &quot; AND &quot;</div><div class="line">                  + Data.MIMETYPE + &quot;=&apos;&quot; + Phone.CONTENT_ITEM_TYPE + &quot;&apos;&quot;,</div><div class="line">          new String[] &#123;String.valueOf(contactId)&#125;, null);</div></pre></td></tr></table></figure>
+<p>查找给定联系人的给定类型的所有原始数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Cursor c = getContentResolver().query(Data.CONTENT_URI,</div><div class="line">          new String[] &#123;Data._ID, Phone.NUMBER, Phone.TYPE, Phone.LABEL&#125;,</div><div class="line">          Data.RAW_CONTACT_ID + &quot;=?&quot; + &quot; AND &quot;</div><div class="line">                  + Data.MIMETYPE + &quot;=&apos;&quot; + Phone.CONTENT_ITEM_TYPE + &quot;&apos;&quot;,</div><div class="line">          new String[] &#123;String.valueOf(rawContactId)&#125;, null);</div></pre></td></tr></table></figure>
+<h3 id="插入通讯录实例"><a href="#插入通讯录实例" class="headerlink" title="插入通讯录实例"></a>插入通讯录实例</h3><p>插入demo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 插入本地联系人数据库</div><div class="line">    * 名片夹的插入地方目前全部是以新增模式保存通讯录，待放出名片夹功能时需要做是否是更新操作的判断</div><div class="line">    */</div><div class="line">   public static int insertContact(Context context, List&lt;CardCaseBean&gt; list, boolean... action) &#123;</div><div class="line">       boolean isUpdate = false;</div><div class="line">       if (action.length &gt; 0) &#123;</div><div class="line">           if (action[0]) &#123;</div><div class="line">               isUpdate = action[0];</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       if (list == null || list.size() &lt; 0) &#123;</div><div class="line">           return 0;</div><div class="line">       &#125;</div><div class="line">       ArrayList&lt;ContentProviderOperation&gt; ops = new ArrayList&lt;ContentProviderOperation&gt;();</div><div class="line">       int rawContactInsertIndex = 0;</div><div class="line">       int resutl = 0;</div><div class="line">       for (CardCaseBean card : list) &#123;</div><div class="line">           rawContactInsertIndex = ops.size();</div><div class="line">           if (isUpdate) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newUpdate(ContactsContract.RawContacts.CONTENT_URI)</div><div class="line">                       .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)</div><div class="line">                       .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)</div><div class="line">                       .build());</div><div class="line">           &#125; else &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)</div><div class="line">                       .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)</div><div class="line">                       .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">           //插入姓名</div><div class="line">           if (!TextUtils.isEmpty(card.name)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, card.name)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">           //插入电话</div><div class="line">           if (!TextUtils.isEmpty(card.mobile)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_WORK)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, card.mobile)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           //插入传真</div><div class="line">           if (!TextUtils.isEmpty(card.fax)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, card.fax)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">           //插入Email</div><div class="line">           if (!TextUtils.isEmpty(card.email)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Email.ADDRESS, card.email)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">           //插入工作网址</div><div class="line">           if (!TextUtils.isEmpty(card.web)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Website.URL, card.web)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Website.TYPE, ContactsContract.CommonDataKinds.Website.TYPE_WORK)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">           //插入地址</div><div class="line">           if (!TextUtils.isEmpty(card.address)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.StructuredPostal.TYPE, ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS, card.address)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">           //插入部门</div><div class="line">           if (!TextUtils.isEmpty(card.department)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Organization.DEPARTMENT, card.department)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">           //插入职务</div><div class="line">           if (!TextUtils.isEmpty(card.jobTitle)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Organization.TITLE, card.jobTitle)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">           //插入公司</div><div class="line">           if (!TextUtils.isEmpty(card.company)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Organization.COMPANY, card.company)</div><div class="line">                       .withYieldAllowed(true)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           //插入备注【公司简介】</div><div class="line">           if (!TextUtils.isEmpty(card.note)) &#123;</div><div class="line">               ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)</div><div class="line">                       .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)</div><div class="line">                       .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE)</div><div class="line">                       .withValue(ContactsContract.CommonDataKinds.Note.DATA1, card.note)</div><div class="line">                       .withYieldAllowed(true)</div><div class="line">                       .build());</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       // 真正添加</div><div class="line">       try &#123;</div><div class="line">           ContentProviderResult[] results = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);</div><div class="line">           if (results != null &amp;&amp; results.length &gt; 0) &#123;</div><div class="line">               for (ContentProviderResult result : results) &#123;</div><div class="line">                   SoutUtils.out(&quot;URI:&quot; + result.uri, &quot;count:&quot; + result.count);</div><div class="line">               &#125;</div><div class="line">               resutl++;</div><div class="line">           &#125;</div><div class="line">       &#125; catch (RemoteException | OperationApplicationException e) &#123;</div><div class="line">           e.printStackTrace();</div><div class="line">       &#125;</div><div class="line">       return resutl;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>插入前要进行一些权限的判断以及开启</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">/***</div><div class="line"> * 执行插入用户的通讯录</div><div class="line"> *</div><div class="line"> * @param activity:当前的Activity</div><div class="line"> * @param items:待插入的数据</div><div class="line"> * @param isUpdate：是否是更新通讯录</div><div class="line"> */</div><div class="line">private static boolean executeInsertToAddressBook(final Activity activity, List&lt;CardCaseBean&gt; items, boolean isUpdate) &#123;</div><div class="line">    int hasWriteContactsPermission = ContextCompat.checkSelfPermission(activity,</div><div class="line">            Manifest.permission.WRITE_CONTACTS);</div><div class="line">    if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) &#123;</div><div class="line">        //用户拒绝授予权限并且不再提示</div><div class="line">        if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_CONTACTS)) &#123;</div><div class="line">            CommonMsgDialog.Builder commonMsgDialog = new CommonMsgDialog.Builder(activity)</div><div class="line">                    .setMessage(&quot;没有写入通讯录的权限&quot;).setNegativeButton(&quot;取消&quot;, new DialogInterface.OnClickListener() &#123;</div><div class="line">                        @Override</div><div class="line">                        public void onClick(DialogInterface dialog, int which) &#123;</div><div class="line">                            dialog.dismiss();</div><div class="line">                        &#125;</div><div class="line">                    &#125;).setPositiveButton(&quot;开启&quot;, new DialogInterface.OnClickListener() &#123;</div><div class="line">                        @Override</div><div class="line">                        public void onClick(DialogInterface dialog, int which) &#123;</div><div class="line">                            ActivityCompat.requestPermissions(activity,</div><div class="line">                                    new String[]&#123;Manifest.permission.WRITE_CONTACTS&#125;,</div><div class="line">                                    REQUEST_WRITE_CONSTACTS_PERMISSIONS);</div><div class="line">                        &#125;</div><div class="line">                    &#125;);</div><div class="line">            commonMsgDialog.create().show();</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        ActivityCompat.requestPermissions(activity,</div><div class="line">                new String[]&#123;Manifest.permission.WRITE_CONTACTS&#125;,</div><div class="line">                REQUEST_WRITE_CONSTACTS_PERMISSIONS);</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    int result = UserUtils.insertContact(activity, items, isUpdate);</div><div class="line">    boolean isSuccess = result &gt; 0;</div><div class="line">    if (isSuccess) &#123;</div><div class="line">        if (isUpdate) &#123;</div><div class="line">            Util.showShortToast(activity, &quot;更新成功&quot;);</div><div class="line">        &#125; else &#123;</div><div class="line">            Util.showShortToast(activity, &quot;已存入通讯录&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125; else &#123;</div><div class="line">        Util.showShortToast(activity, &quot;存入失败&quot;);</div><div class="line">    &#125;</div><div class="line">    return isSuccess;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>获取所有联系人常用字段数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">   * 获取所有联系人的姓名、手机号、公司、职务、地址、邮箱</div><div class="line">   */</div><div class="line">  public static List&lt;CardCaseBean&gt; getAllContact(Context context) &#123;</div><div class="line">      //读取通讯录的全部的联系人</div><div class="line">      //需要先在raw_contact表中遍历id，并根据id到data表中获取数据</div><div class="line">      //uri = content://com.android.contacts/contacts</div><div class="line">      List&lt;CardCaseBean&gt; list = new ArrayList&lt;&gt;();</div><div class="line">      Uri uri = Uri.parse(&quot;content://com.android.contacts/contacts&quot;); //访问raw_contacts表</div><div class="line">      ContentResolver resolver = context.getContentResolver();</div><div class="line">      Cursor cursor = resolver.query(uri, new String[]&#123;ContactsContract.Contacts.Data._ID&#125;, null, null, null);  //获得_id属性</div><div class="line">      while (cursor.moveToNext()) &#123;</div><div class="line">          CardCaseBean contact = new CardCaseBean();</div><div class="line">          int id = cursor.getInt(0);//获得id并且在data中寻找数据</div><div class="line">          uri = Uri.parse(&quot;content://com.android.contacts/contacts/&quot; + id + &quot;/data&quot;); //如果要获得data表中某个id对应的数据，则URI为content://com.android.contacts/contacts/#/data</div><div class="line">          Cursor cursor2 = resolver.query(uri, new String[]&#123;ContactsContract.Contacts.Data.DATA1, ContactsContract.Contacts.Data.MIMETYPE&#125;, null, null, null);  //data1存储各个记录的总数据，mimetype存放记录的类型，如电话、email等</div><div class="line">          while (cursor2.moveToNext()) &#123;</div><div class="line">              String data = cursor2.getString(cursor2.getColumnIndex(&quot;data1&quot;));</div><div class="line">              if (isHasValue(data)) &#123;</div><div class="line">                  if (cursor2.getString(cursor2.getColumnIndex(ContactsContract.Data.MIMETYPE)).equals(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)) &#123;       //如果是名字</div><div class="line">                      contact.name = data;</div><div class="line">                  &#125; else if (cursor2.getString(cursor2.getColumnIndex(ContactsContract.Data.MIMETYPE)).equals(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)) &#123;  //如果是电话</div><div class="line">                      contact.mobile = data;</div><div class="line">                  &#125; else if (cursor2.getString(cursor2.getColumnIndex(ContactsContract.Data.MIMETYPE)).equals(ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)) &#123;  //如果是email</div><div class="line">                      contact.email = data;</div><div class="line">                  &#125; else if (cursor2.getString(cursor2.getColumnIndex(ContactsContract.Data.MIMETYPE)).equals(ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)) &#123;  //如果公司</div><div class="line">                      contact.company = data;</div><div class="line">                  &#125;</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">          Cursor cursor3 = resolver.query(uri, new String[]&#123;ContactsContract.Contacts.Data.DATA4, ContactsContract.Contacts.Data.MIMETYPE&#125;, null, null, null);  //data4 获取公司地址以及职务</div><div class="line">          while (cursor3.moveToNext()) &#123;</div><div class="line">              String data = cursor3.getString(cursor3.getColumnIndex(&quot;data4&quot;));</div><div class="line">              if (isHasValue(data) &amp;&amp; cursor3.getString(cursor3.getColumnIndex(ContactsContract.Data.MIMETYPE)).equals(ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)) &#123;</div><div class="line">                  contact.jobTitle = data;</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">          Cursor cursor4 = resolver.query(uri, new String[]&#123;ContactsContract.Contacts.Data.DATA9, ContactsContract.Contacts.Data.MIMETYPE&#125;, null, null, null);  //data4 获取公司地址以及职务</div><div class="line">          while (cursor4.moveToNext()) &#123;</div><div class="line">              String data = cursor4.getString(cursor4.getColumnIndex(&quot;data9&quot;));</div><div class="line">              if (isHasValue(data) &amp;&amp; cursor4.getString(cursor4.getColumnIndex(ContactsContract.Data.MIMETYPE)).equals(ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)) &#123;</div><div class="line">                  contact.address = data;</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">          list.add(contact);</div><div class="line">      &#125;</div><div class="line">      return list;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/19/Kotlin_lesson_02_流程控制/" rel="next" title="Kotlin_lesson_02_流程控制">
+                <i class="fa fa-chevron-left"></i> Kotlin_lesson_02_流程控制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ContactsContract"><span class="nav-number">1.1.</span> <span class="nav-text">ContactsContract</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ContactsContract定义了可扩展的联系人关联数据库，联系人信息存储为三层表模型"><span class="nav-number">1.1.1.</span> <span class="nav-text">ContactsContract定义了可扩展的联系人关联数据库，联系人信息存储为三层表模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其它表"><span class="nav-number">1.1.2.</span> <span class="nav-text">其它表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContactsContact-Contacts"><span class="nav-number">1.2.</span> <span class="nav-text">ContactsContact.Contacts</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#操作"><span class="nav-number">1.2.1.</span> <span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Insert"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">Insert</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#update"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">update</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Query"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">Query</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContactsContract-Data"><span class="nav-number">1.3.</span> <span class="nav-text">ContactsContract.Data</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据类型"><span class="nav-number">1.3.1.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#批量操作"><span class="nav-number">1.3.2.</span> <span class="nav-text">批量操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#操作符"><span class="nav-number">1.3.3.</span> <span class="nav-text">操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Insert-1"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">Insert</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Update"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">Update</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Delete"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">Delete</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Query-1"><span class="nav-number">1.3.3.4.</span> <span class="nav-text">Query</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入通讯录实例"><span class="nav-number">1.4.</span> <span class="nav-text">插入通讯录实例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
