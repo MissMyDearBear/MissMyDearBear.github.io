@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Provides classes that expose basic user interface classes that handle screen layout and interaction with the user  官网关于View是如上概括的，大概意思是提供处理屏幕布局和用户交互界面类的接口。 注解类 ViewDebug.CapturedViewProperty：这个注解可以用来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 官方文档View解读一">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2017/11/21/Android 官方文档View解读一/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="Provides classes that expose basic user interface classes that handle screen layout and interaction with the user  官网关于View是如上概括的，大概意思是提供处理屏幕布局和用户交互界面类的接口。 注解类 ViewDebug.CapturedViewProperty：这个注解可以用来">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4469838-c778766ee5271fd4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-12-14T08:09:26.816Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 官方文档View解读一">
+<meta name="twitter:description" content="Provides classes that expose basic user interface classes that handle screen layout and interaction with the user  官网关于View是如上概括的，大概意思是提供处理屏幕布局和用户交互界面类的接口。 注解类 ViewDebug.CapturedViewProperty：这个注解可以用来">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4469838-c778766ee5271fd4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2017/11/21/Android 官方文档View解读一/"/>
+
+
+
+
+
+  <title>Android 官方文档View解读一 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2017/11/21/Android 官方文档View解读一/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 官方文档View解读一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-21T00:00:00+08:00">
+                2017-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Provides classes that expose basic user interface classes that handle screen layout and interaction with the user</p>
+</blockquote>
+<p>官网关于View是如上概括的，大概意思是提供处理屏幕布局和用户交互界面类的接口。</p>
+<h3 id="注解类"><a href="#注解类" class="headerlink" title="注解类"></a>注解类</h3><ul>
+<li>ViewDebug.CapturedViewProperty：这个注解可以用来标记捕获视图时要转储的字段和方法。带有这个注解的方法必须没有参数，并且必须返回一个有效类型的数据</li>
+<li>ViewDebug.ExportedProperty：这个注解可以用来标记视图服务器转储的字段和方法。只有没有参数的非void方法才能被这个注解注释掉。</li>
+<li>ViewDebug.FlagToString：定义从一个标志到一个字符串的映射。这样的映射可以在@ExportedProperty中使用，为最终用户提供更有意义的值。</li>
+<li>ViewDebug.IntToString：定义从int值到String的映射。这样的映射可以在@ExportedProperty中使用，为最终用户提供更有意义的值。</li>
+</ul>
+<h3 id="重点标记的接口"><a href="#重点标记的接口" class="headerlink" title="重点标记的接口"></a>重点标记的接口</h3><ul>
+<li>CollapsibleActionView：当一个View实现这个接口时，它将在扩展或折叠时作为一个动作视图接收回调，以及可选的，应用程序指定的对MenuItem.OnActionExpandListener的回调。</li>
+<li>GestureDetector.OnContextClickListener：当context发生点击时回调</li>
+<li>GestureDetector.OnDoubleTapListener：当双击或者确认单击时回调</li>
+</ul>
+<h3 id="View"><a href="#View" class="headerlink" title="View"></a>View</h3><p>表示构建用户界面的基础类。在屏幕中是一块用来绘制和处理事件的矩形区域。<code>View</code>是用来创建用户交互界面（按钮、文本框等）组建的基类。<code>ViewGroup</code>子类是布局的基类，它是不可见的容器，用于存放其他视图（或其他视图组），并定义其布局属性。</p>
+<p>为了实现一个自定义的视图，你通常会首先提供一些框架在所有视图中调用的标准方法的重写。您不需要覆盖所有这些方法。实际上可以只重写<code>onDraw()</code>方法。下面是一些自定义<code>View</code>时需要了解的方法：</p>
+<ol>
+<li>创建</li>
+</ol>
+<ul>
+<li>Constructors 构造方法：当从代码创建视图时调用构造函数的一种形式，以及从布局文件xml视图时调用的形式。第二种形式应解析和应用布局文件中定义的任何属性。</li>
+<li><code>onFinishInflate()</code>：当<code>view</code>和它的子布局都从xml加载出来后回调此方法</li>
+</ul>
+<ol>
+<li>布局</li>
+</ol>
+<ul>
+<li><code>onMeasure(int, int)</code>：当请求获取<code>view</code>以及它的所有子<code>view</code>的大小时回调</li>
+<li><code>onLayout(boolean, int, int, int, int)</code>：当<code>view</code>需要给所有的子布局分配空间和设置位置时调用</li>
+<li><code>onSizeChanged(int, int, int, int)</code>：当<code>view</code>的大小改变时回调</li>
+</ul>
+<ol>
+<li>绘制</li>
+</ol>
+<ul>
+<li><code>onDraw(android.graphics.Canvas)</code>：当<code>view</code>要呈现其内容时调用</li>
+</ul>
+<ol>
+<li>事件处理</li>
+</ol>
+<ul>
+<li><code>onKeyDown(int, KeyEvent)</code>：当发生新的硬件按键事件时调用</li>
+<li><code>onKeyUp(int, KeyEvent)</code>：当发生硬件按键事件时调用</li>
+<li><code>onTrackballEvent(MotionEvent)</code>：当轨迹球移动事件发生时调用</li>
+<li><code>onTouchEvent(MotionEvent)</code>：当触摸屏幕事件发生时调用</li>
+</ul>
+<ol>
+<li>焦点</li>
+</ol>
+<ul>
+<li><code>onFocusChanged(boolean, int, android.graphics.Rect)</code>：当<code>view</code>获取或者失去焦点时调用</li>
+<li><code>onWindowFocusChanged(boolean)</code>：当包含<code>view</code>的窗体得到或失去焦点时调用</li>
+</ul>
+<ol>
+<li>填充（Attaching）</li>
+</ol>
+<ul>
+<li><code>onAttachedToWindow()</code>：当<code>view</code>填充到窗体上时调用</li>
+<li><code>onDetachedFromWindow()</code>:当<code>view</code>从窗体上分离时调用</li>
+<li><code>onWindowVisibilityChanged(int)</code>：当包含<code>view</code>的窗体显隐状态发生改变时调用<h3 id="Position"><a href="#Position" class="headerlink" title="Position"></a>Position</h3></li>
+<li><code>View</code> 的 <code>getLeft()</code>和<code>getRight()</code>和 <code>getTop()</code> 和<code>getBottom()</code></li>
+<li><code>View</code> 的<code>getY()</code>， <code>getTranslationY()</code>和 <code>getTop()</code> 之间的联系</li>
+<li><code>View</code> 的 <code>getScroolY</code> 和 <code>View</code> 的 <code>scrollTo()</code> 和 <code>scrollBy（）</code></li>
+<li><code>event.getY()</code> 和 <code>event.getRawY()</code></li>
+</ul>
+<p>先来看个截图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4469838-c778766ee5271fd4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="screen.png"></p>
+<p>最大的草绿色区域时屏幕界面，红色次大的区域我们称之为“应用界面区域”。屏幕顶端，应用界面之外的区域含有运营商，电池时间等称之为“状态栏”。一般应用界面会含有标题栏也就是紫色标记的区域。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">View.getLeft()</div><div class="line">View.getRight()</div><div class="line">View.getTop()</div><div class="line">View.getBottom()</div></pre></td></tr></table></figure>
+<p>这四个方法是获取View针对其直接父布局的左上角和右下角的的坐标。<code>View.getLeft()</code>是左上角的<code>x</code>坐标，<code>View.getTop()</code>是左上角的<code>Y</code>坐标。。<code>View.getRight()</code>是右下角的<code>x</code>坐标，<code>View.getBottom()</code>是右下角的<code>Y</code>坐标。</p>
+<p>举个例子：求标题栏的<code>left</code>，<code>top</code>，<code>right</code>，<code>bottom</code>。相对于它的直接父布局为红色应用区域，红色区域左上角为坐标系原点。以actionBar和180*800的屏幕为例，<code>actionBar</code>高度为<code>58px</code>则左上角，右下角的坐标分别为<code>(0,0)</code>和<code>(480,58)</code></p>
+<p><code>View</code>的<code>getLeft()</code>、<code>getTranslationX()</code>、<code>getTop()</code>、<code>getTranslationY()</code>之间的关系如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//getTanslationX()默认为零，产生X轴方向偏移时有值</div><div class="line"> getLeft()=getX()+getTanslationX();</div><div class="line"> </div><div class="line"> //同上，getTanslationY()默认为零，产生Y轴方向偏移时有值</div><div class="line"> getTop()=getY()+getTanslationY();</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/11/Android系统联系人相关介绍以及具体的用法/" rel="next" title="Android系统联系人相关介绍以及具体的用法">
+                <i class="fa fa-chevron-left"></i> Android系统联系人相关介绍以及具体的用法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#注解类"><span class="nav-number">1.</span> <span class="nav-text">注解类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重点标记的接口"><span class="nav-number">2.</span> <span class="nav-text">重点标记的接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-number">3.</span> <span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position"><span class="nav-number">4.</span> <span class="nav-text">Position</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
