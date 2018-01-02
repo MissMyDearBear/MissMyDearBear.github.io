@@ -1,0 +1,738 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="单例模式是java设计模式之一。这种模式涉及到一个单一的类，该类负责创建自己的对象，并确保是单一的对象。这个类提供直接访问其单一对象的方式，且不需要实例化该类的对象。  特点 单例类只能有一个示例 单例类必须自己创建自己唯一的实例。构造函数是私有的，外部是无法实例化该类。 单例类必须给所有其他对象提供这一实例。优缺点 优点   减少程序内部实例数目，节省系统资源 全局使用的实例可以避免其频繁的创">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 单例模式">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2018/01/02/Android 单例模式/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="单例模式是java设计模式之一。这种模式涉及到一个单一的类，该类负责创建自己的对象，并确保是单一的对象。这个类提供直接访问其单一对象的方式，且不需要实例化该类的对象。  特点 单例类只能有一个示例 单例类必须自己创建自己唯一的实例。构造函数是私有的，外部是无法实例化该类。 单例类必须给所有其他对象提供这一实例。优缺点 优点   减少程序内部实例数目，节省系统资源 全局使用的实例可以避免其频繁的创">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/2/160b64c387e5c252?w=180&h=200&f=jpeg&s=8415">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/2/160b64ca7193c566?w=258&h=258&f=jpeg&s=27717">
+<meta property="og:updated_time" content="2018-01-02T10:26:49.835Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 单例模式">
+<meta name="twitter:description" content="单例模式是java设计模式之一。这种模式涉及到一个单一的类，该类负责创建自己的对象，并确保是单一的对象。这个类提供直接访问其单一对象的方式，且不需要实例化该类的对象。  特点 单例类只能有一个示例 单例类必须自己创建自己唯一的实例。构造函数是私有的，外部是无法实例化该类。 单例类必须给所有其他对象提供这一实例。优缺点 优点   减少程序内部实例数目，节省系统资源 全局使用的实例可以避免其频繁的创">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/1/2/160b64c387e5c252?w=180&h=200&f=jpeg&s=8415">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2018/01/02/Android 单例模式/"/>
+
+
+
+
+
+  <title>Android 单例模式 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2018/01/02/Android 单例模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 单例模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T00:00:00+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>单例模式是java设计模式之一。这种模式涉及到一个单一的类，该类负责创建自己的对象，并确保是单一的对象。这个类提供直接访问其单一对象的方式，且不需要实例化该类的对象。</p>
+</blockquote>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ol>
+<li>单例类只能有一个示例</li>
+<li>单例类必须自己创建自己唯一的实例。构造函数是私有的，外部是无法实例化该类。</li>
+<li>单例类必须给所有其他对象提供这一实例。<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3></li>
+<li>优点</li>
+</ol>
+<ul>
+<li>减少程序内部实例数目，节省系统资源</li>
+<li>全局使用的实例可以避免其频繁的创建与销毁</li>
+<li>避免对资源的多重占用</li>
+</ul>
+<ol>
+<li>缺点</li>
+</ol>
+<ul>
+<li>没有接口，不能继承</li>
+<li>与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3></li>
+</ul>
+<ol>
+<li>按照概念，我们实现一下单例模式，如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class SingleInstanceClass &#123;</div><div class="line">    //创建自己的对象</div><div class="line">    private static SingleInstanceClass instanceClass=new SingleInstanceClass();</div><div class="line">    //私有构造方法</div><div class="line">    private  SingleInstanceClass()&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    //对外提供获取该类对象的方法</div><div class="line">    public static SingleInstanceClass getInstanceClass()&#123;</div><div class="line">        return instanceClass;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这就完了吗？</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/2/160b64c387e5c252?w=180&amp;h=200&amp;f=jpeg&amp;s=8415" alt=""></p>
+<p>那必须接着折腾，上面代码虽然完全实现了单例。但是会发现，如果程序中没有使用到这个对象，他依然会在编译时创建对应的实例，这样就浪费了资源。于是便有了懒加载的创建单例方式。</p>
+<ol>
+<li>懒加载模式<br>按照上面的分析，为了不浪费资源我们需要在使用给对象的时候再去创建它的实例对象，也就是懒加载模式。看下面的代码：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class SingleInstanceClass &#123;</div><div class="line">    private static SingleInstanceClass instanceClass;</div><div class="line">    //私有构造方法</div><div class="line">    private  SingleInstanceClass()&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    //对外提供获取该类对象的方法，且调用此方法时，创建实例</div><div class="line">    public static SingleInstanceClass getInstanceClass()&#123;</div><div class="line">        //保证唯一性</div><div class="line">        if(instanceClass==null)&#123;</div><div class="line">            instanceClass=new SingleInstanceClass();</div><div class="line">        &#125;</div><div class="line">        return instanceClass;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>与放法一不同之处在于，只有当我们使用<code>SingleInstanceClass.getInstanceClass()</code>方法时才会实例化该对象。但是，如果是在多线程中呢？这种方式又有弊端了，多线程有可能依然会多次实例化这个对象。那为解决这个问题我们来看第三种方式。</p>
+<ol>
+<li>懒加载，线程安全方式</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class SingleInstanceClass &#123;</div><div class="line">    private static SingleInstanceClass instanceClass;</div><div class="line">    //私有构造方法</div><div class="line">    private  SingleInstanceClass()&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    //对外提供获取该类对象的方法，且调用此方法时，创建实例,加入线程锁</div><div class="line">    public static synchronized SingleInstanceClass getInstanceClass()&#123;</div><div class="line">        //保证唯一性</div><div class="line">        if(instanceClass==null)&#123;</div><div class="line">            instanceClass=new SingleInstanceClass();</div><div class="line">        &#125;</div><div class="line">        return instanceClass;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>synchronized 同步锁，多线程并发时，同一时间只会执行一个线程。</p>
+</blockquote>
+<p>这种方法因为加了锁，会导致执行效率变低，于是乎为了提高运行效率，且又能保证线程安全。又演变出第四中方式。</p>
+<ol>
+<li>双检锁/双重校验锁（DCL，即double-checked locking）</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public class SingleInstanceClass &#123;</div><div class="line">    private volatile static SingleInstanceClass instanceClass;</div><div class="line">    //私有构造方法</div><div class="line">    private  SingleInstanceClass()&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    //对外提供获取该类对象的方法，且调用此方法时，创建实例</div><div class="line">    public static  SingleInstanceClass getInstanceClass()&#123;</div><div class="line">        //保证唯一性</div><div class="line">        if(instanceClass==null)&#123;</div><div class="line">          synchronized (SingleInstanceClass.class)&#123;</div><div class="line">              if(instanceClass==null)&#123;</div><div class="line">                  instanceClass=new SingleInstanceClass();</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">        return instanceClass;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>一旦一个共享变量（类的成员变量、类的静态成员变量）被volatile修饰之后，那么就具备了两层语义：1. 保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。2. 禁止进行指令重排序</p>
+</blockquote>
+<p>除此之外还有其它的方式如下</p>
+<ol>
+<li>登记式/静态内部类<br>这种方法，要比上面的方法实现上面简单许多，且效果是一样的。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class SingleInstanceClass &#123;</div><div class="line">    //静态内部类中创建外部类的实例</div><div class="line">    private static class SingleHolder &#123;</div><div class="line">        private static SingleInstanceClass INSTANCE = new SingleInstanceClass();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //私有构造方法</div><div class="line">    private SingleInstanceClass() &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static SingleInstanceClass getInstance() &#123;</div><div class="line">        return SingleHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>经验之谈：一般情况下，不建议使用第 1 种和第 2 种方式，建议使用第 3 种方式。只有在要明确实现 懒加载效果时，才会使用第 5 种登记方式。如果有其他特殊的需求，可以考虑使用第 4 种双检锁方式。</p>
+<p>👇我的公众号欢迎大家关注</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/2/160b64ca7193c566?w=258&amp;h=258&amp;f=jpeg&amp;s=27717" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/15/Android内存泄漏总结/" rel="next" title="Android开内存泄漏总结">
+                <i class="fa fa-chevron-left"></i> Android开内存泄漏总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点"><span class="nav-number">1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">2.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
