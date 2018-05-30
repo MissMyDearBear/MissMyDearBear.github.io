@@ -1,0 +1,705 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="经历过几个大型项目的开发，在使用SharedPreferences（下面简称Sp）的时候踩了许多坑。下面将自己的一些经验总结一下。 不合理用法（个人认为） 存放大量的数据。（例如：存放接口数据，达到了MB级别） 当应用中有许多需要保存在Sp中的数据时，整个应用使用同一个Sp。 Sp的key使用时定义。 Spcommit方法使用时机不合理。 同批次的key-value多次提交。  Sp读取数据时，会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SharedPreferences的正确打开姿势">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2018/05/30/SharedPreferences的正确打开姿势/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="经历过几个大型项目的开发，在使用SharedPreferences（下面简称Sp）的时候踩了许多坑。下面将自己的一些经验总结一下。 不合理用法（个人认为） 存放大量的数据。（例如：存放接口数据，达到了MB级别） 当应用中有许多需要保存在Sp中的数据时，整个应用使用同一个Sp。 Sp的key使用时定义。 Spcommit方法使用时机不合理。 同批次的key-value多次提交。  Sp读取数据时，会">
+<meta property="og:updated_time" content="2018-05-30T08:31:39.123Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SharedPreferences的正确打开姿势">
+<meta name="twitter:description" content="经历过几个大型项目的开发，在使用SharedPreferences（下面简称Sp）的时候踩了许多坑。下面将自己的一些经验总结一下。 不合理用法（个人认为） 存放大量的数据。（例如：存放接口数据，达到了MB级别） 当应用中有许多需要保存在Sp中的数据时，整个应用使用同一个Sp。 Sp的key使用时定义。 Spcommit方法使用时机不合理。 同批次的key-value多次提交。  Sp读取数据时，会">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2018/05/30/SharedPreferences的正确打开姿势/"/>
+
+
+
+
+
+  <title>SharedPreferences的正确打开姿势 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2018/05/30/SharedPreferences的正确打开姿势/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SharedPreferences的正确打开姿势</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-30T00:00:00+08:00">
+                2018-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>经历过几个大型项目的开发，在使用<code>SharedPreferences</code>（下面简称<code>Sp</code>）的时候踩了许多坑。下面将自己的一些经验总结一下。</p>
+<h3 id="不合理用法（个人认为）"><a href="#不合理用法（个人认为）" class="headerlink" title="不合理用法（个人认为）"></a>不合理用法（个人认为）</h3><ol>
+<li>存放大量的数据。（例如：存放接口数据，达到了MB级别）</li>
+<li>当应用中有许多需要保存在<code>Sp</code>中的数据时，整个应用使用同一个<code>Sp</code>。</li>
+<li><code>Sp</code>的key使用时定义。</li>
+<li><code>Sp</code>commit方法使用时机不合理。</li>
+<li>同批次的key-value多次提交。</li>
+</ol>
+<p><code>Sp</code>读取数据时，会将整个xml放入内存中，当发生上面1和2的情况时就会影响读取速度，严重时造成卡顿，甚至是ANR，用户体验很差。</p>
+<p><code>Sp</code>的key定义也需要规范起来，不能使用的时候直接“xxx”这种情况，一旦复制粘贴keyName的时候多个空格或者少个字母你就准备怀疑人生吧，非常难发现（本人亲身经历过）。</p>
+<p><code>Sp</code>的提交分为<code>commit</code>和<code>apply</code>两种。这两个方法的区别在于： </p>
+<ul>
+<li><code>apply</code>没有返回值而<code>commit</code>返回<code>boolean</code>表明修改是否提交成功 </li>
+<li><code>apply</code>是将修改数据元素提交到内存,而后异步真正提交到硬件磁盘,而<code>commit</code>是同步提交到硬件磁盘，因此，在多个并发提交<code>commit</code>的时候，他们会等待正在处理的<code>commit</code>保存到磁盘后再操作，从而降低了效率。而<code>apply</code>只是先提交到内存，后面有调用<code>apply</code>的函数的将会直接覆盖前面的内存数据，这样从一定程度上提高了很多效率。 </li>
+<li><code>apply</code>方法不会提示任何失败的提示。由于在一个进程中，<code>Sp</code>是单实例，一般不会出现并发冲突，如果对提交的结果不关心的话，建议使用<code>apply</code>，当然需要确保提交成功且有后续操作的话，还是需要用commit的。</li>
+</ul>
+<h3 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h3><p>针对上面提出的一些问题，我这里整理了一些使用规范以及简单的封装。封装的核心目的：为了方便维护，对每个<code>Sp</code>中保存的key-value能快速了解使用。</p>
+<p>举个列子：假如项目中，需要将用户的一些信息（name,age,sex,phone,isMarried）保存在<code>Sp</code>中。</p>
+<h4 id="创建Spkey的描述类"><a href="#创建Spkey的描述类" class="headerlink" title="创建Spkey的描述类"></a>创建<code>Sp</code>key的描述类</h4><p>建议新建一个包，专门存放<code>Sp</code>相关的内容。在新建的包下新建一个<code>SpKeyUser</code>类如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">public class SpKeyUser &#123;</div><div class="line">    /**</div><div class="line">     * 姓名</div><div class="line">     * valueType[String]</div><div class="line">     * 默认值：&quot;&quot;</div><div class="line">     */</div><div class="line">    public static final String NAME=&quot;name&quot;;</div><div class="line">    /**</div><div class="line">     * 姓名</div><div class="line">     * valueType[int]</div><div class="line">     * 默认值：0</div><div class="line">     */</div><div class="line">    public static final String AGE=&quot;age&quot;;</div><div class="line">    /**</div><div class="line">     * 姓名</div><div class="line">     * valueType[String]</div><div class="line">     * 默认值：&quot;man&quot;</div><div class="line">     */</div><div class="line">    public static final String SEX=&quot;sex&quot;;</div><div class="line">    /**</div><div class="line">     * 姓名</div><div class="line">     * valueType[String]</div><div class="line">     * 默认值：&quot;&quot;</div><div class="line">     */</div><div class="line">    public static final String PHONE=&quot;phone&quot;;</div><div class="line">    /**</div><div class="line">     * 姓名</div><div class="line">     * valueType[Boolean]</div><div class="line">     * 默认值：false</div><div class="line">     */</div><div class="line">    public static final String IS_MARRIED=&quot;is_married&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里之所用一个类来描述<code>Sp</code>的key，是为了更清晰地展现这个其保存的所有key，看了上面的注释我相信好处就不用我再一一赘述了。</p>
+<h4 id="创建Sp的帮助类"><a href="#创建Sp的帮助类" class="headerlink" title="创建Sp的帮助类"></a>创建<code>Sp</code>的帮助类</h4><p>这个类主要作为各个<code>Sp</code>的生产工厂使用，并进一步提供简化的提交，获取值的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div></pre></td><td class="code"><pre><div class="line">public class SharedPreferencesHelper &#123;</div><div class="line"></div><div class="line">    private static final String SP_NAME_USER = &quot;sp_name_user&quot;;//用户相关的SP</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 用户相关Sp</div><div class="line">     * 相关的key见&#123;@link SpKeyUser&#125;</div><div class="line">     */</div><div class="line">    public static SharedPreferences getUserSp() &#123;</div><div class="line">        return MyApplication.getInstances().getSharedPreferences(SP_NAME_USER, Context.MODE_PRIVATE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 用户相关Sp</div><div class="line">     * 相关的key见&#123;@link SpKeyDefault&#125;</div><div class="line">     */</div><div class="line">    public static SharedPreferences getDefaultSp() &#123;</div><div class="line">        return PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstances());</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    //sharedPreferences 是否为空</div><div class="line">    public static boolean isEmpty(SharedPreferences sp) &#123;</div><div class="line">        return sp == null || sp.getAll() == null || 0 == sp.getAll().size();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 默认值为&quot;&quot;</div><div class="line">     */</div><div class="line">    public static String getString(SharedPreferences sp, String key) &#123;</div><div class="line">        return sp.getString(key, Key.NIL);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 具有默认值</div><div class="line">     *</div><div class="line">     * @param defValue 默认值</div><div class="line">     */</div><div class="line">    public static String getString(SharedPreferences sp, String key, String defValue) &#123;</div><div class="line">        return sp.getString(key, defValue);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 默认值为0L</div><div class="line">     */</div><div class="line">    public static long getLong(SharedPreferences sp, String key) &#123;</div><div class="line">        return sp.getLong(key, 0L);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 默认值为0</div><div class="line">     */</div><div class="line">    public static int getInt(SharedPreferences sp, String key) &#123;</div><div class="line">        return sp.getInt(key, 0);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void setPreference(SharedPreferences sp, String key, int value) &#123;</div><div class="line">        sp.edit().putInt(key, value).apply();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void setPreference(SharedPreferences sp, String key, String value) &#123;</div><div class="line">        sp.edit().putString(key, value).apply();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void setPreference(SharedPreferences sp, String key, boolean value) &#123;</div><div class="line">        sp.edit().putBoolean(key, value).apply();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //批量put数据</div><div class="line">    public static void setPreferenceWithList(SharedPreferences sp, List&lt;SpItem&gt; spItemList) &#123;</div><div class="line">        if (sp == null || spItemList == null || spItemList.isEmpty()) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        Editor spEditor = sp.edit();</div><div class="line">        for (SpItem item : spItemList) &#123;</div><div class="line">            setSpItem(spEditor, item);</div><div class="line">        &#125;</div><div class="line">        spEditor.apply();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void setPreference(SharedPreferences sp, String key, long value) &#123;</div><div class="line">        sp.edit().putLong(key, value).apply();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 默认值为false</div><div class="line">     */</div><div class="line">    public static boolean getBoolean(SharedPreferences sp, String key) &#123;</div><div class="line">        return sp.getBoolean(key, false);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 自定义默认值</div><div class="line">     */</div><div class="line">    public static boolean getBoolean(SharedPreferences sp, String key, boolean defValue) &#123;</div><div class="line">        return sp.getBoolean(key, defValue);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 清除某一个key</div><div class="line">     */</div><div class="line">    public static void remove(SharedPreferences sp, String key) &#123;</div><div class="line">        if (sp == null || TextUtils.isEmpty(key)) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        sp.edit().remove(key).apply();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //值类型（String：0，int：1，long：2，float：3，boolean：4）</div><div class="line">    private static final int VALUE_TYPE_STRING = 0;</div><div class="line">    private static final int VALUE_TYPE_INT = 1;</div><div class="line">    private static final int VALUE_TYPE_LONG = 2;</div><div class="line">    private static final int VALUE_TYPE_FLOAT = 3;</div><div class="line">    private static final int VALUE_TYPE_BOOLEAN = 4;</div><div class="line"></div><div class="line">    //Sp提交多个时使用，用于描述每个提交项</div><div class="line">    public static class SpItem&lt;T&gt; &#123;</div><div class="line">        private String mKey;</div><div class="line">        private T mValue;</div><div class="line">        private int mValueType;</div><div class="line"></div><div class="line">        public SpItem(String key, T value) &#123;</div><div class="line">            this.mKey = key;</div><div class="line">            this.mValue = value;</div><div class="line">            this.mValueType = initValueType(value);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        private int initValueType(T t) &#123;</div><div class="line">            int typ = -1;</div><div class="line">            if (t instanceof String) &#123;</div><div class="line">                typ = VALUE_TYPE_STRING;</div><div class="line">            &#125; else if (t instanceof Integer) &#123;</div><div class="line">                typ = VALUE_TYPE_INT;</div><div class="line">            &#125; else if (t instanceof Long) &#123;</div><div class="line">                typ = VALUE_TYPE_LONG;</div><div class="line">            &#125; else if (t instanceof Float) &#123;</div><div class="line">                typ = VALUE_TYPE_FLOAT;</div><div class="line">            &#125; else if (t instanceof Boolean) &#123;</div><div class="line">                typ = VALUE_TYPE_BOOLEAN;</div><div class="line">            &#125;</div><div class="line">            return typ;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //按类型put数据</div><div class="line">    private static void setSpItem(Editor spEditor, SpItem spItem) &#123;</div><div class="line">        if (spItem == null || spEditor == null) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        switch (spItem.mValueType) &#123;</div><div class="line">            case VALUE_TYPE_STRING:</div><div class="line">                spEditor.putString(spItem.mKey, (String) spItem.mValue);</div><div class="line">                break;</div><div class="line">            case VALUE_TYPE_INT:</div><div class="line">                spEditor.putInt(spItem.mKey, (Integer) spItem.mValue);</div><div class="line">                break;</div><div class="line">            case VALUE_TYPE_LONG:</div><div class="line">                spEditor.putLong(spItem.mKey, (Long) spItem.mValue);</div><div class="line">                break;</div><div class="line">            case VALUE_TYPE_FLOAT:</div><div class="line">                spEditor.putFloat(spItem.mKey, (Float) spItem.mValue);</div><div class="line">                break;</div><div class="line">            case VALUE_TYPE_BOOLEAN:</div><div class="line">                spEditor.putBoolean(spItem.mKey, (Boolean) spItem.mValue);</div><div class="line">                break;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>大家可以根据业务需求对这个帮助类进行改造。</p>
+<h3 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h3><p>优化永无止境！后面计划将<code>Sp</code>的提交等操作通过注解方式来实现。</p>
+<p>当然如果大家有相关优化的建议，欢迎留言反馈。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/25/无比强大的ViewGroup——ConstraintLayout/" rel="next" title="无比强大的ViewGroup——ConstraintLayout">
+                <i class="fa fa-chevron-left"></i> 无比强大的ViewGroup——ConstraintLayout
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#不合理用法（个人认为）"><span class="nav-number">1.</span> <span class="nav-text">不合理用法（个人认为）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装"><span class="nav-number">2.</span> <span class="nav-text">封装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建Spkey的描述类"><span class="nav-number">2.1.</span> <span class="nav-text">创建Spkey的描述类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建Sp的帮助类"><span class="nav-number">2.2.</span> <span class="nav-text">创建Sp的帮助类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#展望"><span class="nav-number">3.</span> <span class="nav-text">展望</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
