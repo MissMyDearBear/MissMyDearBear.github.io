@@ -1,0 +1,790 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, Blog" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="环境搭建 JDK下载与配置环境变量 SDK下载与配置环境变量 GIT下载与配置环境变量 Jenkins下载与安装。  本篇着重讲如何配置Jenkins，前三个配置就不一一赘述，详情请百度。 搭建步骤检查环境变量是否都配置正确。1.环境变量检查 win运行cmd，输入 1java -version 查看是否输出java version，如果输出成功则证明配置JDK正确。 win运行cmd，输入 1a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins Android 自动打包教程">
+<meta property="og:url" content="http://MissMyDearBear.github.io.git/2018/08/08/Jenkins Android 自动打包教程/index.html">
+<meta property="og:site_name" content="AlenBear的技术博客">
+<meta property="og:description" content="环境搭建 JDK下载与配置环境变量 SDK下载与配置环境变量 GIT下载与配置环境变量 Jenkins下载与安装。  本篇着重讲如何配置Jenkins，前三个配置就不一一赘述，详情请百度。 搭建步骤检查环境变量是否都配置正确。1.环境变量检查 win运行cmd，输入 1java -version 查看是否输出java version，如果输出成功则证明配置JDK正确。 win运行cmd，输入 1a">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-6ed76203c8f9200f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-8bf66d3b51d20a64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-766f9f002b0e836a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-b3b411a25c6be0c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-b3b411a25c6be0c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-14451c6a623f324a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-9acbbaa23c8113d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-994fa632dbd8ea97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-b1a5e4df5e2ff4af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-c18921f777800ad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-5f77cad21fad41bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-a5ce11836ae4298f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-1529c33a6333efbe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-92da56e4c8d50652.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-429758ab8ebca195.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-868ce872c7cae50f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4469838-6944f0a60b64b264.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-08-08T03:35:03.732Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jenkins Android 自动打包教程">
+<meta name="twitter:description" content="环境搭建 JDK下载与配置环境变量 SDK下载与配置环境变量 GIT下载与配置环境变量 Jenkins下载与安装。  本篇着重讲如何配置Jenkins，前三个配置就不一一赘述，详情请百度。 搭建步骤检查环境变量是否都配置正确。1.环境变量检查 win运行cmd，输入 1java -version 查看是否输出java version，如果输出成功则证明配置JDK正确。 win运行cmd，输入 1a">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4469838-6ed76203c8f9200f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Alen Bear'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://MissMyDearBear.github.io.git/2018/08/08/Jenkins Android 自动打包教程/"/>
+
+
+
+
+
+  <title>Jenkins Android 自动打包教程 | AlenBear的技术博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3eb06544b4f524be337d20b8ef788e71";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlenBear的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Android blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MissMyDearBear.github.io.git/2018/08/08/Jenkins Android 自动打包教程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alen Bear">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlenBear的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Jenkins Android 自动打包教程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-08T00:00:00+08:00">
+                2018-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><ol>
+<li>JDK下载与配置环境变量</li>
+<li>SDK下载与配置环境变量</li>
+<li>GIT下载与配置环境变量</li>
+<li>Jenkins下载与安装。</li>
+</ol>
+<p>本篇着重讲如何配置Jenkins，前三个配置就不一一赘述，详情请百度。</p>
+<h3 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h3><h4 id="检查环境变量是否都配置正确。"><a href="#检查环境变量是否都配置正确。" class="headerlink" title="检查环境变量是否都配置正确。"></a>检查环境变量是否都配置正确。</h4><p>1.环境变量检查</p>
+<p>win运行<code>cmd</code>，输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -version</div></pre></td></tr></table></figure>
+<p>查看是否输出java version，如果输出成功则证明配置JDK正确。</p>
+<p>win运行<code>cmd</code>，输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb start-server</div></pre></td></tr></table></figure>
+<p>查看是否成功启动adb server，如果成功则证明SDK配成功</p>
+<p>win运行<code>cmd</code>，输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git</div></pre></td></tr></table></figure>
+<p>如果出现git usage说明则证明配置成功</p>
+<ol>
+<li><p>解压工具包，按照向导安装Jenkins。安装向导推荐的插件。插件安装完在已安装的列表中查看是否已经安装了Android Lint Plugin，Gradle Plugin，<br>Git plugin插件。</p>
+</li>
+<li><p>配置Jenkins的全局工具配置</p>
+</li>
+</ol>
+<ul>
+<li>进入jenkin首页，如下图，点击系系统管理。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-6ed76203c8f9200f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Jenkins首页.png"></p>
+<p>找到全局工具配置</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-8bf66d3b51d20a64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="全局工具.png"></p>
+<ol>
+<li>配置JDK</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-766f9f002b0e836a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="JDK配置.png"></p>
+<ol>
+<li>git配置</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-b3b411a25c6be0c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git配置.png"></p>
+<ol>
+<li>gradle配置</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-b3b411a25c6be0c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git配置.png"></p>
+<p>注意：此处配置的gradle版本必须与所构建的项目一致。另外路径不能过长，否则后面编译会导致AAPT的错误（建议将对应版本gradle移动到某个盘的根目录中，或者直接使用项目自带的gradle在编译时进行下载）。</p>
+<ol>
+<li>配置全局的SDK路径如下图</li>
+</ol>
+<p>左边找到系统管理，然后点击下图所示的系统设置<br><img src="https://upload-images.jianshu.io/upload_images/4469838-14451c6a623f324a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="系统设置.png"></p>
+<p>找到环境变量配置，添加Android Sdk的配置，==路径需要改为自己的SDK路径==<br><img src="https://upload-images.jianshu.io/upload_images/4469838-9acbbaa23c8113d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2ECB85DBB34566AF3893ABED04C26365.png"><br>环境变量到这里就配置完毕了。</p>
+<h3 id="新建无参数任务"><a href="#新建无参数任务" class="headerlink" title="新建无参数任务"></a>新建无参数任务</h3><ol>
+<li><p>新建任务<br><img src="https://upload-images.jianshu.io/upload_images/4469838-994fa632dbd8ea97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="新建任务.png"></p>
+</li>
+<li><p>添加描述，点击高级设置配置工作区<br><img src="https://upload-images.jianshu.io/upload_images/4469838-b1a5e4df5e2ff4af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置工作区.png"></p>
+</li>
+<li><p>配置代码git仓库</p>
+</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-c18921f777800ad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置代码git仓库.png"></p>
+<ol>
+<li>配置构建<br><img src="https://upload-images.jianshu.io/upload_images/4469838-5f77cad21fad41bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="开始构建.png"></li>
+</ol>
+<p>配置GradleWrapper</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-a5ce11836ae4298f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="构建选择gradle配置wrap路径执行命令.png"></p>
+<p>配置root build script 路径</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-1529c33a6333efbe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置build的路径.png"></p>
+<ol>
+<li>点击保存应用。</li>
+<li>点击立即构建，就可以完成自动打包的任务。<h3 id="新建带参数任务"><a href="#新建带参数任务" class="headerlink" title="新建带参数任务"></a>新建带参数任务</h3></li>
+<li>和无参任务一样先创建一个自由风格的构建项目</li>
+<li>选择参数化构建过程</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-92da56e4c8d50652.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="参数化构建.png"></p>
+<ol>
+<li>构建参数，与build.gradle中获取的方式。</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-429758ab8ebca195.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="参数配置.png"></p>
+<p>如上图，以选项参数以及文本参数为例。在Jenkins中定义的参数可以使用”${parameterName}”,例如Jenkins选择分支时就可以使用此参数：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-868ce872c7cae50f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Jenkins使用参数.png"></p>
+<p>在Andrid项目中如何获取对应的参数呢？因为Jenkins打包时会把参数侵入到项目中，在app包名下的build.gradle中可以这样获取上述的<code>JAR_VERSION_NAME</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def defaultName = &quot;2.04.11&quot;</div><div class="line">def jarVersionName = project.hasProperty(&apos;JAR_VERSION_NAME&apos;) ? JAR_VERSION_NAME : defaultName</div></pre></td></tr></table></figure>
+<p><strong>注意：boolean参数使用选项参数来代替，在gradle3.3版本中运行时此参数会获取不准确。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def needNewsSdk = project.hasProperty(&apos;NEED_NEWS_SDK&apos;) ? NEED_NEWS_SDK : &quot;false&quot;</div><div class="line">boolean isNeedNewsSdk = needNewsSdk == &quot;true&quot;</div></pre></td></tr></table></figure>
+<ol>
+<li>其它过程同无参数任务一致，在执行Gradle脚本时需要将参数带到命令中。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">clean</div><div class="line">assembleRelease -PJAR_VERSION_NAME=$&#123;JAR_VERSION_NAME&#125; &#125;</div></pre></td></tr></table></figure>
+<p><strong>注意：参数名使用<code>-P</code>来开头，<code>P</code>为大写</strong></p>
+<h3 id="构建完后构建其它项目，且带有参数。"><a href="#构建完后构建其它项目，且带有参数。" class="headerlink" title="构建完后构建其它项目，且带有参数。"></a>构建完后构建其它项目，且带有参数。</h3><ol>
+<li>需要安装插件<code>Parameterized Trigger plugin</code>,在系统管理-插件管理-可安装选项里面检索此插件安装并重启Jenkins（重启方法在Jenkins后面地址后面加上<code>/restart</code>）</li>
+<li>在构建或者构建后操作选项里面（因Jenkins版本不同，此插件的位置也不同）找到：</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/4469838-6944f0a60b64b264.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="构建其它项目.png"></p>
+<p>填入要构建的下个项目名，并添加参数，可以选择当前任务的参数如上图。</p>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>Jenkins工具包下载：<br><a href="https://pan.baidu.com/s/1A-ZtI7ZOCUc6-UlztbbbpQ" target="_blank" rel="external">点击下载</a></p>
+<p> 提取密码: 3zr5</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/30/SharedPreferences的正确打开姿势/" rel="next" title="SharedPreferences的正确打开姿势">
+                <i class="fa fa-chevron-left"></i> SharedPreferences的正确打开姿势
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/upload/avatar.jpg"
+               alt="Alen Bear" />
+          <p class="site-author-name" itemprop="name">Alen Bear</p>
+           
+              <p class="site-description motion-element" itemprop="description">Android技术博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">博客</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境搭建"><span class="nav-number">1.</span> <span class="nav-text">环境搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建步骤"><span class="nav-number">2.</span> <span class="nav-text">搭建步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#检查环境变量是否都配置正确。"><span class="nav-number">2.1.</span> <span class="nav-text">检查环境变量是否都配置正确。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建无参数任务"><span class="nav-number">3.</span> <span class="nav-text">新建无参数任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建带参数任务"><span class="nav-number">4.</span> <span class="nav-text">新建带参数任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建完后构建其它项目，且带有参数。"><span class="nav-number">5.</span> <span class="nav-text">构建完后构建其它项目，且带有参数。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它"><span class="nav-number">6.</span> <span class="nav-text">其它</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alen Bear</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
